@@ -1,0 +1,54 @@
+# Validation record
+
+This record separates checks run against REVibe from claims about arbitrary
+projects. Passing these checks does not guarantee that an executing agent will
+make every project correct.
+
+## Automated checks
+
+- `python -m unittest discover -s tests -v`: installer, recovery, state, and
+  distribution regression coverage.
+- `python tools/validate.py`: skill metadata, state template, product links,
+  and release metadata.
+- `python tools/package.py`: reproducible standalone Python archive.
+- `npm pack --dry-run`: npm projection contains the launcher, installer, and
+  product only.
+
+The distribution tests build the archive twice, compare bytes, extract it
+outside the repository, install and uninstall from the extracted copy, and
+exercise all five native target families in an isolated project. The product
+projection excludes tests, tools, documentation, and development prompts.
+
+## Remote install acceptance
+
+The release gate is the remote command documented in the README:
+
+```sh
+npx --yes --package=github:MPSMeridiaN/REVibe#v1.0.0 revibe --local
+npx --yes --package=github:MPSMeridiaN/REVibe#v1.0.0 revibe --global
+```
+
+Acceptance checks use a clean project and a fresh temporary user directory. Each
+run confirms that the agent-facing package can be fetched from GitHub without a
+manual clone, the requested scope is respected, the selected harness directory
+contains all 11 skills, the shared references are readable, a repeat install is
+a no-op, and no duplicate skill tree is created. Explicit harness targets and
+the unambiguous auto-detection path are checked separately.
+
+## Behavioral scope
+
+The fixtures under `tests/fixtures/` cover a small Python library, an
+asynchronous queue, and a documentation-only project. They exist to exercise
+the workflow's evidence, review, and capability-limit contracts; their outputs
+are not treated as proof of arbitrary real-world reliability.
+
+## Known limits
+
+- Skill discovery depends on the executing harness and agent following the
+  installed instructions.
+- Live execution inside every native harness application is not part of the
+  automated suite.
+- Multi-target installation commits each destination separately rather than as
+  one cross-directory transaction.
+- Unexpected filesystem changes during recovery may require manual repair to
+  preserve user edits.

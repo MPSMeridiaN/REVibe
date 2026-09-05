@@ -1,0 +1,21 @@
+{
+  "name": "revibe",
+  "version": "1.0.0",
+  "description": "An installable, portable engineering workflow suite for AI coding agents.",
+  "type": "module",
+  "bin": {
+    "revibe": "bin/revibe.mjs"
+  },
+  "files": [
+    "bin",
+    "install.py",
+    "product",
+    "INSTALL.md",
+    "LICENSE",
+    "README.md",
+    "VERSION"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

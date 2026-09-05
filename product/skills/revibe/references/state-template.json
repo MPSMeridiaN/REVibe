@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "revision": 0,
+  "project": {
+    "root": ".",
+    "baseline": "unknown"
+  },
+  "stages": {
+    "discover": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/discover.md",
+      "depends_on": []
+    },
+    "verify": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/verify.md",
+      "depends_on": ["stage:discover"]
+    },
+    "align": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/align.md",
+      "depends_on": ["stage:verify"]
+    },
+    "design": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/design.md",
+      "depends_on": ["stage:align"]
+    },
+    "strategize": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/strategize.md",
+      "depends_on": ["stage:design"]
+    },
+    "plan": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/plan.md",
+      "depends_on": ["stage:strategize"]
+    },
+    "implement": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/implement.md",
+      "depends_on": ["stage:plan"]
+    },
+    "validate": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/validate.md",
+      "depends_on": ["stage:implement"]
+    },
+    "cohere": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/cohere.md",
+      "depends_on": ["stage:validate"]
+    },
+    "finalize": {
+      "status": "pending",
+      "input_revision": 0,
+      "output_revision": 0,
+      "artifact": ".revibe/handoffs/finalize.md",
+      "depends_on": ["stage:cohere"]
+    }
+  },
+  "features": [],
+  "evidence": [],
+  "decisions": [],
+  "risks": [],
+  "questions": [],
+  "constraints": [],
+  "relationships": [],
+  "assumptions": [],
+  "tasks": [],
+  "next_stage": "discover"
+}

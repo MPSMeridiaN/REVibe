@@ -1,0 +1,28 @@
+name: Validate REVibe
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ['3.10', '3.12']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: python -m unittest discover -s tests -v
+      - run: python tools/validate.py
+      - run: python tools/package.py
+      - run: npm pack --dry-run --ignore-scripts
+      - run: node bin/revibe.mjs --version
+      - uses: actions/upload-artifact@v4
+        with:
+          name: revibe-${{ matrix.os }}-${{ matrix.python }}
+          path: dist/
