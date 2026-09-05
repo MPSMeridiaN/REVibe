@@ -18,7 +18,7 @@ class DistributionTests(unittest.TestCase):
     def test_release_metadata_is_consistent(self):
         package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
         version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
-        self.assertEqual("1.0.3", version)
+        self.assertEqual("1.0.4", version)
         self.assertEqual(version, package["version"])
         self.assertEqual("bin/revibe.mjs", package["bin"]["revibe"])
         self.assertIn("product", package["files"])

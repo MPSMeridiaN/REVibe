@@ -78,8 +78,10 @@ class AdversarialInstallerTests(unittest.TestCase):
         references.mkdir()
         (references / "reference.md").write_text("reference")
         self.install()
+        current_manifest = installer.manifest_path(self.root)
         manifest_path = self.root / installer.MANIFEST
-        legacy = json.loads(manifest_path.read_text())
+        legacy = json.loads(current_manifest.read_text())
+        current_manifest.unlink()
         legacy["format"] = 1
         for files in legacy["skills"].values():
             for filename in list(files):
@@ -90,6 +92,8 @@ class AdversarialInstallerTests(unittest.TestCase):
 
         installer.apply(self.root, self.manifest(), self.source)
         self.assertEqual("v2", (self.root / "revibe" / "SKILL.md").read_text())
+        self.assertFalse(manifest_path.exists())
+        self.assertTrue(installer.manifest_path(self.root).is_file())
 
     def test_python_310_junction_destination_is_rejected(self):
         outside = self.base / "outside"
@@ -124,10 +128,10 @@ class AdversarialInstallerTests(unittest.TestCase):
             with self.assertRaises(KeyboardInterrupt):
                 self.install()
 
-        self.assertTrue((self.root / installer.TRANSACTION).exists())
+        self.assertTrue(installer.transaction_path(self.root).exists())
         installer.recover(self.root)
         self.assertEqual(before, installer.inventory(self.root / "revibe"))
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
     def test_interrupt_before_prepared_phase_discards_transaction(self):
         self.install()
@@ -146,7 +150,7 @@ class AdversarialInstallerTests(unittest.TestCase):
 
         installer.recover(self.root)
         self.assertEqual(before, installer.inventory(self.root / "revibe"))
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
     def test_interrupt_after_prepared_phase_rolls_back_safely(self):
         self.install()
@@ -166,7 +170,7 @@ class AdversarialInstallerTests(unittest.TestCase):
 
         installer.recover(self.root)
         self.assertEqual(before, installer.inventory(self.root / "revibe"))
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
     def test_interrupt_after_prepared_journal_rename_rolls_back(self):
         self.install()
@@ -184,11 +188,11 @@ class AdversarialInstallerTests(unittest.TestCase):
             with self.assertRaises(KeyboardInterrupt):
                 self.install()
 
-        journal = json.loads((self.root / installer.TRANSACTION / "journal.json").read_text())
+        journal = json.loads((installer.transaction_path(self.root) / "journal.json").read_text())
         self.assertEqual("prepared", journal["phase"])
         installer.recover(self.root)
         self.assertEqual(before, installer.inventory(self.root / "revibe"))
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
     def test_interrupt_after_manifest_replace_rolls_back(self):
         self.install()
@@ -209,7 +213,7 @@ class AdversarialInstallerTests(unittest.TestCase):
         self.assertEqual("v2", (self.root / "revibe" / "SKILL.md").read_text())
         installer.recover(self.root)
         self.assertEqual(before, installer.inventory(self.root / "revibe"))
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
     def test_new_unowned_skill_created_during_install_is_not_deleted(self):
         (self.skill / "SKILL.md").write_text("v1")
@@ -232,22 +236,24 @@ class AdversarialInstallerTests(unittest.TestCase):
             with self.assertRaises(installer.Conflict):
                 installer.apply(self.root, new_manifest, self.source)
         self.assertEqual("user-owned", (self.root / "revibe-new" / "SKILL.md").read_text())
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
     def test_unowned_manifest_created_during_install_is_not_overwritten(self):
         new_manifest = self.manifest()
         real_write_json = installer.write_json
 
+        manifest_path = installer.manifest_path(self.root)
+
         def write_journal_then_add_user_manifest(path, data):
             real_write_json(path, data)
             if Path(path).name == "journal.json":
-                (self.root / installer.MANIFEST).write_text("user metadata")
+                manifest_path.write_text("user metadata")
 
         with patch.object(installer, "write_json", side_effect=write_journal_then_add_user_manifest):
             with self.assertRaises(installer.Conflict):
                 installer.apply(self.root, new_manifest, self.source)
-        self.assertEqual("user metadata", (self.root / installer.MANIFEST).read_text())
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertEqual("user metadata", manifest_path.read_text())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
     def test_recover_refuses_to_race_a_live_install(self):
         self.install()
@@ -394,14 +400,14 @@ class AdversarialInstallerTests(unittest.TestCase):
         with patch.object(installer.os, "replace", side_effect=interrupt_manifest_replace):
             with self.assertRaises(KeyboardInterrupt):
                 self.install()
-        journal_path = self.root / installer.TRANSACTION / "journal.json"
+        journal_path = installer.transaction_path(self.root) / "journal.json"
         legacy_journal = json.loads(journal_path.read_text())
         legacy_journal.pop("phase")
         journal_path.write_text(json.dumps(legacy_journal))
 
         installer.recover(self.root)
         self.assertEqual(before, installer.inventory(self.root / "revibe"))
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
     def test_corrupt_old_backup_is_rejected_before_replacement(self):
         self.install()
@@ -427,7 +433,7 @@ class AdversarialInstallerTests(unittest.TestCase):
                 with self.assertRaises(installer.Conflict):
                     self.install()
         self.assertEqual(before, installer.inventory(self.root / "revibe"))
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
 
 if __name__ == "__main__":

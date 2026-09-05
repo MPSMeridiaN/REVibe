@@ -73,11 +73,11 @@ npx -y MPSMeridiaN/REVibe --local --uninstall --dry-run
 npx -y MPSMeridiaN/REVibe --local --uninstall
 ```
 
-Use the same scope or destination as installation. Removal preserves unrelated skills and the project's `.revibe/` state. Empty parent directories, an empty ownership manifest, and the small `.revibe-lock` file may remain.
+Use the same scope or destination as installation. Removal preserves unrelated skills and the project's `.revibe/` state. The harness skill directory contains only skill directories; installer bookkeeping is stored beside it under `.revibe/`.
 
 ## Interrupted installation
 
-An operating-system lock prevents install and recovery operations from overlapping. `.revibe-transaction` stores the journal and verified backups. After an interruption, use the same destination flags:
+An operating-system lock prevents install and recovery operations from overlapping. The adjacent `.revibe/` state directory stores the lock, journal, and verified backups. After an interruption, use the same destination flags:
 
 ```sh
 npx -y MPSMeridiaN/REVibe --local --recover

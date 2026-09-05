@@ -84,6 +84,10 @@ The installer records exactly what it owns. Reinstalling is safe, unchanged runs
 are no-ops, updates remove stale REVibe skills, and unrelated skills are left
 alone.
 
+The destination stays clean: `.agents/skills/` contains only the 11 skill
+directories. Installer bookkeeping lives beside it under `.agents/.revibe/` and
+never enters the harness skill tree.
+
 ## The workflow
 
 REVibe is a connected process, not a folder of unrelated prompts:

@@ -44,6 +44,13 @@ class InstallerTests(unittest.TestCase):
         self.assertFalse((self.root / "revibe").exists())
         self.assertEqual("mine", (other / "SKILL.md").read_text())
 
+    def test_skill_directory_contains_only_skill_directories(self):
+        self.install()
+        self.assertEqual(["revibe"], [path.name for path in self.root.iterdir()])
+        self.assertTrue(installer.manifest_path(self.root).is_file())
+        self.assertFalse((self.root / installer.MANIFEST).exists())
+        self.assertFalse((self.root / installer.LOCK).exists())
+
     def test_unowned_identical_skill_still_refused(self):
         import shutil
         self.root.mkdir(parents=True)
@@ -87,7 +94,7 @@ class InstallerTests(unittest.TestCase):
             with self.assertRaises(OSError):
                 self.install()
         self.assertEqual(before, installer.inventory(self.root / "revibe"))
-        self.assertFalse((self.root / installer.TRANSACTION).exists())
+        self.assertFalse(installer.transaction_path(self.root).exists())
 
     def test_process_interruption_can_recover(self):
         self.install()

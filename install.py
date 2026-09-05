@@ -12,8 +12,9 @@ import shutil
 import stat
 import sys
 
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 SOURCE = Path(__file__).resolve().parent / "product" / "skills"
+STATE_DIR = ".revibe"
 MANIFEST = ".revibe-install.json"
 TRANSACTION = ".revibe-transaction"
 LOCK = ".revibe-lock"
@@ -59,11 +60,70 @@ def normalized(path: Path) -> Path:
     return path.resolve()
 
 
+def state_root(root: Path) -> Path:
+    """Keep installer state beside, never inside, the harness skill directory."""
+    return root.parent / STATE_DIR / root.name
+
+
+def state_path(root: Path, name: str) -> Path:
+    return state_root(root) / name
+
+
+def legacy_path(root: Path, name: str) -> Path:
+    return root / name
+
+
+def manifest_path(root: Path) -> Path:
+    return state_path(root, MANIFEST)
+
+
+def transaction_path(root: Path) -> Path:
+    return state_path(root, TRANSACTION)
+
+
+def existing_manifest_path(root: Path) -> Path:
+    current = manifest_path(root)
+    legacy = legacy_path(root, MANIFEST)
+    if current.exists():
+        return current
+    if legacy.exists():
+        return legacy
+    return current
+
+
+def existing_transaction_path(root: Path) -> Path:
+    current = transaction_path(root)
+    legacy = legacy_path(root, TRANSACTION)
+    if current.exists():
+        return current
+    if legacy.exists():
+        return legacy
+    return current
+
+
+def legacy_state_exists(root: Path) -> bool:
+    return any(legacy_path(root, name).exists() for name in (MANIFEST, LOCK, TRANSACTION))
+
+
+def cleanup_legacy_state(root: Path) -> None:
+    """Remove state left by pre-1.0.4 installers after a safe migration."""
+    for name in (MANIFEST, LOCK):
+        path = legacy_path(root, name)
+        if not path.exists():
+            continue
+        check_path(path)
+        if not path.is_file():
+            raise Conflict(f"Expected legacy state file: {path}")
+        path.unlink()
+
+
 @contextmanager
 def operation_lock(root: Path):
     """OS locks are released on process exit; recovery obeys the same lock."""
-    root.mkdir(parents=True, exist_ok=True)
-    path = root / LOCK
+    state = state_root(root)
+    check_path(state)
+    state.mkdir(parents=True, exist_ok=True)
+    path = state / LOCK
     check_path(path)
     with path.open("a+b") as stream:
         if path.stat().st_size == 0:
@@ -170,7 +230,7 @@ def source_manifest(source: Path = SOURCE) -> dict:
 
 
 def installed(root: Path) -> dict:
-    path = root / MANIFEST
+    path = existing_manifest_path(root)
     check_path(path)
     return validate_manifest(read_json(path)) if path.exists() else {"format": 2, "skills": {}}
 
@@ -179,8 +239,10 @@ def preflight(root: Path, new: dict) -> dict:
     check_path(root)
     if root.exists() and not root.is_dir():
         raise Conflict(f"Not a directory: {root}")
-    if (root / TRANSACTION).exists():
-        raise Conflict(f"Interrupted or active operation at {root}; stop other installers, then use --recover")
+    for transaction in (transaction_path(root), legacy_path(root, TRANSACTION)):
+        check_path(transaction)
+        if transaction.exists():
+            raise Conflict(f"Interrupted or active operation at {root}; stop other installers, then use --recover")
     old = installed(root)
     for name, files in old["skills"].items():
         if inventory(root / name) != files:
@@ -211,7 +273,7 @@ def remove_tree(path: Path, parent: Path) -> None:
 
 def _recover_locked(root: Path) -> str:
     check_path(root)
-    tx = root / TRANSACTION
+    tx = existing_transaction_path(root)
     check_path(tx)
     if not tx.exists():
         return f"No transaction: {root}"
@@ -226,7 +288,7 @@ def _recover_locked(root: Path) -> str:
     new = validate_manifest(journal.get("new", {}))
     if journal.get("phase") == "preparing":
         # The journal advances to prepared before the first destination mutation.
-        remove_tree(tx, root)
+        remove_tree(tx, tx.parent)
         return f"Discarded interrupted preparation; destination preserved: {root}"
     if journal.get("phase", "prepared") != "prepared":
         raise Conflict("Unknown transaction phase; manual recovery required")
@@ -247,7 +309,8 @@ def _recover_locked(root: Path) -> str:
         for name, files in new["skills"].items():
             if inventory(root / name) != files:
                 raise Conflict("Committed product changed; manual recovery required")
-        remove_tree(tx, root)
+        remove_tree(tx, tx.parent)
+        cleanup_legacy_state(root)
         return f"Finished committed operation: {root}"
     if current not in (old, new):
         raise Conflict("Installation manifest changed; manual recovery required")
@@ -262,7 +325,7 @@ def _recover_locked(root: Path) -> str:
             remove_tree(path, root)
         if name in old["skills"]:
             shutil.copytree(tx / "old" / name, path)
-    manifest = root / MANIFEST
+    manifest = manifest_path(root)
     check_path(manifest)
     if old["skills"]:
         replacement = tx / "restore.json"
@@ -272,13 +335,14 @@ def _recover_locked(root: Path) -> str:
         os.replace(replacement, manifest)
     elif manifest.exists():
         manifest.unlink()
-    remove_tree(tx, root)
+    remove_tree(tx, tx.parent)
+    cleanup_legacy_state(root)
     return f"Restored previous installation: {root}"
 
 
 def recover(root: Path) -> str:
     root = normalized(root)
-    if not root.exists():
+    if not root.exists() and not any(path.exists() for path in (transaction_path(root), legacy_path(root, TRANSACTION))):
         return f"No transaction: {root}"
     with operation_lock(root):
         return _recover_locked(root)
@@ -286,15 +350,19 @@ def recover(root: Path) -> str:
 
 def _apply_locked(root: Path, new: dict, source: Path) -> str:
     old = preflight(root, new)
-    if old == new:
+    if old == new and not legacy_state_exists(root):
         return f"Already current: {root}"
     root.mkdir(parents=True, exist_ok=True)
-    tx = root / TRANSACTION
+    tx = transaction_path(root)
     tx.mkdir()  # Exclusive lock; never steal a live or interrupted transaction.
     prepared = False
     try:
-        manifest_path = root / MANIFEST
-        prior_manifest_hash = digest(manifest_path) if manifest_path.exists() else None
+        current_manifest = manifest_path(root)
+        legacy_manifest = legacy_path(root, MANIFEST)
+        manifest_paths = (current_manifest, legacy_manifest)
+        prior_manifest_state = tuple(
+            digest(path) if path.exists() else None for path in manifest_paths
+        )
         journal = {"root": str(root), "old": old, "new": new, "phase": "preparing"}
         write_json(tx / "journal.json", journal)
         (tx / "old").mkdir()
@@ -317,8 +385,12 @@ def _apply_locked(root: Path, new: dict, source: Path) -> str:
             check_path(root / name)
             if (root / name).exists():
                 raise Conflict(f"Unowned skill appeared while preparing: {root / name}")
-        check_path(manifest_path)
-        if (digest(manifest_path) if manifest_path.exists() else None) != prior_manifest_hash:
+        for path in manifest_paths:
+            check_path(path)
+        current_manifest_state = tuple(
+            digest(path) if path.exists() else None for path in manifest_paths
+        )
+        if current_manifest_state != prior_manifest_state:
             raise Conflict("Manifest changed while preparing installation")
         journal["phase"] = "prepared"
         write_json(tx / "prepared.json", journal)
@@ -333,19 +405,24 @@ def _apply_locked(root: Path, new: dict, source: Path) -> str:
                 remove_tree(path, root)
             if name in new["skills"]:
                 os.replace(tx / "new" / name, path)
-        check_path(manifest_path)
-        if (digest(manifest_path) if manifest_path.exists() else None) != prior_manifest_hash:
+        for path in manifest_paths:
+            check_path(path)
+        current_manifest_state = tuple(
+            digest(path) if path.exists() else None for path in manifest_paths
+        )
+        if current_manifest_state != prior_manifest_state:
             raise Conflict("Manifest changed before commit")
         write_json(tx / "manifest.json", new)
-        os.replace(tx / "manifest.json", root / MANIFEST)
+        os.replace(tx / "manifest.json", current_manifest)
         (tx / "committed").write_text("committed\n", encoding="utf-8")
-        remove_tree(tx, root)
+        cleanup_legacy_state(root)
+        remove_tree(tx, tx.parent)
     except Exception:
         if tx.exists():
             if prepared:
                 _recover_locked(root)
             else:
-                remove_tree(tx, root)
+                remove_tree(tx, tx.parent)
         raise
     return f"{'Installed' if new['skills'] else 'Uninstalled'}: {root}"
 
