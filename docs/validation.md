@@ -24,8 +24,8 @@ projection excludes tests, tools, documentation, and development prompts.
 The release gate is the remote command documented in the README:
 
 ```sh
-npx --yes --package=github:MPSMeridiaN/REVibe#v1.0.1 revibe --local
-npx --yes --package=github:MPSMeridiaN/REVibe#v1.0.1 revibe --global
+npx -y MPSMeridiaN/REVibe#v1.0.2 --local
+npx -y MPSMeridiaN/REVibe#v1.0.2 --global
 ```
 
 Acceptance checks use a clean project and a fresh temporary user directory. Each

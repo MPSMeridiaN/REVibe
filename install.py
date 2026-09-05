@@ -12,7 +12,7 @@ import shutil
 import stat
 import sys
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 SOURCE = Path(__file__).resolve().parent / "product" / "skills"
 MANIFEST = ".revibe-install.json"
 TRANSACTION = ".revibe-transaction"
@@ -45,7 +45,12 @@ def check_path(path: Path) -> None:
             attributes = part.lstat()
         except FileNotFoundError:
             continue
-        if stat.S_ISLNK(attributes.st_mode) or getattr(attributes, "st_file_attributes", 0) & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400):
+        linked = stat.S_ISLNK(attributes.st_mode) or getattr(attributes, "st_file_attributes", 0) & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+        # macOS exposes /var (and sometimes /tmp) as root-level aliases to
+        # /private/var and /private/tmp. These OS aliases are safe; a link
+        # anywhere below the filesystem root is still an unsafe destination.
+        system_alias = os.name != "nt" and part.parent == Path(part.anchor)
+        if linked and not system_alias:
             raise Conflict(f"Linked path is not supported: {part}")
 
 

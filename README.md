@@ -24,7 +24,7 @@ clone is needed.
 Installs only into the current project:
 
 ```sh
-npx --yes --package=github:MPSMeridiaN/REVibe#v1.0.1 revibe --local
+npx -y MPSMeridiaN/REVibe#v1.0.2 --local
 ```
 
 Result: `./.agents/skills/`
@@ -34,7 +34,7 @@ Result: `./.agents/skills/`
 Installs once for the current user:
 
 ```sh
-npx --yes --package=github:MPSMeridiaN/REVibe#v1.0.1 revibe --global
+npx -y MPSMeridiaN/REVibe#v1.0.2 --global
 ```
 
 Result: `~/.agents/skills/`
@@ -44,8 +44,8 @@ and recognized by multiple agent harnesses. Use a native target only when you
 want one explicitly:
 
 ```sh
-npx --yes --package=github:MPSMeridiaN/REVibe#v1.0.1 revibe --local --harness claude
-npx --yes --package=github:MPSMeridiaN/REVibe#v1.0.1 revibe --local --harness cursor
+npx -y MPSMeridiaN/REVibe#v1.0.2 --local --harness claude
+npx -y MPSMeridiaN/REVibe#v1.0.2 --local --harness cursor
 ```
 
 If you want evidence-based adaptation, opt in explicitly with `--harness auto`.
