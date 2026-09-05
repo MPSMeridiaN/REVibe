@@ -6,13 +6,13 @@ Run from the project that should receive REVibe. The GitHub package is fetched b
 `npx`; you do not need to clone the repository:
 
 ```sh
-npx -y MPSMeridiaN/REVibe#v1.0.2 --local
+npx -y MPSMeridiaN/REVibe --local
 ```
 
 Use `--global` for the current user's native skill directory:
 
 ```sh
-npx -y MPSMeridiaN/REVibe#v1.0.2 --global
+npx -y MPSMeridiaN/REVibe --global
 ```
 
 The remote launcher requires Node.js 18+ and Python 3.10+. A direct archive or
@@ -59,13 +59,18 @@ Restart or reload the harness if the skills do not appear. Use its skill picker,
 
 ## Update and remove
 
-Run the same remote command from a newer tag to update. An unchanged installation is a no-op. A manifest records installed files and hashes; the installer replaces only its own unchanged skill directories. It refuses unowned collisions, locally edited files, extra files inside owned skills, and linked destinations. Keep personal extensions in separate skill folders.
+Run the same no-ref remote command to update; it follows the repository's default
+branch. Pin a release tag only when a reproducible automation input is required.
+An unchanged installation is a no-op. A manifest records installed files and
+hashes; the installer replaces only its own unchanged skill directories. It
+refuses unowned collisions, locally edited files, extra files inside owned skills,
+and linked destinations. Keep personal extensions in separate skill folders.
 
 The current manifest also records directories so empty personal folders are protected. File-only manifests from earlier builds are read compatibly; an update writes the current format after verifying ownership. Legacy prepared recovery journals are also supported.
 
 ```sh
-npx -y MPSMeridiaN/REVibe#v1.0.2 --local --uninstall --dry-run
-npx -y MPSMeridiaN/REVibe#v1.0.2 --local --uninstall
+npx -y MPSMeridiaN/REVibe --local --uninstall --dry-run
+npx -y MPSMeridiaN/REVibe --local --uninstall
 ```
 
 Use the same scope or destination as installation. Removal preserves unrelated skills and the project's `.revibe/` state. Empty parent directories, an empty ownership manifest, and the small `.revibe-lock` file may remain.
@@ -75,7 +80,7 @@ Use the same scope or destination as installation. Removal preserves unrelated s
 An operating-system lock prevents install and recovery operations from overlapping. `.revibe-transaction` stores the journal and verified backups. After an interruption, use the same destination flags:
 
 ```sh
-npx -y MPSMeridiaN/REVibe#v1.0.2 --local --recover
+npx -y MPSMeridiaN/REVibe --local --recover
 ```
 
 Recovery refuses to run while an installer holds the lock. Interrupted preparation is discarded without changing the destination; a prepared transaction uses its recorded inventory and verified backups. Recovery refuses to overwrite files changed after replacement began. Keep the transaction directory until recovery is resolved. If the journal is damaged or a file operation was interrupted midway, automatic recovery may refuse: inspect the destination and backups, preserve any personal changes elsewhere, and restore the recorded files manually. Never delete the transaction blindly.

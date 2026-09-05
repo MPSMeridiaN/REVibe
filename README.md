@@ -24,17 +24,22 @@ clone is needed.
 Installs only into the current project:
 
 ```sh
-npx -y MPSMeridiaN/REVibe#v1.0.2 --local
+npx -y MPSMeridiaN/REVibe --local
 ```
 
 Result: `./.agents/skills/`
+
+This is the floating latest install: the GitHub package follows the repository's
+default branch, so the command does not need a version edit for each release.
+(`@latest` is npm registry syntax; for the current GitHub distribution, omitting
+the ref is the equivalent.)
 
 ### User-global
 
 Installs once for the current user:
 
 ```sh
-npx -y MPSMeridiaN/REVibe#v1.0.2 --global
+npx -y MPSMeridiaN/REVibe --global
 ```
 
 Result: `~/.agents/skills/`
@@ -44,8 +49,8 @@ and recognized by multiple agent harnesses. Use a native target only when you
 want one explicitly:
 
 ```sh
-npx -y MPSMeridiaN/REVibe#v1.0.2 --local --harness claude
-npx -y MPSMeridiaN/REVibe#v1.0.2 --local --harness cursor
+npx -y MPSMeridiaN/REVibe --local --harness claude
+npx -y MPSMeridiaN/REVibe --local --harness cursor
 ```
 
 If you want evidence-based adaptation, opt in explicitly with `--harness auto`.

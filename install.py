@@ -12,7 +12,7 @@ import shutil
 import stat
 import sys
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 SOURCE = Path(__file__).resolve().parent / "product" / "skills"
 MANIFEST = ".revibe-install.json"
 TRANSACTION = ".revibe-transaction"

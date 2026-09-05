@@ -153,9 +153,10 @@ class AdversarialInstallerTests(unittest.TestCase):
         before = installer.inventory(self.root / "revibe")
         (self.skill / "SKILL.md").write_text("v2")
         real_remove_tree = installer.remove_tree
+        replacement = installer.normalized(self.root / "revibe")
 
         def interrupt_first_replacement(path, parent):
-            if path == self.root / "revibe":
+            if path == replacement:
                 raise KeyboardInterrupt()
             return real_remove_tree(path, parent)
 
