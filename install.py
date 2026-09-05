@@ -12,7 +12,7 @@ import shutil
 import stat
 import sys
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 SOURCE = Path(__file__).resolve().parent / "product" / "skills"
 MANIFEST = ".revibe-install.json"
 TRANSACTION = ".revibe-transaction"
@@ -389,7 +389,7 @@ def destinations(args: argparse.Namespace) -> list[Path]:
         base = Path(args.project).expanduser().absolute() if args.project else (
             Path.cwd() if scope == "local" else Path.home()
         )
-        harness = requested_harness or "auto"
+        harness = requested_harness or "codex"
         if harness == "auto":
             harness = detect_harness(base, scope)
         relative = PATHS[harness]
@@ -424,7 +424,7 @@ def main(argv: list[str] | None = None) -> int:
     for harness in PATHS:
         parser.add_argument(f"--{harness}", action="store_true")
     parser.add_argument("--all", action="store_true", help="Install to all five native locations")
-    parser.add_argument("--harness", choices=("auto", *PATHS), help="Harness to target; auto adapts only on one clear project signal")
+    parser.add_argument("--harness", choices=("auto", *PATHS), help="Native target; omit for portable .agents/skills, or use auto for evidence-based adaptation")
     scope = parser.add_mutually_exclusive_group()
     scope.add_argument("--local", action="store_true", help="Install in the current project (the default portable target is .agents/skills)")
     scope.add_argument("--global", dest="global_scope", action="store_true", help="Install for the current user")

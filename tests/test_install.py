@@ -171,16 +171,22 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(0, installer.main(["--local", "--project", str(project)]))
         self.assertEqual(11, len(list((project / ".agents" / "skills").glob("*/SKILL.md"))))
 
-    def test_local_scope_adapts_only_to_one_clear_marker(self):
+    def test_local_scope_defaults_to_portable_target_even_with_marker(self):
         project = self.base / "project"
         (project / ".claude").mkdir(parents=True)
         self.assertEqual(0, installer.main(["--local", "--project", str(project)]))
+        self.assertTrue((project / ".agents" / "skills" / "revibe" / "SKILL.md").is_file())
+
+    def test_auto_scope_adapts_only_to_one_clear_marker(self):
+        project = self.base / "project"
+        (project / ".claude").mkdir(parents=True)
+        self.assertEqual(0, installer.main(["--local", "--project", str(project), "--harness", "auto"]))
         self.assertTrue((project / ".claude" / "skills" / "revibe" / "SKILL.md").is_file())
 
         ambiguous = self.base / "ambiguous"
         (ambiguous / ".claude").mkdir(parents=True)
         (ambiguous / ".cursor").mkdir()
-        self.assertEqual(0, installer.main(["--local", "--project", str(ambiguous)]))
+        self.assertEqual(0, installer.main(["--local", "--project", str(ambiguous), "--harness", "auto"]))
         self.assertTrue((ambiguous / ".agents" / "skills" / "revibe" / "SKILL.md").is_file())
 
     def test_explicit_harness_overrides_auto_detection(self):

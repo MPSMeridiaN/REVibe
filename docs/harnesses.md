@@ -3,8 +3,9 @@
 The product uses the standard `SKILL.md` entrypoint with `name` and `description`
 frontmatter. The same workflow files are copied to every target; there are no
 harness-specific workflow forks. The remote launcher accepts `--local` or
-`--global` plus an optional `--harness`; `auto` adapts only when one native
-project marker is unambiguous and otherwise uses `.agents/skills`.
+`--global` plus an optional `--harness`. Without a harness flag it always uses
+the predictable `.agents/skills` convention; `auto` is opt-in and adapts only
+when one native project marker is unambiguous.
 
 Installation locations verified against primary documentation on 2026-09-05:
 
