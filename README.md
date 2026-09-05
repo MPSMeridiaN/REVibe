@@ -57,6 +57,35 @@ If you want evidence-based adaptation, opt in explicitly with `--harness auto`.
 It adapts only when `REVIBE_HARNESS` or one unambiguous project marker provides a
 clear signal; otherwise it safely falls back to `.agents/skills`.
 
+### No Node.js or Python — clone and copy
+
+The installer is optional. If you only want the product files, Git and a file
+copy command are enough. Run this from the target project:
+
+macOS, Linux, or another POSIX shell:
+
+```sh
+git clone --depth 1 https://github.com/MPSMeridiaN/REVibe.git ../REVibe-source
+mkdir -p .agents/skills
+cp -R ../REVibe-source/product/skills/. .agents/skills/
+```
+
+Windows PowerShell:
+
+```powershell
+git clone --depth 1 https://github.com/MPSMeridiaN/REVibe.git ..\REVibe-source
+New-Item -ItemType Directory -Force .agents\skills
+Copy-Item -Path ..\REVibe-source\product\skills\* -Destination .\.agents\skills -Recurse -Force
+```
+
+Copy the contents of `product/skills/`, not the `product` directory itself.
+The result is exactly the 11 REVibe skill directories under `.agents/skills/`;
+no manifest, lock file, installer state, or other metadata is created. For a
+user-global install, copy to `~/.agents/skills/` (PowerShell:
+`$env:USERPROFILE\.agents\skills`) instead. Remove the temporary clone when
+you are done. Manual copies do not auto-update or uninstall; repeat the copy
+from a fresh clone when you want the latest release.
+
 The remote launcher requires Node.js 18+ and Python 3.10+. A downloaded release
 archive or development checkout can use the same installer directly:
 
@@ -80,13 +109,14 @@ add a service, account, MCP server, background process, or project configuration
 | Global | `~/.agents/skills/` | Making REVibe available across projects |
 | Native harness | Harness-specific skills directory | An explicit Claude, Cursor, Gemini, OpenCode, or Codex target |
 
-The installer records exactly what it owns. Reinstalling is safe, unchanged runs
-are no-ops, updates remove stale REVibe skills, and unrelated skills are left
-alone.
+The installer is intentionally stateless. Reinstalling is a no-op when current,
+updates replace stale REVibe skills, removes old `revibe*` entries, and leaves
+unrelated skill names alone. It writes no manifest, lock, transaction journal,
+cache, or other bookkeeping into the project.
 
 The destination stays clean: `.agents/skills/` contains only the 11 skill
-directories. Installer bookkeeping lives beside it under `.agents/.revibe/` and
-never enters the harness skill tree.
+directories. REVibe owns the reserved `revibe` / `revibe-*` namespace; keep
+personal skills under another name.
 
 ## The workflow
 
@@ -106,7 +136,9 @@ REVibe is a connected process, not a folder of unrelated prompts:
 Every stage produces a durable handoff and pauses for review where user judgment
 matters. Findings, decisions, risks, questions, and stage progress live in the
 project's `.revibe/` directory so a fresh session can resume without pretending
-that missing context never existed.
+that missing context never existed. This is workflow runtime data created when
+an agent runs REVibe; it is separate from installer state and is not created by
+installation alone.
 
 ![REVibe handoff contract: evidence, user decisions, and dependencies produce a reviewed stage result.](docs/assets/handoff.svg)
 
@@ -143,14 +175,15 @@ that missing context never existed.
 | --- | --- |
 | Tests, validation, docs, packaging, CI, and release tooling | `product/skills/` and the installer |
 | Maintainer-facing and development-only | The files copied into the selected skills directory |
-| [Workflow docs](docs/workflow.md), [harness matrix](docs/harnesses.md), and [validation record](docs/validation.md) | The 11 skills plus shared protocol and state template |
+| [Workflow docs](docs/workflow.md), [harness matrix](docs/harnesses.md), and [validation record](docs/validation.md) | The 11 skills plus shared protocol and workflow state template |
 
 ## Learn more
 
-- [Installation, removal, recovery, and advanced targets](INSTALL.md)
+- [Installation, removal, and advanced targets](INSTALL.md)
 - [How state and handoffs work](docs/workflow.md)
 - [Harness support and portable discovery](docs/harnesses.md)
 - [Development and release checks](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
 - [MIT license](LICENSE)
 
 REVibe is an engineering reasoning workflow, not a guarantee of correctness. Its

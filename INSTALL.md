@@ -29,6 +29,37 @@ Python launcher is installed. No dependency installation is needed. The command
 copies the canonical skills into the selected harness's native skill directory. It
 never edits agent settings or global instruction files.
 
+## Clone and copy (no Node.js or Python)
+
+The installer is optional. From the project that should receive REVibe, clone the
+repository outside the project and copy the contents of `product/skills/`:
+
+macOS, Linux, or another POSIX shell:
+
+```sh
+git clone --depth 1 https://github.com/MPSMeridiaN/REVibe.git ../REVibe-source
+mkdir -p .agents/skills
+cp -R ../REVibe-source/product/skills/. .agents/skills/
+```
+
+Windows PowerShell:
+
+```powershell
+git clone --depth 1 https://github.com/MPSMeridiaN/REVibe.git ..\REVibe-source
+New-Item -ItemType Directory -Force .agents\skills
+Copy-Item -Path ..\REVibe-source\product\skills\* -Destination .\.agents\skills -Recurse -Force
+```
+
+Copy `product/skills/*` itself, not the parent `product` directory. The target
+will contain exactly the 11 REVibe skill directories and no installer manifest,
+lock, transaction journal, cache, or other state. For a global install, replace
+`.agents/skills` with `~/.agents/skills` or `$env:USERPROFILE\.agents\skills` in
+PowerShell. Delete the temporary clone afterward if it is no longer needed.
+
+Manual copies have no automatic update or uninstall command. Repeat the copy
+from a fresh clone to update, or remove only the `revibe` and `revibe-*`
+directories to uninstall. Keep personal skills under another name.
+
 ## Choose a destination
 
 ```sh
@@ -61,35 +92,40 @@ Restart or reload the harness if the skills do not appear. Use its skill picker,
 
 Run the same no-ref remote command to update; it follows the repository's default
 branch. Pin a release tag only when a reproducible automation input is required.
-An unchanged installation is a no-op. A manifest records installed files and
-hashes; the installer replaces only its own unchanged skill directories. It
-refuses unowned collisions, locally edited files, extra files inside owned skills,
-and linked destinations. Keep personal extensions in separate skill folders.
+An unchanged installation is a no-op. The installer replaces stale directories in
+the reserved `revibe` / `revibe-*` namespace, removes stale REVibe skill names,
+and leaves unrelated skill names alone. It refuses linked destinations and
+existing REVibe directories with unexpected extra files; preserve or move those
+files before retrying. Keep personal skills under another name.
 
-The current manifest also records directories so empty personal folders are protected. File-only manifests from earlier builds are read compatibly; an update writes the current format after verifying ownership. Legacy prepared recovery journals are also supported.
+Current installs create no manifest, lock, transaction journal, cache, or other
+persistent installer state. A temporary staging directory is removed when the
+command finishes. Installers from older releases may have left state behind; a
+successful current install removes that legacy bookkeeping without touching
+workflow state in the project's `.revibe/` directory.
 
 ```sh
 npx -y MPSMeridiaN/REVibe --local --uninstall --dry-run
 npx -y MPSMeridiaN/REVibe --local --uninstall
 ```
 
-Use the same scope or destination as installation. Removal preserves unrelated skills and the project's `.revibe/` state. The harness skill directory contains only skill directories; installer bookkeeping is stored beside it under `.revibe/`.
+Use the same scope or destination as installation. Removal preserves unrelated
+skills and the project's `.revibe/` workflow state. The harness skill directory
+contains only skill directories, with no installer bookkeeping.
 
-## Interrupted installation
+## Interrupted or partial installation
 
-An operating-system lock prevents install and recovery operations from overlapping. The adjacent `.revibe/` state directory stores the lock, journal, and verified backups. After an interruption, use the same destination flags:
+There is no persistent installer lock or recovery journal. The installer stages
+the product in a temporary directory, then updates the destination. If the
+process or machine stops during the final update, inspect the reserved
+`revibe*` directories and rerun the same command. Unexpected extra files are
+never silently deleted; preserve user changes or remove them deliberately before
+retrying.
 
-```sh
-npx -y MPSMeridiaN/REVibe --local --recover
-```
-
-Recovery refuses to run while an installer holds the lock. Interrupted preparation is discarded without changing the destination; a prepared transaction uses its recorded inventory and verified backups. Recovery refuses to overwrite files changed after replacement began. Keep the transaction directory until recovery is resolved. If the journal is damaged or a file operation was interrupted midway, automatic recovery may refuse: inspect the destination and backups, preserve any personal changes elsewhere, and restore the recorded files manually. Never delete the transaction blindly.
-
-All requested destinations are checked before installation begins. Each destination commits separately; a failure or power loss can leave earlier destinations updated. Resolve the reported destination and rerun the command. This is not a cross-directory or power-loss-atomic transaction. Avoid editing owned skills during install, update, removal, or recovery.
-
-## Without Python or native skill discovery
-
-Copy every directory in `product/skills/` together into a skills location your harness supports, preserving sibling names and references. Check for existing names before copying. Manual installs do not gain installer ownership; manage their updates and removal manually.
+All requested destinations are checked before installation begins. Each destination
+commits separately; a failure can leave earlier destinations updated. This is not
+a cross-directory or power-loss-atomic transaction. Avoid editing REVibe skills
+during install, update, or removal.
 
 For a file-reading agent without skill discovery, ask it to read `product/skills/revibe/SKILL.md` from your extracted copy. Shells, subagents, browsers, and specialist integrations accelerate stages but are optional. Missing capabilities must be recorded as limitations rather than simulated evidence.
 

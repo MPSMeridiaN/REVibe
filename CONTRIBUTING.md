@@ -1,10 +1,10 @@
 # Develop REVibe
 
 `product/skills/` is the installable workflow. `install.py`, `bin/revibe.mjs`,
-`package.json`, `VERSION`, `INSTALL.md`, and `LICENSE` make up the remote and
-archive installers. Everything in `tests/`, `tools/`, `docs/`, and `.github/`
-serves development, validation, or repository presentation and is excluded from
-the user package.
+`package.json`, `VERSION`, `INSTALL.md`, `CHANGELOG.md`, and `LICENSE` make up
+the remote and archive installers. Everything in `tests/`, `tools/`, `docs/`,
+and `.github/` serves development, validation, or repository presentation and
+is excluded from the user package.
 
 Use Python 3.10+; development checks use the standard library:
 
@@ -25,7 +25,12 @@ Keep one canonical workflow. Give each stage a distinct question, concrete evide
 
 When changing the state contract, update its template and downstream consumers together. Define compatibility and recovery behavior. Test correction propagation and session resumption, not just the presence of headings. Keep generated state and experiment output out of the product.
 
-Installer changes need regression coverage for ownership and failure recovery. Never test against your real global skills directory. Use temporary destinations; include local edits, collisions, damaged input, and interrupted writes. A new harness needs primary documentation for its discovery paths and an honest distinction between path verification and live harness execution.
+Installer changes need regression coverage for reserved-namespace ownership,
+stateless cleanup, collisions, linked paths, and interrupted writes. Never test
+against your real global skills directory. Use temporary destinations and verify
+that only the 11 product skill directories remain. A new harness needs primary
+documentation for its discovery paths and an honest distinction between path
+verification and live harness execution.
 
 ## Behavioral evaluation
 

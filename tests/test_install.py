@@ -1,5 +1,4 @@
 import importlib.util
-import json
 import os
 from pathlib import Path
 import tempfile
@@ -40,23 +39,22 @@ class InstallerTests(unittest.TestCase):
         (self.skill / "SKILL.md").write_text("Updated")
         self.install()
         self.assertEqual("Updated", (self.root / "revibe" / "SKILL.md").read_text())
-        installer.apply(self.root, {"format": 1, "skills": {}}, self.source)
+        installer.apply(self.root, self.manifest(), self.source, uninstall=True)
         self.assertFalse((self.root / "revibe").exists())
         self.assertEqual("mine", (other / "SKILL.md").read_text())
 
     def test_skill_directory_contains_only_skill_directories(self):
         self.install()
         self.assertEqual(["revibe"], [path.name for path in self.root.iterdir()])
-        self.assertTrue(installer.manifest_path(self.root).is_file())
-        self.assertFalse((self.root / installer.MANIFEST).exists())
-        self.assertFalse((self.root / installer.LOCK).exists())
+        self.assertTrue((self.root / "revibe" / "SKILL.md").is_file())
+        self.assertFalse(any(path.is_file() for path in self.root.iterdir()))
 
-    def test_unowned_identical_skill_still_refused(self):
+    def test_reserved_revibe_skill_can_be_refreshed_without_state(self):
         import shutil
         self.root.mkdir(parents=True)
         shutil.copytree(self.skill, self.root / "revibe")
-        with self.assertRaises(installer.Conflict):
-            self.install()
+        self.assertIn("Already current", self.install())
+        self.assertEqual("Original\n", (self.root / "revibe" / "SKILL.md").read_text().split("---\n")[-1])
 
     def test_modified_owned_skill_and_extra_file_refused(self):
         self.install()
@@ -64,7 +62,7 @@ class InstallerTests(unittest.TestCase):
         with self.assertRaises(installer.Conflict):
             self.install()
         with self.assertRaises(installer.Conflict):
-            installer.apply(self.root, {"format": 1, "skills": {}}, self.source)
+            installer.apply(self.root, self.manifest(), self.source, uninstall=True)
         self.assertEqual("keep", (self.root / "revibe" / "notes.txt").read_text())
 
     def test_preflight_does_not_write(self):
@@ -80,56 +78,6 @@ class InstallerTests(unittest.TestCase):
         shutil.rmtree(extra)
         self.install()
         self.assertFalse((self.root / "revibe-old").exists())
-
-    def test_failure_after_replacement_rolls_back(self):
-        self.install()
-        before = installer.inventory(self.root / "revibe")
-        (self.skill / "SKILL.md").write_text("Updated")
-        real_replace = os.replace
-        def fail_manifest(src, dest):
-            if Path(src).name == "manifest.json":
-                raise OSError("simulated disk failure")
-            return real_replace(src, dest)
-        with patch.object(installer.os, "replace", side_effect=fail_manifest):
-            with self.assertRaises(OSError):
-                self.install()
-        self.assertEqual(before, installer.inventory(self.root / "revibe"))
-        self.assertFalse(installer.transaction_path(self.root).exists())
-
-    def test_process_interruption_can_recover(self):
-        self.install()
-        before = installer.inventory(self.root / "revibe")
-        (self.skill / "SKILL.md").write_text("Updated")
-        real_replace = os.replace
-        def interrupt(src, dest):
-            if Path(src).name == "manifest.json":
-                raise KeyboardInterrupt()
-            return real_replace(src, dest)
-        with patch.object(installer.os, "replace", side_effect=interrupt):
-            with self.assertRaises(KeyboardInterrupt):
-                self.install()
-        with self.assertRaises(installer.Conflict):
-            self.install()
-        installer.recover(self.root)
-        self.assertEqual(before, installer.inventory(self.root / "revibe"))
-
-    def test_recovery_preserves_post_interruption_edits(self):
-        self.install()
-        (self.skill / "SKILL.md").write_text("Updated")
-        real_replace = installer.os.replace
-        def interrupt_commit(src, dest):
-            if Path(src).name == "manifest.json":
-                raise KeyboardInterrupt()
-            return real_replace(src, dest)
-        with patch.object(installer.os, "replace", side_effect=interrupt_commit):
-            with self.assertRaises(KeyboardInterrupt):
-                self.install()
-        skill = self.root / "revibe"
-        skill.mkdir(exist_ok=True)
-        (skill / "SKILL.md").write_text("human rescue edit")
-        with self.assertRaises(installer.Conflict):
-            installer.recover(self.root)
-        self.assertEqual("human rescue edit", (skill / "SKILL.md").read_text())
 
     def test_manifest_traversal_is_rejected(self):
         for name in ("../revibe", "revibe/../../outside", "REVibe", "revibe:outside"):
@@ -155,6 +103,7 @@ class InstallerTests(unittest.TestCase):
         project = self.base / "project"
         conflict = project / ".claude" / "skills" / "revibe"
         conflict.mkdir(parents=True)
+        (conflict / "user-file.txt").write_text("keep")
         with patch.object(installer, "source_manifest", return_value=self.manifest()):
             result = installer.main(["--codex", "--claude", "--project", str(project)])
         self.assertEqual(1, result)
@@ -208,11 +157,8 @@ class InstallerTests(unittest.TestCase):
             self.assertEqual(0, installer.main(["--global", "--harness", "codex"]))
         self.assertTrue((user_home / ".agents" / "skills" / "revibe" / "SKILL.md").is_file())
 
-    def test_unknown_manifest_and_bad_cli_are_rejected(self):
+    def test_bad_cli_is_rejected(self):
         self.root.mkdir(parents=True)
-        (self.root / installer.MANIFEST).write_text(json.dumps({"format": 99, "skills": {}}))
-        with self.assertRaises(installer.Conflict):
-            self.install()
         self.assertEqual(1, installer.main([]))
         self.assertEqual(1, installer.main(["--destination", str(self.root), "--codex"]))
 

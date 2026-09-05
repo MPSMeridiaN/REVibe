@@ -18,10 +18,11 @@ class DistributionTests(unittest.TestCase):
     def test_release_metadata_is_consistent(self):
         package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
         version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
-        self.assertEqual("1.0.4", version)
+        self.assertEqual("1.0.5", version)
         self.assertEqual(version, package["version"])
         self.assertEqual("bin/revibe.mjs", package["bin"]["revibe"])
         self.assertIn("product", package["files"])
+        self.assertIn("CHANGELOG.md", package["files"])
         self.assertNotIn("tests", package["files"])
 
     def test_reproducible_package_installs_without_repository(self):
@@ -34,6 +35,7 @@ class DistributionTests(unittest.TestCase):
                 names = bundle.namelist()
                 self.assertFalse(any("/tests/" in n or "/tools/" in n or "/docs/" in n or "GOAL.md" in n for n in names))
                 self.assertIn("revibe/install.py", names)
+                self.assertIn("revibe/CHANGELOG.md", names)
                 self.assertIn("revibe/VERSION", names)
                 bundle.extractall(base / "extracted")
             extracted = base / "extracted" / "revibe"
@@ -47,6 +49,9 @@ class DistributionTests(unittest.TestCase):
             run()
             skills = list(destination.glob("*/SKILL.md"))
             self.assertEqual(11, len(skills))
+            self.assertEqual(11, len(list(destination.iterdir())))
+            self.assertFalse(any(path.is_file() for path in destination.iterdir()))
+            self.assertFalse((destination.parent / ".revibe").exists())
             self.assertTrue((destination / "revibe" / "references" / "protocol.md").is_file())
             self.assertEqual((ROOT / "LICENSE").read_bytes(), (destination / "revibe" / "LICENSE").read_bytes())
             for document in destination.rglob("*.md"):
@@ -62,7 +67,10 @@ class DistributionTests(unittest.TestCase):
             result = subprocess.run([sys.executable, str(ROOT / "install.py"), "--all", "--project", temp], capture_output=True, text=True)
             self.assertEqual(0, result.returncode, result.stderr)
             for location in (".agents", ".claude", ".opencode", ".cursor", ".gemini"):
-                self.assertEqual(11, len(list((Path(temp) / location / "skills").glob("*/SKILL.md"))))
+                destination = Path(temp) / location / "skills"
+                self.assertEqual(11, len(list(destination.glob("*/SKILL.md"))))
+                self.assertEqual(11, len(list(destination.iterdir())))
+                self.assertFalse(any(path.is_file() for path in destination.iterdir()))
 
 
 if __name__ == "__main__":

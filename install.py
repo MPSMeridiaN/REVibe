@@ -3,21 +3,16 @@
 from __future__ import annotations
 
 import argparse
-from contextlib import contextmanager
 import hashlib
-import json
 import os
 from pathlib import Path
 import shutil
 import stat
 import sys
+import tempfile
 
-VERSION = "1.0.4"
+VERSION = "1.0.5"
 SOURCE = Path(__file__).resolve().parent / "product" / "skills"
-STATE_DIR = ".revibe"
-MANIFEST = ".revibe-install.json"
-TRANSACTION = ".revibe-transaction"
-LOCK = ".revibe-lock"
 DIRECTORY_HASH = hashlib.sha256(b"directory").hexdigest()
 PATHS = {
     "codex": ".agents/skills",
@@ -60,95 +55,6 @@ def normalized(path: Path) -> Path:
     return path.resolve()
 
 
-def state_root(root: Path) -> Path:
-    """Keep installer state beside, never inside, the harness skill directory."""
-    return root.parent / STATE_DIR / root.name
-
-
-def state_path(root: Path, name: str) -> Path:
-    return state_root(root) / name
-
-
-def legacy_path(root: Path, name: str) -> Path:
-    return root / name
-
-
-def manifest_path(root: Path) -> Path:
-    return state_path(root, MANIFEST)
-
-
-def transaction_path(root: Path) -> Path:
-    return state_path(root, TRANSACTION)
-
-
-def existing_manifest_path(root: Path) -> Path:
-    current = manifest_path(root)
-    legacy = legacy_path(root, MANIFEST)
-    if current.exists():
-        return current
-    if legacy.exists():
-        return legacy
-    return current
-
-
-def existing_transaction_path(root: Path) -> Path:
-    current = transaction_path(root)
-    legacy = legacy_path(root, TRANSACTION)
-    if current.exists():
-        return current
-    if legacy.exists():
-        return legacy
-    return current
-
-
-def legacy_state_exists(root: Path) -> bool:
-    return any(legacy_path(root, name).exists() for name in (MANIFEST, LOCK, TRANSACTION))
-
-
-def cleanup_legacy_state(root: Path) -> None:
-    """Remove state left by pre-1.0.4 installers after a safe migration."""
-    for name in (MANIFEST, LOCK):
-        path = legacy_path(root, name)
-        if not path.exists():
-            continue
-        check_path(path)
-        if not path.is_file():
-            raise Conflict(f"Expected legacy state file: {path}")
-        path.unlink()
-
-
-@contextmanager
-def operation_lock(root: Path):
-    """OS locks are released on process exit; recovery obeys the same lock."""
-    state = state_root(root)
-    check_path(state)
-    state.mkdir(parents=True, exist_ok=True)
-    path = state / LOCK
-    check_path(path)
-    with path.open("a+b") as stream:
-        if path.stat().st_size == 0:
-            stream.write(b"\0")
-            stream.flush()
-        stream.seek(0)
-        try:
-            if os.name == "nt":
-                import msvcrt
-                msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
-            else:
-                import fcntl
-                fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except OSError as exc:
-            raise Conflict(f"Another installation or recovery is active: {root}") from exc
-        try:
-            yield
-        finally:
-            stream.seek(0)
-            if os.name == "nt":
-                msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
-            else:
-                fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
-
-
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -167,17 +73,6 @@ def inventory(directory: Path) -> dict[str, str]:
         else:
             raise Conflict(f"Unsupported filesystem entry: {path}")
     return result
-
-
-def read_json(path: Path) -> dict:
-    check_path(path)
-    try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (ValueError, OSError) as exc:
-        raise Conflict(f"Cannot read {path}: {exc}") from exc
-    if not isinstance(value, dict):
-        raise Conflict(f"Expected JSON object: {path}")
-    return value
 
 
 def validate_manifest(value: dict) -> dict:
@@ -229,211 +124,121 @@ def source_manifest(source: Path = SOURCE) -> dict:
     return validate_manifest({"format": 2, "skills": skills})
 
 
-def installed(root: Path) -> dict:
-    path = existing_manifest_path(root)
-    check_path(path)
-    return validate_manifest(read_json(path)) if path.exists() else {"format": 2, "skills": {}}
+LEGACY_STATE_FILES = (".revibe-install.json", ".revibe-lock")
+LEGACY_TRANSACTION = ".revibe-transaction"
 
 
-def preflight(root: Path, new: dict) -> dict:
-    check_path(root)
-    if root.exists() and not root.is_dir():
-        raise Conflict(f"Not a directory: {root}")
-    for transaction in (transaction_path(root), legacy_path(root, TRANSACTION)):
-        check_path(transaction)
-        if transaction.exists():
-            raise Conflict(f"Interrupted or active operation at {root}; stop other installers, then use --recover")
-    old = installed(root)
-    for name, files in old["skills"].items():
-        if inventory(root / name) != files:
-            raise Conflict(f"Locally modified installed skill; preserve or move it before retrying: {root / name}")
-    for name in new["skills"]:
-        path = root / name
-        check_path(path)
-        if path.exists() and name not in old["skills"]:
-            raise Conflict(f"Unowned skill would be overwritten: {path}")
-    return old
-
-
-def write_json(path: Path, data: dict) -> None:
-    with path.open("x", encoding="utf-8", newline="\n") as stream:
-        json.dump(data, stream, indent=2, sort_keys=True)
-        stream.write("\n")
-        stream.flush()
-        os.fsync(stream.fileno())
+def is_revibe_skill(name: str) -> bool:
+    return name == "revibe" or name.startswith("revibe-")
 
 
 def remove_tree(path: Path, parent: Path) -> None:
     check_path(path)
     if path.parent.resolve() != parent.resolve():
         raise Conflict(f"Removal outside intended parent: {path}")
-    inventory(path)  # Inspect all descendants for links before recursive removal.
+    inventory(path)
     shutil.rmtree(path)
 
 
-def _recover_locked(root: Path) -> str:
+def cleanup_persistent_state(root: Path) -> bool:
+    """Remove bookkeeping created by older installers; current installs create none."""
+    changed = False
+    for name in LEGACY_STATE_FILES:
+        path = root / name
+        if path.exists():
+            check_path(path)
+            if not path.is_file():
+                raise Conflict(f"Expected legacy state file: {path}")
+            path.unlink()
+            changed = True
+
+    transaction = root / LEGACY_TRANSACTION
+    if transaction.exists():
+        remove_tree(transaction, root)
+        changed = True
+
+    adjacent_state = root.parent / ".revibe" / root.name
+    if adjacent_state.exists():
+        remove_tree(adjacent_state, adjacent_state.parent)
+        changed = True
+        if adjacent_state.parent.exists() and not any(adjacent_state.parent.iterdir()):
+            adjacent_state.parent.rmdir()
+    return changed
+
+
+def preflight(root: Path, new: dict) -> None:
     check_path(root)
-    tx = existing_transaction_path(root)
-    check_path(tx)
-    if not tx.exists():
-        return f"No transaction: {root}"
-    if not (tx / "journal.json").exists() and not list(tx.iterdir()):
-        tx.rmdir()
-        return f"Discarded empty preparation: {root}"
-    journal = read_json(tx / "journal.json")
-    journal_root = journal.get("root")
-    if not isinstance(journal_root, str) or normalized(Path(journal_root)) != root:
-        raise Conflict("Transaction belongs to another destination")
-    old = validate_manifest(journal.get("old", {}))
-    new = validate_manifest(journal.get("new", {}))
-    if journal.get("phase") == "preparing":
-        # The journal advances to prepared before the first destination mutation.
-        remove_tree(tx, tx.parent)
-        return f"Discarded interrupted preparation; destination preserved: {root}"
-    if journal.get("phase", "prepared") != "prepared":
-        raise Conflict("Unknown transaction phase; manual recovery required")
-    names = sorted(set(old["skills"]) | set(new["skills"]))
-    # A fully committed manifest means cleanup, not rollback.
-    current = installed(root)
-    committed = (tx / "committed").is_file()
-    for name in names:
+    if root.exists() and not root.is_dir():
+        raise Conflict(f"Not a directory: {root}")
+    if not root.exists():
+        return
+
+    for child in root.iterdir():
+        if is_revibe_skill(child.name):
+            check_path(child)
+            if not child.is_dir():
+                raise Conflict(f"Expected REVibe skill directory: {child}")
+
+    for name, files in new["skills"].items():
         path = root / name
+        check_path(path)
         if path.exists():
-            observed = inventory(path)
-            allowed = [m["skills"].get(name) for m in (old, new)]
-            if observed not in allowed:
-                raise Conflict(f"Changed during interrupted operation; manual recovery required: {path}")
-    if committed:
-        if current != new:
-            raise Conflict("Committed manifest changed; manual recovery required")
-        for name, files in new["skills"].items():
-            if inventory(root / name) != files:
-                raise Conflict("Committed product changed; manual recovery required")
-        remove_tree(tx, tx.parent)
-        cleanup_legacy_state(root)
-        return f"Finished committed operation: {root}"
-    if current not in (old, new):
-        raise Conflict("Installation manifest changed; manual recovery required")
-    for name, files in old["skills"].items():
-        backup = tx / "old" / name
-        if inventory(backup) != files:
-            raise Conflict(f"Invalid recovery backup: {backup}")
-    # Everything has been checked before restoring any path.
-    for name in names:
-        path = root / name
-        if path.exists():
-            remove_tree(path, root)
-        if name in old["skills"]:
-            shutil.copytree(tx / "old" / name, path)
-    manifest = manifest_path(root)
-    check_path(manifest)
-    if old["skills"]:
-        replacement = tx / "restore.json"
-        if replacement.exists():
-            replacement.unlink()
-        write_json(replacement, old)
-        os.replace(replacement, manifest)
-    elif manifest.exists():
-        manifest.unlink()
-    remove_tree(tx, tx.parent)
-    cleanup_legacy_state(root)
-    return f"Restored previous installation: {root}"
+            existing = inventory(path)
+            unexpected = sorted(set(existing) - set(files))
+            if unexpected:
+                raise Conflict(
+                    f"Existing REVibe skill contains extra files; preserve or move them before retrying: {path}"
+                )
 
 
-def recover(root: Path) -> str:
-    root = normalized(root)
-    if not root.exists() and not any(path.exists() for path in (transaction_path(root), legacy_path(root, TRANSACTION))):
-        return f"No transaction: {root}"
-    with operation_lock(root):
-        return _recover_locked(root)
-
-
-def _apply_locked(root: Path, new: dict, source: Path) -> str:
-    old = preflight(root, new)
-    if old == new and not legacy_state_exists(root):
-        return f"Already current: {root}"
-    root.mkdir(parents=True, exist_ok=True)
-    tx = transaction_path(root)
-    tx.mkdir()  # Exclusive lock; never steal a live or interrupted transaction.
-    prepared = False
-    try:
-        current_manifest = manifest_path(root)
-        legacy_manifest = legacy_path(root, MANIFEST)
-        manifest_paths = (current_manifest, legacy_manifest)
-        prior_manifest_state = tuple(
-            digest(path) if path.exists() else None for path in manifest_paths
-        )
-        journal = {"root": str(root), "old": old, "new": new, "phase": "preparing"}
-        write_json(tx / "journal.json", journal)
-        (tx / "old").mkdir()
-        (tx / "new").mkdir()
-        for name in old["skills"]:
-            shutil.copytree(root / name, tx / "old" / name)
-            if inventory(tx / "old" / name) != old["skills"][name]:
-                raise Conflict("Backup verification failed; destination was not changed")
-        for name, files in new["skills"].items():
-            if inventory(source / name) != files:
-                raise Conflict("Product changed before preparation")
-            shutil.copytree(source / name, tx / "new" / name)
-            if inventory(tx / "new" / name) != files:
-                raise Conflict("Product changed while preparing installation")
-        # Recheck source ownership after preparation, before any replacement.
-        for name, files in old["skills"].items():
-            if inventory(root / name) != files:
-                raise Conflict("Installed skills changed while preparing installation")
-        for name in set(new["skills"]) - set(old["skills"]):
-            check_path(root / name)
-            if (root / name).exists():
-                raise Conflict(f"Unowned skill appeared while preparing: {root / name}")
-        for path in manifest_paths:
-            check_path(path)
-        current_manifest_state = tuple(
-            digest(path) if path.exists() else None for path in manifest_paths
-        )
-        if current_manifest_state != prior_manifest_state:
-            raise Conflict("Manifest changed while preparing installation")
-        journal["phase"] = "prepared"
-        write_json(tx / "prepared.json", journal)
-        os.replace(tx / "prepared.json", tx / "journal.json")
-        prepared = True
-        for name in sorted(set(old["skills"]) | set(new["skills"])):
-            path = root / name
-            check_path(path)
-            if path.exists():
-                if name not in old["skills"] or inventory(path) != old["skills"][name]:
-                    raise Conflict(f"Destination changed before replacement: {path}")
-                remove_tree(path, root)
-            if name in new["skills"]:
-                os.replace(tx / "new" / name, path)
-        for path in manifest_paths:
-            check_path(path)
-        current_manifest_state = tuple(
-            digest(path) if path.exists() else None for path in manifest_paths
-        )
-        if current_manifest_state != prior_manifest_state:
-            raise Conflict("Manifest changed before commit")
-        write_json(tx / "manifest.json", new)
-        os.replace(tx / "manifest.json", current_manifest)
-        (tx / "committed").write_text("committed\n", encoding="utf-8")
-        cleanup_legacy_state(root)
-        remove_tree(tx, tx.parent)
-    except Exception:
-        if tx.exists():
-            if prepared:
-                _recover_locked(root)
-            else:
-                remove_tree(tx, tx.parent)
-        raise
-    return f"{'Installed' if new['skills'] else 'Uninstalled'}: {root}"
-
-
-def apply(root: Path, new: dict, source: Path = SOURCE) -> str:
+def apply(root: Path, new: dict, source: Path = SOURCE, uninstall: bool = False) -> str:
     root = normalized(root)
     source = normalized(source)
     new = validate_manifest(new)
     preflight(root, new)
-    with operation_lock(root):
-        return _apply_locked(root, new, source)
+
+    if uninstall:
+        changed = False
+        if root.exists():
+            for child in sorted(root.iterdir(), key=lambda path: path.name):
+                if is_revibe_skill(child.name):
+                    remove_tree(child, root)
+                    changed = True
+        changed = cleanup_persistent_state(root) or changed
+        return f"Uninstalled: {root}"
+
+    root.parent.mkdir(parents=True, exist_ok=True)
+    changed = False
+    with tempfile.TemporaryDirectory(prefix=".revibe-", dir=str(root.parent)) as temporary:
+        staged_root = Path(temporary) / "skills"
+        staged_root.mkdir()
+        for name, files in new["skills"].items():
+            source_skill = source / name
+            if inventory(source_skill) != files:
+                raise Conflict("Product changed before preparation")
+            shutil.copytree(source_skill, staged_root / name)
+            if inventory(staged_root / name) != files:
+                raise Conflict("Product changed while preparing installation")
+
+        root.mkdir(parents=True, exist_ok=True)
+        desired_names = set(new["skills"])
+        for child in sorted(root.iterdir(), key=lambda path: path.name):
+            if is_revibe_skill(child.name) and child.name not in desired_names:
+                remove_tree(child, root)
+                changed = True
+
+        for name, files in new["skills"].items():
+            destination = root / name
+            if destination.exists() and inventory(destination) == files:
+                continue
+            if destination.exists():
+                remove_tree(destination, root)
+                changed = True
+            os.replace(staged_root / name, destination)
+            changed = True
+
+    changed = cleanup_persistent_state(root) or changed
+    return f"{'Installed' if changed else 'Already current'}: {root}"
 
 
 def detect_harness(base: Path, scope: str) -> str:
@@ -516,25 +321,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--destination", metavar="PATH", help="Explicit skills directory for another harness")
     action = parser.add_mutually_exclusive_group()
     action.add_argument("--uninstall", action="store_true")
-    action.add_argument("--recover", action="store_true", help="Recover after stopping any other installer")
     parser.add_argument("--dry-run", action="store_true", help="Check and print changes without writing")
     args = parser.parse_args(argv)
     try:
         roots = destinations(args)
-        if args.recover:
-            if args.dry_run:
-                raise Conflict("--recover cannot be combined with --dry-run")
-            for root in roots:
-                print(recover(root))
-            return 0
-        new = {"format": 1, "skills": {}} if args.uninstall else source_manifest()
+        new = source_manifest()
         for root in roots:
             preflight(root, new)  # All destinations checked before any mutation.
         for root in roots:
             if args.dry_run:
-                print(f"Would {'uninstall owned skills from' if args.uninstall else 'install ' + str(len(new['skills'])) + ' skills to'}: {root}")
+                action_text = "uninstall REVibe skills from" if args.uninstall else f"install {len(new['skills'])} skills to"
+                print(f"Would {action_text}: {root}")
             else:
-                print(apply(root, new))
+                print(apply(root, new, uninstall=args.uninstall))
         return 0
     except (Conflict, OSError) as exc:
         print(f"REVibe: {exc}", file=sys.stderr)

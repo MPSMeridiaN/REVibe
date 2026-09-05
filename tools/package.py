@@ -13,7 +13,7 @@ def build(output: Path) -> Path:
     install.source_manifest()
     output.mkdir(parents=True, exist_ok=True)
     archive = output / "revibe.zip"
-    files = [ROOT / "install.py", ROOT / "INSTALL.md", ROOT / "LICENSE", ROOT / "VERSION"]
+    files = [ROOT / "install.py", ROOT / "INSTALL.md", ROOT / "CHANGELOG.md", ROOT / "LICENSE", ROOT / "VERSION"]
     files += sorted(p for p in (ROOT / "product").rglob("*") if p.is_file())
     with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
         for path in sorted(files):

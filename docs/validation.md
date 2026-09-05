@@ -6,8 +6,8 @@ make every project correct.
 
 ## Automated checks
 
-- `python -m unittest discover -s tests -v`: installer, recovery, state, and
-  distribution regression coverage.
+- `python -m unittest discover -s tests -v`: installer, stateless update/cleanup,
+  workflow state, and distribution regression coverage.
 - `python tools/validate.py`: skill metadata, state template, product links,
   and release metadata.
 - `python tools/package.py`: reproducible standalone Python archive.
@@ -31,9 +31,11 @@ npx -y MPSMeridiaN/REVibe --global
 Acceptance checks use a clean project and a fresh temporary user directory. Each
 run confirms that the agent-facing package can be fetched from GitHub without a
 manual clone, the requested scope is respected, the selected harness directory
-contains all 11 skills, the shared references are readable, a repeat install is
-a no-op, and no duplicate skill tree is created. Explicit harness targets and
-the unambiguous auto-detection path are checked separately.
+contains all 11 skills and no direct files or installer state, the shared
+references are readable, a repeat install is a no-op, and no duplicate skill
+tree is created. Explicit harness targets and the unambiguous auto-detection path
+are checked separately. The documented clone-and-copy path is also smoke-tested
+as a product-only install without Node.js or Python.
 
 ## Behavioral scope
 
@@ -50,5 +52,8 @@ are not treated as proof of arbitrary real-world reliability.
   automated suite.
 - Multi-target installation commits each destination separately rather than as
   one cross-directory transaction.
-- Unexpected filesystem changes during recovery may require manual repair to
-  preserve user edits.
+- The installer keeps no persistent recovery journal. A process or power loss
+  during the final update may require inspecting the reserved `revibe*` entries
+  and rerunning the command.
+- The installer owns the reserved `revibe` / `revibe-*` namespace; personal
+  skills should use another name.
