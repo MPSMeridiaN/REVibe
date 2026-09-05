@@ -62,6 +62,7 @@ and floating; use a tag only when an exact historical build is required.
 
 - Initial public REVibe release.
 
+[1.1.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.1.0
 [1.0.5]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.0.5
 [1.0.4]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.0.4
 [1.0.3]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.0.3
