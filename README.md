@@ -154,11 +154,15 @@ REVibe is a connected process, not a folder of unrelated prompts:
 10. **Finalize** the repository for use and maintenance.
 
 Every stage produces a durable handoff and pauses for review where user judgment
-matters. Findings, decisions, risks, questions, and stage progress live in the
-project's `.revibe/` directory so a fresh session can resume without pretending
-that missing context never existed. This is workflow runtime data created when
-an agent runs REVibe; it is separate from installer state and is not created by
-installation alone.
+matters. The agent discovers the current harness's question capability by
+behavior and schema rather than assuming one tool name; when available, it uses
+that capability for every review question, marks an evidence-backed
+recommendation, asks a final open-ended addition question, and states the exact
+command for continuing. Findings, decisions, risks, questions, and stage
+progress live in the project's `.revibe/` directory so a fresh session can
+resume without pretending that missing context never existed. This is workflow
+runtime data created when an agent runs REVibe; it is separate from installer
+state and is not created by installation alone.
 
 ![REVibe handoff contract: evidence, user decisions, and dependencies produce a reviewed stage result.](docs/assets/handoff.svg)
 

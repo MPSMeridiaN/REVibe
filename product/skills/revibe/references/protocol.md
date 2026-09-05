@@ -2,6 +2,16 @@
 
 This is the shared contract for the connected REVibe skills. Read it before creating or changing `.revibe/state.json` or a stage handoff. The contract is intentionally instruction-only: it does not require a runtime, package, service, or particular harness.
 
+## Interactive user questions
+
+When a stage needs a user decision, inspect the actual current harness before asking. Search its exposed tool/function catalog, schemas, and descriptions by capability rather than assuming a fixed display name. Names such as `request_user_input`, `ask_user`, `elicitation`, `prompt_user`, `question`, and `clarify` are only discovery hints; confirm that the candidate can pause for a user response, present choices or free text, and return that response. Do not mistake a generic message, screen, approval, or notification tool for a question tool. If the catalog is not visible, use the harness's documented capability-discovery path and record the limit.
+
+The active stage owner is the only actor that asks the user. Before the first question, enumerate every meaningful unresolved choice for the stage, order dependent questions, and keep asking until each is answered, explicitly deferred, or blocked. If a structured question tool exists, use it for every user-facing question in the review; never switch to plain conversational questions merely for convenience. Batch only independent questions when the tool supports batching; otherwise make repeated calls and use each answer before asking a dependent question.
+
+Every choice question must identify one evidence-backed option as `Recommended`, include a concise reason and material tradeoffs, and provide a custom/free-text path. After all decision questions, ask one separate final open-ended question equivalent in the user's language to: “Is there anything REVibe missed, misunderstood, or that you want to add?” If the tool requires options, include a no-additions option marked `Recommended` plus a free-text/custom option; the prompt must remain open-ended. If the answer introduces a new material decision, process it as a new question cycle and repeat the final open-ended question last.
+
+Record the question IDs, recommendations, answers, deferrals, and blockers in the handoff/state. If no structured question tool exists, use the plain-text fallback, record the unavailable capability, and leave the stage `awaiting_review`; absence of the tool is never approval.
+
 ## Workflow and authority
 
 REVibe moves a project through these short stages:
@@ -15,10 +25,11 @@ The user owns intent, priorities, acceptance, and permission for consequential c
 At the end of every stage:
 
 1. Set the stage to `awaiting_review` and write the handoff with the meaningful findings, uncertainties, recommendations, and choices that need the user's response.
-2. Present each meaningful item so the user can confirm, reject, correct, modify, prioritize, defer, or replace it. Offer a recommended choice with its material tradeoffs when useful, plus a custom path.
-3. Close with the equivalent, in the user's language, of: “Is there anything REVibe missed, misunderstood, or that you want to add?”
+2. Apply the interactive user-question protocol above. Present every meaningful item so the user can confirm, reject, correct, modify, prioritize, defer, or replace it, with a recommended choice, tradeoffs, and a custom path.
+3. Ask the final open-ended addition question only after all other review questions have been answered, deferred, or blocked.
 4. Incorporate the response into the handoff and canonical state before marking the stage `complete`.
 5. Set `next_stage` to the recommended logical continuation, or to the earlier stage that must be revisited when the result is incomplete.
+6. Tell the user the current status, what the next stage will do, and the exact command to continue (for example, `Use revibe to continue to <next_stage>`); when review or a blocker remains, state the answer or command needed to resume the current stage.
 
 Silence is pending. It does not mean approval, completion, or permission. If an interactive question mechanism is unavailable, leave the stage `awaiting_review`, record the questions, and return the review request in the conversation.
 

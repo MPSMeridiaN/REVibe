@@ -41,14 +41,21 @@ only when requested.
 | Capability present | Use | Fallback |
 | --- | --- | --- |
 | Native skill discovery | Route by concise skill descriptions | Read the entrypoint directly |
-| Structured questions | Review findings and decisions in manageable batches | Plain-text choices plus custom response |
+| Structured questions | Discover the capability by schema/description; use it for every review question with a `Recommended` choice and a final open-ended addition check | Plain-text questions plus custom response; record the capability limit |
 | Subagents | Scoped independent investigations and review | Sequential role passes by the orchestrator |
 | Shell and test runtime | Reproduce behavior with commands and artifacts | Source-only findings with explicit confidence limits |
 | Browser/debugger | Inspect UI, lifecycle, runtime state | Record unavailable checks and a reproduction recipe |
 | Graph, search, language server | Follow relationships efficiently | Targeted source search and manual tracing |
 | Filesystem writes | Durable state and handoffs | Return a structured handoff for the user to save; report persistence unavailable |
 
-Discover actual capabilities in the current session. Do not hardcode tool names, model names, agent counts, or hidden harness features in the core. An unavailable tool never means a check passed.
+Discover actual capabilities in the current session. For user questions, inspect
+the exposed tool/function catalog, schemas, and descriptions for a capability
+that presents choices or free text and returns the user's response. Names such
+as `request_user_input`, `ask_user`, `elicitation`, `prompt_user`, `question`,
+or `clarify` are only search hints; do not assume one exists or treat a generic
+message, screen, approval, or notification tool as equivalent. Do not hardcode
+tool names, model names, agent counts, or hidden harness features in the core.
+An unavailable tool never means a check passed.
 
 ## Design research
 

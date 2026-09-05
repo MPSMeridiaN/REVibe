@@ -3,6 +3,17 @@
 All notable REVibe releases are recorded here. The release command stays short
 and floating; use a tag only when an exact historical build is required.
 
+## [Unreleased]
+
+### Changed
+
+- Distributed skills now discover user-question tools by capability and schema
+  across harnesses, use them for every stage review when available, present
+  recommended choices with tradeoffs, finish with an open-ended addition check,
+  and state the exact command for continuing to the next stage.
+- Workflow and harness documentation now describe the question sequence,
+  capability-based discovery, and continuation guidance.
+
 ## [1.1.0] - 2026-09-05
 
 ### Added
@@ -62,6 +73,7 @@ and floating; use a tag only when an exact historical build is required.
 
 - Initial public REVibe release.
 
+[Unreleased]: https://github.com/MPSMeridiaN/REVibe/compare/v1.1.0...HEAD
 [1.1.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.1.0
 [1.0.5]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.0.5
 [1.0.4]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.0.4

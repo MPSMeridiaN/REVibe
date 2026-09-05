@@ -6,13 +6,28 @@ The stages are separate because they settle different questions. Discovery inven
 
 ## Review is part of the result
 
-A stage first saves an `awaiting_review` handoff. It presents meaningful findings, uncertainties, and choices in manageable batches. Features are reviewed individually during discovery. A recommendation includes the tradeoff and a custom path where useful.
+A stage first saves an `awaiting_review` handoff. Before asking, the active stage
+checks the current harness's exposed tools and schemas by capability, not by a
+fixed name; different harnesses may call the same question capability different
+things. If a structured question tool exists, the stage uses it for every
+user-facing review question. It enumerates all meaningful decisions, asks them
+until each is answered, deferred, or blocked, and uses manageable batches only
+for independent questions. Each choice has an evidence-backed `Recommended`
+option, its tradeoffs, and a custom/free-text path where useful.
 
 You can accept, reject, correct, modify, prioritize, or defer any item. Every stage finishes its review with:
 
+The final question in the review cycle is a separate open-ended check:
+
 > Is there anything REVibe missed, misunderstood, or that you want to add?
 
-The agent incorporates your answer before calling the stage complete. An unanswered question stays unanswered. Accepting a feature inventory does not prove the features work; accepting an implementation strategy does not prove its changes pass validation.
+If the harness has no structured question tool, the stage falls back to plain
+text, records that capability limit, and remains `awaiting_review`. The agent
+incorporates your answers before calling the stage complete, then explains the
+current status, what the next stage will do, and the exact command to continue.
+An unanswered question stays unanswered. Accepting a feature inventory does not
+prove the features work; accepting an implementation strategy does not prove
+its changes pass validation.
 
 ## What persists
 
