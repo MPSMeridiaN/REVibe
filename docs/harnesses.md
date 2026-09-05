@@ -9,17 +9,32 @@ when one native project marker is unambiguous.
 
 Installation locations verified against primary documentation on 2026-09-05:
 
-| Flag | Project location | User location | Source |
-| --- | --- | --- | --- |
-| `--codex` | `.agents/skills` | `~/.agents/skills` | [OpenAI: Build skills](https://learn.chatgpt.com/docs/build-skills) |
-| `--claude` | `.claude/skills` | `~/.claude/skills` | [Claude Code skills](https://code.claude.com/docs/en/skills) |
-| `--opencode` | `.opencode/skills` | `~/.config/opencode/skills` | [OpenCode skills](https://opencode.ai/docs/skills/) |
-| `--cursor` | `.cursor/skills` | `~/.cursor/skills` | [Cursor skills](https://cursor.com/docs/skills) |
-| `--gemini` | `.gemini/skills` | `~/.gemini/skills` | [Gemini CLI skills](https://geminicli.com/docs/cli/skills/) |
+| Flag / host | Project discovery | User discovery | REVibe route | Source |
+| --- | --- | --- | --- | --- |
+| `--codex` · Codex CLI, IDE, desktop | `.agents/skills` | `~/.agents/skills` | Default or native flag | [OpenAI: Build skills](https://learn.chatgpt.com/docs/build-skills) |
+| `--copilot` · GitHub Copilot | `.github/skills`, `.agents/skills`, `.claude/skills` | `~/.copilot/skills`, `~/.agents/skills` | Default shared path or native flag | [GitHub: agent skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills), [Copilot CLI reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) |
+| `--claude` · Claude Code | `.claude/skills` | `~/.claude/skills` | Native flag | [Claude Code skills](https://code.claude.com/docs/en/skills) |
+| `--opencode` · OpenCode | `.opencode/skills`, `.claude/skills`, `.agents/skills` | `~/.config/opencode/skills`, `~/.claude/skills`, `~/.agents/skills` | Default shared path or native flag | [OpenCode skills](https://opencode.ai/docs/skills/) |
+| `--cursor` · Cursor | `.agents/skills`, `.cursor/skills` | `~/.agents/skills`, `~/.cursor/skills` | Default shared path or native flag | [Cursor skills](https://cursor.com/docs/skills) |
+| `--gemini` · Gemini CLI | `.agents/skills`, `.gemini/skills` | `~/.agents/skills`, `~/.gemini/skills` | Default shared path or native flag | [Gemini CLI skills](https://geminicli.com/docs/cli/skills/) |
+| `--cline` · Cline | `.cline/skills`, `.clinerules/skills`, `.claude/skills` | `~/.cline/skills` | Native flag | [Cline skills](https://docs.cline.bot/customization/skills) |
+| `--qwen` · Qwen Code | `.qwen/skills` | `~/.qwen/skills` | Native flag | [Qwen Code skills](https://github.com/QwenLM/qwen-code/blob/main/docs/users/features/skills.md) |
+| `--kiro` · Kiro IDE, CLI, web | `.kiro/skills` | `~/.kiro/skills` (IDE/CLI) | Native flag | [Kiro CLI skills](https://kiro.dev/docs/cli/skills/) |
+| Amp | `.agents/skills`, `.claude/skills` | `~/.config/agents/skills`, `~/.agents/skills`, `~/.claude/skills` | Default shared path | [Amp skills](https://ampcode.com/docs/customize/skills) |
+| Warp | `.agents/skills`, `.warp/skills` | `~/.agents/skills` or configured equivalent | Default shared path | [Warp AI objects](https://docs.warp.dev/knowledge-and-collaboration/warp-drive/ai-objects) |
 
-OpenCode user installs respect an absolute `XDG_CONFIG_HOME` when set. Explicit `--destination` handles other configurations. Native path support is not a claim of having run every harness: see [validation](validation.md).
+OpenCode user installs respect an absolute `XDG_CONFIG_HOME` when set. Explicit
+`--destination` handles other configurations. Native path support means the
+path and `SKILL.md` contract are documented; it is not a claim that every host
+application has been run in CI. See [validation](validation.md).
 
-Codex, Cursor, Gemini CLI, and OpenCode document `.agents/skills` discovery. Claude and OpenCode also describe compatibility paths and precedence rules. Avoid redundant copies if your harness discovers multiple roots. Cursor's local user skills and cloud skill availability differ; this installer configures the local filesystem only. OpenAI also recommends plugins for distributing bundles; REVibe currently uses native skill-directory installation to preserve a single cross-harness package.
+The `.agents/skills` default is deliberately the lowest-friction interoperable
+choice. Avoid redundant copies when a host discovers both `.agents/skills` and a
+native or compatibility directory. Cursor's local user skills and cloud skill
+availability differ; this installer configures the local filesystem only. OpenAI
+and other hosts may offer plugin or marketplace distribution as well; REVibe
+currently keeps one portable skill package and installs it into native folders
+only when requested.
 
 ## Capability adaptation
 

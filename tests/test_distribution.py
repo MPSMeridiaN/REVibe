@@ -18,7 +18,7 @@ class DistributionTests(unittest.TestCase):
     def test_release_metadata_is_consistent(self):
         package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
         version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
-        self.assertEqual("1.0.5", version)
+        self.assertEqual("1.1.0", version)
         self.assertEqual(version, package["version"])
         self.assertEqual("bin/revibe.mjs", package["bin"]["revibe"])
         self.assertIn("product", package["files"])
@@ -66,7 +66,7 @@ class DistributionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             result = subprocess.run([sys.executable, str(ROOT / "install.py"), "--all", "--project", temp], capture_output=True, text=True)
             self.assertEqual(0, result.returncode, result.stderr)
-            for location in (".agents", ".claude", ".opencode", ".cursor", ".gemini"):
+            for location in (".agents", ".github", ".claude", ".opencode", ".cursor", ".gemini", ".cline", ".qwen", ".kiro"):
                 destination = Path(temp) / location / "skills"
                 self.assertEqual(11, len(list(destination.glob("*/SKILL.md"))))
                 self.assertEqual(11, len(list(destination.iterdir())))

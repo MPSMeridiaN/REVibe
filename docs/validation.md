@@ -16,7 +16,7 @@ make every project correct.
 
 The distribution tests build the archive twice, compare bytes, extract it
 outside the repository, install and uninstall from the extracted copy, and
-exercise all five native target families in an isolated project. The product
+exercise all nine native target families in an isolated project. The product
 projection excludes tests, tools, documentation, and development prompts.
 
 ## Remote install acceptance
@@ -33,9 +33,12 @@ run confirms that the agent-facing package can be fetched from GitHub without a
 manual clone, the requested scope is respected, the selected harness directory
 contains all 11 skills and no direct files or installer state, the shared
 references are readable, a repeat install is a no-op, and no duplicate skill
-tree is created. Explicit harness targets and the unambiguous auto-detection path
-are checked separately. The documented clone-and-copy path is also smoke-tested
-as a product-only install without Node.js or Python.
+tree is created. Explicit harness targets are checked across the nine native
+targets; auto-detection is checked with representative unambiguous markers and
+an ambiguous-marker fallback. The documented
+clone-and-copy path is also smoke-tested as a product-only install without
+Node.js or Python. The shared `.agents/skills` claims for Amp and Warp are
+documentation-verified but are not live application tests in CI.
 
 ## Behavioral scope
 

@@ -65,6 +65,10 @@ directories to uninstall. Keep personal skills under another name.
 ```sh
 python install.py --local --harness claude --dry-run
 python install.py --local --project /path/to/project --harness cursor
+python install.py --local --harness copilot
+python install.py --local --harness cline
+python install.py --local --harness qwen
+python install.py --local --harness kiro
 python install.py --global --harness opencode
 python install.py --local --harness auto
 python install.py --destination /custom/skills
@@ -75,16 +79,25 @@ defaults to that project's `.agents/skills/`. `--global` targets the current
 user's `~/.agents/skills/`. The harness is optional: without `--harness`, the
 portable `.agents/skills` target is always used. `--harness auto` uses an explicit
 `REVIBE_HARNESS` value or one unambiguous native project marker (`.claude`,
-`.cursor`, `.gemini`, `.opencode`, or `.agents`); missing or ambiguous evidence
-falls back to `.agents/skills`. The older forms `--codex`, `--claude`,
-`--opencode`, `--cursor`, `--gemini`, `--all`, `--project`, and `--user` remain
-available for scripted compatibility.
+`.cursor`, `.gemini`, `.opencode`, `.agents`, `.github/skills`, `.cline`, `.qwen`,
+or `.kiro`); missing or ambiguous evidence falls back to `.agents/skills`.
+Native targets also cover GitHub Copilot (`.github/skills`), Cline
+(`.cline/skills`), Qwen Code (`.qwen/skills`), and Kiro (`.kiro/skills`). The
+portable target is additionally documented by Amp and Warp. See
+`docs/harnesses.md` for the complete project/global path matrix and evidence
+limits. The older forms `--codex`, `--copilot`, `--claude`, `--opencode`,
+`--cursor`, `--gemini`, `--cline`, `--qwen`, `--kiro`, `--all`, `--project`, and
+`--user` remain available for scripted compatibility.
 
 `--destination` names the skills directory itself and is exclusive with harness
 and scope flags. The installer never edits agent settings or global instruction
 files.
 
-Some harnesses also discover other harnesses' directories. Installing all five may expose duplicate skills. Prefer one native target for the harness you use; the shared `.agents/skills` target is documented by several other harnesses. The repository's `docs/harnesses.md` contains the source-backed support matrix.
+Some harnesses also discover other harnesses' directories. Installing all nine
+native targets may expose duplicate skills. Prefer one native target for the
+harness you use; the shared `.agents/skills` target is documented by several
+other harnesses. The repository's `docs/harnesses.md` contains the source-backed
+support matrix.
 
 Restart or reload the harness if the skills do not appear. Use its skill picker, mention `revibe`, or ask it to read the installed `revibe/SKILL.md`. A project may need to be trusted before its skills become available.
 

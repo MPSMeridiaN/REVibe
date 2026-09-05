@@ -3,6 +3,19 @@
 All notable REVibe releases are recorded here. The release command stays short
 and floating; use a tag only when an exact historical build is required.
 
+## [1.1.0] - 2026-09-05
+
+### Added
+
+- Harness coverage for GitHub Copilot, Cline, Qwen Code, Kiro, Amp, and Warp.
+- Native installer targets: `--copilot`, `--cline`, `--qwen`, and `--kiro`.
+- A README support summary and an evidence-backed project/global path matrix.
+
+### Changed
+
+- The installer now validates all nine native target families in distribution
+  tests while keeping `.agents/skills` as the portable default.
+
 ## [1.0.5] - 2026-09-05
 
 ### Added

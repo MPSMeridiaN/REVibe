@@ -113,12 +113,16 @@ class InstallerTests(unittest.TestCase):
         from argparse import Namespace
         values = {h: False for h in installer.PATHS}
         args = Namespace(**values, all=True, destination=None, project=str(self.base), user=False)
-        self.assertEqual(5, len(installer.destinations(args)))
+        self.assertEqual(9, len(installer.destinations(args)))
         args.all = False
         args.opencode = True
         args.project = None
         with patch.dict(os.environ, {"XDG_CONFIG_HOME": str(self.base / "config")}):
             self.assertEqual([self.base / "config" / "opencode" / "skills"], installer.destinations(args))
+
+        args.opencode = False
+        args.copilot = True
+        self.assertEqual([Path.home() / ".copilot" / "skills"], installer.destinations(args))
 
     def test_local_scope_defaults_to_portable_target_and_is_repeatable(self):
         project = self.base / "project"
@@ -139,6 +143,11 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(0, installer.main(["--local", "--project", str(project), "--harness", "auto"]))
         self.assertTrue((project / ".claude" / "skills" / "revibe" / "SKILL.md").is_file())
 
+        qwen = self.base / "qwen"
+        (qwen / ".qwen").mkdir(parents=True)
+        self.assertEqual(0, installer.main(["--local", "--project", str(qwen), "--harness", "auto"]))
+        self.assertTrue((qwen / ".qwen" / "skills" / "revibe" / "SKILL.md").is_file())
+
         ambiguous = self.base / "ambiguous"
         (ambiguous / ".claude").mkdir(parents=True)
         (ambiguous / ".cursor").mkdir()
@@ -156,6 +165,10 @@ class InstallerTests(unittest.TestCase):
         with patch.object(installer.Path, "home", return_value=user_home):
             self.assertEqual(0, installer.main(["--global", "--harness", "codex"]))
         self.assertTrue((user_home / ".agents" / "skills" / "revibe" / "SKILL.md").is_file())
+
+        with patch.object(installer.Path, "home", return_value=user_home):
+            self.assertEqual(0, installer.main(["--global", "--harness", "copilot"]))
+        self.assertTrue((user_home / ".copilot" / "skills" / "revibe" / "SKILL.md").is_file())
 
     def test_bad_cli_is_rejected(self):
         self.root.mkdir(parents=True)

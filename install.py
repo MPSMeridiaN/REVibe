@@ -11,22 +11,41 @@ import stat
 import sys
 import tempfile
 
-VERSION = "1.0.5"
+VERSION = "1.1.0"
 SOURCE = Path(__file__).resolve().parent / "product" / "skills"
 DIRECTORY_HASH = hashlib.sha256(b"directory").hexdigest()
 PATHS = {
     "codex": ".agents/skills",
+    "copilot": ".github/skills",
     "claude": ".claude/skills",
     "opencode": ".opencode/skills",
     "cursor": ".cursor/skills",
     "gemini": ".gemini/skills",
+    "cline": ".cline/skills",
+    "qwen": ".qwen/skills",
+    "kiro": ".kiro/skills",
+}
+GLOBAL_PATHS = {
+    "codex": ".agents/skills",
+    "copilot": ".copilot/skills",
+    "claude": ".claude/skills",
+    "opencode": ".config/opencode/skills",
+    "cursor": ".cursor/skills",
+    "gemini": ".gemini/skills",
+    "cline": ".cline/skills",
+    "qwen": ".qwen/skills",
+    "kiro": ".kiro/skills",
 }
 HARNESS_MARKERS = {
     "codex": ".agents",
+    "copilot": ".github/skills",
     "claude": ".claude",
     "opencode": ".opencode",
     "cursor": ".cursor",
     "gemini": ".gemini",
+    "cline": ".cline",
+    "qwen": ".qwen",
+    "kiro": ".kiro",
 }
 
 
@@ -279,7 +298,7 @@ def destinations(args: argparse.Namespace) -> list[Path]:
         harness = requested_harness or "codex"
         if harness == "auto":
             harness = detect_harness(base, scope)
-        relative = PATHS[harness]
+        relative = PATHS[harness] if scope == "local" else GLOBAL_PATHS[harness]
         if harness == "opencode" and scope == "global":
             config = Path(os.environ.get("XDG_CONFIG_HOME", str(base / ".config"))).expanduser()
             if not config.is_absolute():
@@ -294,7 +313,7 @@ def destinations(args: argparse.Namespace) -> list[Path]:
     base = Path(args.project).expanduser().absolute() if args.project else Path.home()
     roots = []
     for harness in selected:
-        relative = PATHS[harness]
+        relative = PATHS[harness] if args.project else GLOBAL_PATHS[harness]
         if harness == "opencode" and not args.project:
             config = Path(os.environ.get("XDG_CONFIG_HOME", str(base / ".config"))).expanduser()
             if not config.is_absolute():
@@ -310,7 +329,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--version", action="version", version=f"REVibe {VERSION}")
     for harness in PATHS:
         parser.add_argument(f"--{harness}", action="store_true")
-    parser.add_argument("--all", action="store_true", help="Install to all five native locations")
+    parser.add_argument("--all", action="store_true", help="Install to all configured native locations")
     parser.add_argument("--harness", choices=("auto", *PATHS), help="Native target; omit for portable .agents/skills, or use auto for evidence-based adaptation")
     scope = parser.add_mutually_exclusive_group()
     scope.add_argument("--local", action="store_true", help="Install in the current project (the default portable target is .agents/skills)")

@@ -51,6 +51,10 @@ want one explicitly:
 ```sh
 npx -y MPSMeridiaN/REVibe --local --harness claude
 npx -y MPSMeridiaN/REVibe --local --harness cursor
+npx -y MPSMeridiaN/REVibe --local --harness copilot
+npx -y MPSMeridiaN/REVibe --local --harness cline
+npx -y MPSMeridiaN/REVibe --local --harness qwen
+npx -y MPSMeridiaN/REVibe --local --harness kiro
 ```
 
 If you want evidence-based adaptation, opt in explicitly with `--harness auto`.
@@ -83,8 +87,10 @@ The result is exactly the 11 REVibe skill directories under `.agents/skills/`;
 no manifest, lock file, installer state, or other metadata is created. For a
 user-global install, copy to `~/.agents/skills/` (PowerShell:
 `$env:USERPROFILE\.agents\skills`) instead. Remove the temporary clone when
-you are done. Manual copies do not auto-update or uninstall; repeat the copy
-from a fresh clone when you want the latest release.
+you are done. To target another supported harness manually, copy the same
+contents into the project or user path listed in the [harness matrix](docs/harnesses.md).
+Manual copies do not auto-update or uninstall; repeat the copy from a fresh
+clone when you want the latest release.
 
 The remote launcher requires Node.js 18+ and Python 3.10+. A downloaded release
 archive or development checkout can use the same installer directly:
@@ -107,7 +113,21 @@ add a service, account, MCP server, background process, or project configuration
 | --- | --- | --- |
 | Local | `<project>/.agents/skills/` | A repo-specific workflow and handoffs |
 | Global | `~/.agents/skills/` | Making REVibe available across projects |
-| Native harness | Harness-specific skills directory | An explicit Claude, Cursor, Gemini, OpenCode, or Codex target |
+| Native harness | Harness-specific skills directory | An explicit host target when its native path is preferred |
+
+### Harness coverage
+
+REVibe uses the portable Agent Skills format: one directory per skill with a
+`SKILL.md` entrypoint. Path support below is verified against each host's primary
+documentation; live execution inside every host application is not part of CI.
+
+| Coverage | Hosts | Install route |
+| --- | --- | --- |
+| Shared `.agents/skills` path | Codex, GitHub Copilot, Cursor, Gemini CLI, OpenCode, Amp, Warp | Omit `--harness` |
+| Native target paths | Codex, GitHub Copilot, Claude Code, OpenCode, Cursor, Gemini CLI, Cline, Qwen Code, Kiro | `--harness <name>` |
+
+See the [full harness matrix](docs/harnesses.md) for project/global paths,
+precedence, compatibility aliases, and the evidence boundary for each claim.
 
 The installer is intentionally stateless. Reinstalling is a no-op when current,
 updates replace stale REVibe skills, removes old `revibe*` entries, and leaves
