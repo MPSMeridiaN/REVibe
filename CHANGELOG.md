@@ -10,6 +10,8 @@ and floating; use a tag only when an exact historical build is required.
 - Strengthened the shared review contract so every question explains its subject,
   source artifact, observed claim, confidence, and downstream impact before asking
   for a decision. Multiple findings must be explained and reviewed individually.
+- Replaced the flow SVG in the README with a high-resolution PNG card with rounded
+  corners and mobile-sized typography for sharper rendering in GitHub's app viewer.
 
 ## [1.3.1] - 2026-09-06
 

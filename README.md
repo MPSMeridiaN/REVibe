@@ -18,7 +18,7 @@
 </div>
 
 <p align="center">
-  <img src="docs/assets/revibe-flow-v2.svg" alt="REVibe controller loop: request, assign, work, verify, then advance, rerun, or pause" width="900">
+  <img src="docs/assets/revibe-flow.png" alt="REVibe controller loop: request, assign, work, verify, then advance, rerun, or pause" width="900">
 </p>
 
 ## Why REVibe
