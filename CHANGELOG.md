@@ -3,6 +3,15 @@
 All notable REVibe releases are recorded here. The release command stays short
 and floating; use a tag only when an exact historical build is required.
 
+## [1.3.1] - 2026-09-06
+
+### Changed
+
+- Reworked the README as a focused product landing page with a clear pain point,
+  controller-led flow, isolated-run example, install and uninstall paths, and
+  direct documentation links.
+- Removed two unreferenced legacy diagram assets from `docs/assets/`.
+
 ## [Unreleased]
 
 ### Changed
@@ -115,7 +124,8 @@ and floating; use a tag only when an exact historical build is required.
 
 - Initial public REVibe release.
 
-[Unreleased]: https://github.com/MPSMeridiaN/REVibe/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/MPSMeridiaN/REVibe/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.3.1
 [1.3.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.3.0
 [1.2.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.2.0
 [1.1.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.1.0
