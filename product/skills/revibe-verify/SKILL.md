@@ -19,7 +19,9 @@ Determine the feature's `runtime_status`: `working`, `partial`, `broken`, `misle
 
 ## Orchestration
 
-Discover available static analyzers, language servers, dependency graphs, test runners, browsers, debuggers, sandboxes, and runtime environments. Select the smallest useful combination. Use parallel lanes for independent feature paths or read-only static checks; serialize execution where shared state, migrations, timing, or environment setup makes results dependent.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+
+Discover available static analyzers, language servers, dependency graphs, test runners, browsers, debuggers, sandboxes, and runtime environments. Select the smallest useful combination. Delegate parallel lanes for independent feature paths or read-only static checks; serialize execution where shared state, migrations, timing, or environment setup makes results dependent.
 
 Each lane should have a feature or boundary, an explicit question, and a stopping condition. Good lanes include:
 
@@ -30,7 +32,7 @@ Each lane should have a feature or boundary, an explicit question, and a stoppin
 | Failure and lifecycle | What happens on invalid input, cancellation, retries, startup, shutdown, timeout, or dependency failure? |
 | Reproduction | Which static, test, integration, or runtime checks can reproduce the expected and adverse paths? |
 
-Workers return bounded evidence packets. Do not let a green test result erase a conflicting runtime observation, and do not infer runtime success from reachable code. When a check mutates data, isolate it, document the preconditions, and avoid repeating a non-idempotent operation blindly.
+Workers return bounded evidence packets to the controller. Do not let a green test result erase a conflicting runtime observation, and do not infer runtime success from reachable code. When a check mutates data, isolate it, document the preconditions, and avoid repeating a non-idempotent operation blindly.
 
 ## Verification trace
 

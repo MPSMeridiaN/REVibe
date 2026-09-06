@@ -21,11 +21,13 @@ Do not overwrite unrelated user work or assume a clean checkout. Respect reposit
 
 ## Orchestration
 
-Discover available coding agents, language tools, build systems, test runners, browsers, debuggers, and review skills. Use the smallest capability set that can make and verify each task. A single agent is a valid fallback.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+
+Discover available coding agents, language tools, build systems, test runners, browsers, debuggers, and review skills. Use the smallest capability set that can make and verify each task. A single sequential worker role is a valid fallback only when delegation is unavailable or forbidden; record that limitation and perform controller review.
 
 Group tasks by dependency and ownership. Parallelize only when scopes are disjoint, task inputs are complete, and workers cannot make incompatible architecture or contract choices. Isolate parallel work with the harness's worktrees or branches when available; otherwise serialize edits to shared files and integration seams. Never let workers independently redefine an accepted design.
 
-For every worker or task, provide the task ID, accepted decision IDs, exact scope, dependency context, completion criteria, and checks to run. Require an implementation packet:
+For every worker assignment, including a sequential fallback role, provide the task ID, accepted decision IDs, exact scope, dependency context, completion criteria, and checks to run. Require an implementation packet:
 
 ```text
 task: task.<id>
@@ -38,7 +40,7 @@ risks/gaps: unresolved behavior, tool limits, or follow-up
 next: integration or review action
 ```
 
-Integrate in dependency order. After each meaningful boundary, inspect the diff, run the narrowest relevant check, and update evidence. Keep migrations, generated outputs, public interfaces, and shared abstractions serialized with their consumers. Do not repeatedly run destructive or non-idempotent operations without restoring or confirming preconditions.
+The controller integrates worker results in dependency order. After each meaningful boundary, inspect the diff, run the narrowest relevant check, and update evidence. Keep migrations, generated outputs, public interfaces, and shared abstractions serialized with their consumers. Do not repeatedly run destructive or non-idempotent operations without restoring or confirming preconditions.
 
 ## Deviation and state trace
 

@@ -21,7 +21,9 @@ Compare every proposed cleanup with evidence and the accepted target. Consolidat
 
 ## Orchestration and audit trace
 
-Discover available repository, dependency, build, packaging, documentation, security, and release checks. Use independent read-only audits for source hygiene, docs/configuration, dependencies/build, and reproducibility, then synthesize. Do not ask all reviewers to load the whole repository.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+
+Discover available repository, dependency, build, packaging, documentation, security, and release checks. Delegate independent read-only audits for source hygiene, docs/configuration, dependencies/build, and reproducibility, then have the controller synthesize. Do not ask all reviewers to load the whole repository.
 
 For each cleanup or readiness item record a stable ID such as `ev.finalize.<topic>` or `risk.finalize.<topic>`:
 

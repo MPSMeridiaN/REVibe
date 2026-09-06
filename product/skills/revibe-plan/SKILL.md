@@ -27,7 +27,9 @@ Index each task in canonical `tasks` with its ID, status, dependencies, scope, `
 
 ## Orchestration and review
 
-Discover available planning, architecture, test, migration, and adversarial-review capabilities. Use separate bounded reviews for task completeness, dependency ordering, test coverage, operational recovery, and architecture drift when they materially improve confidence. Ask each reviewer to identify omissions or contradictions, not to rewrite the whole plan.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+
+Discover available planning, architecture, test, migration, and adversarial-review capabilities. Delegate separate bounded reviews for task completeness, dependency ordering, test coverage, operational recovery, and architecture drift when they materially improve confidence. Require each reviewer to identify omissions or contradictions, not to rewrite or approve the whole plan.
 
 Parallelize only tasks with disjoint ownership, no shared decision, and no dependency on another task's output. Mark tasks that must serialize because they touch shared abstractions, migrations, generated code, public contracts, or integration seams. State how parallel changes will be isolated and merged when the harness supports it.
 

@@ -21,8 +21,8 @@ The final question in the review cycle is a separate open-ended check:
 
 > Is there anything REVibe missed, misunderstood, or that you want to add?
 
-If the harness has no structured question tool, the stage falls back to plain
-text, records that capability limit, and remains `awaiting_review`. The agent
+If the harness has no permitted structured question tool, the controller falls back to plain
+text, records that capability limit, and remains `awaiting_review` until you answer. An explicit plain-text answer can satisfy the review. The controller
 incorporates your answers before calling the stage complete, then explains the
 current status, what the next stage will do, and the exact command to continue.
 An unanswered question stays unanswered. Accepting a feature inventory does not
@@ -62,10 +62,27 @@ Malformed state is preserved for diagnosis. Temporary and backup files are check
 
 For a narrower run, keep the same contracts. A documentation-only project has no application runtime to validate; a file-reading harness cannot manufacture test results. Record that a concern is inapplicable or unavailable, explain why, and review the limit with the user. The process should fit the project rather than force irrelevant work into it.
 
-## Orchestration, not fixed agent choreography
+## One controller, every stage
 
-Each skill defines its objective, evidence, investigation boundaries, synthesis, handoff, review, and exit criteria. The executing agent decides which available tools improve the result.
+The router and each stage share one controller role. It assigns substantive work to available, permitted subagents, checks their returned evidence, and owns the conversation and canonical state. Invoking a stage directly uses the same loop. Workers investigate, propose, edit, or test within their assigned scope; finishing an assignment does not complete the stage.
 
-Independent feature traces can run in parallel. Shared design decisions, conflicting write scopes, and migrations are serialized. Workers receive only their question, relevant context, ownership, and expected evidence packet. Contradictions trigger a focused follow-up instead of a majority vote. Without subagents, the orchestrator does the same work sequentially and records the reduced independence of review.
+1. **Assign:** provide a question, baseline/revision, accepted inputs, file ownership, expected evidence, and completion criteria.
+2. **Check:** wait for final worker results, inspect artifacts and material claims, and compare the result with the criteria.
+3. **Repair:** return gaps or conflicts as focused follow-ups; preserve valid work.
+4. **Discuss:** save the result for review, present findings and choices, then ask the same final addition question.
+5. **Persist:** incorporate your feedback, verify the state/handoff pair, and either rerun affected work or mark the stage complete and recommend the next stage.
+
+Independent scopes may run in parallel. Shared design decisions, conflicting writes, and migrations are serialized. Without permitted subagents, the same agent performs the worker and controller roles sequentially and records the reduced independence of review.
+
+| Event | State and next action |
+| --- | --- |
+| Worker finishes | Stage stays `in_progress` while the controller checks the result |
+| Evidence or deliverable is missing | Keep `in_progress`; assign a focused follow-up |
+| Result or blocker needs your judgment | Save `awaiting_review`; ask the relevant questions |
+| You request more work | Return to `in_progress`, or mark the upstream owner and affected dependents `stale` |
+| Criteria are met and feedback is incorporated | Save `complete`; recommend the next stage |
+| You have not answered | Keep `awaiting_review`; no implied approval |
+
+The handoff Trace stores a compact checkpoint: assignment/result references, consumed baseline/revision, controller checks, outstanding work, feedback IDs, and the next action's owning stage. A fresh session can reconcile partial changes and resume without relying on live worker IDs. Existing schema-1 state remains compatible; missing older checkpoints are reconstructed only from durable evidence.
 
 Use the project's own build, test, and runtime tools where available. REVibe supplies the reasoning workflow, not a universal test runner or a promise that every installed agent will follow instructions perfectly.

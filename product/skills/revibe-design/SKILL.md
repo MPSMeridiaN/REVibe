@@ -25,7 +25,9 @@ Seek simplification. Remove accidental duplication and coupling when the evidenc
 
 ## Orchestration
 
-Discover available architecture, domain, UX, data-flow, dependency-graph, and risk-review capabilities. Use independent read-only lanes for separate concerns, then synthesize them because a state or boundary choice affects the whole product.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+
+Discover available architecture, domain, UX, data-flow, dependency-graph, and risk-review capabilities. Delegate independent read-only lanes for separate concerns, then have the controller synthesize them because a state or boundary choice affects the whole product.
 
 | Lane | Required question |
 | --- | --- |
@@ -35,7 +37,7 @@ Discover available architecture, domain, UX, data-flow, dependency-graph, and ri
 | Reliability and operations | How do failure, recovery, security, performance, observability, deployment, and rollback work? |
 | Verification seams | Which tests, harnesses, fixtures, and runtime checks can establish the design's invariants? |
 
-Assign each worker a target decision or boundary and a stopping condition. Workers return concise evidence packets or design proposals with alternatives and tradeoffs. Do not let parallel workers silently choose incompatible names, state models, or contracts; the stage owner synthesizes and records conflicts.
+The controller assigns each worker a target decision or boundary and a stopping condition. Workers return concise evidence packets or design proposals with alternatives and tradeoffs. Do not let parallel workers silently choose incompatible names, state models, or contracts; the controller synthesizes and records conflicts.
 
 ## Design trace
 

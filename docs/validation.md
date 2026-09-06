@@ -47,6 +47,22 @@ asynchronous queue, and a documentation-only project. They exist to exercise
 the workflow's evidence, review, and capability-limit contracts; their outputs
 are not treated as proof of arbitrary real-world reliability.
 
+## Controller contract review — 2026-09-06
+
+An independent agent reviewed the router and shared protocol against six
+simulated situations: a missing test artifact despite a worker's `done` result;
+changed upstream intent during active writes; resumption from partial artifacts;
+plain-text review without subagents; an unrelated revision increase; and
+substantive changes requested in the final addition answer.
+
+The review kept incomplete evidence in progress, required stopping obsolete
+writers before replacement, resumed only from durable evidence, accepted actual
+plain-text answers, reconciled revision age by dependency impact, and reran
+changed scope before completion. This was an instruction-level scenario review,
+not a live multi-agent execution or proof of every harness's cancellation behavior.
+Worker cancellation remains harness-dependent; replacement writes must wait
+until ownership is resolved.
+
 ## Known limits
 
 - Skill discovery depends on the executing harness and agent following the

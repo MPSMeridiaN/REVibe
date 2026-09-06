@@ -6,209 +6,149 @@
 [![CI](https://github.com/MPSMeridiaN/REVibe/actions/workflows/check.yml/badge.svg)](https://github.com/MPSMeridiaN/REVibe/actions/workflows/check.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-111827.svg)](LICENSE)
 
-Give an agent a repository URL. REVibe gives it a disciplined way to understand
-what exists, separate evidence from assumptions, align changes with your intent,
-and carry decisions all the way through implementation and validation.
+Turn an unfamiliar repository and a change request into a traceable, reviewed
+path from evidence to release. REVibe keeps reality, intent, implementation,
+and validation connected without making the next session depend on yesterday's
+conversation.
 
 > **inspect → verify → align → design → strategize → plan → implement → validate → cohere → finalize**
 
 ![REVibe workflow: inspect the existing system, confirm the target, execute and verify. Evidence and user decisions travel between stages.](docs/assets/journey.svg)
 
-## Install in one command
+## Install
 
-Run the command from the project you want the agent to work on. No repository
-clone is needed.
+Run this from the project you want the agent to work on. The remote installer
+requires Node.js 18+ and Python 3.10+.
 
-### Project-local — recommended
-
-Installs only into the current project:
+### Project-local · recommended
 
 ```sh
 npx -y MPSMeridiaN/REVibe --local
 ```
 
-Result: `./.agents/skills/`
-
-This is the floating latest install: the GitHub package follows the repository's
-default branch, so the command does not need a version edit for each release.
-(`@latest` is npm registry syntax; for the current GitHub distribution, omitting
-the ref is the equivalent.)
+Installs the 11 skills into `<project>/.agents/skills/`.
 
 ### User-global
-
-Installs once for the current user:
 
 ```sh
 npx -y MPSMeridiaN/REVibe --global
 ```
 
-Result: `~/.agents/skills/`
+Installs into `~/.agents/skills/` for the current user. For a native harness
+directory, add `--harness <name>` (`codex`, `copilot`, `claude`, `opencode`,
+`cursor`, `gemini`, `cline`, `qwen`, `kiro`, or `auto`). See the [installation
+guide](INSTALL.md) and [harness matrix](docs/harnesses.md) for the full path
+matrix and behavior.
 
-The portable `.agents/skills` convention is the default because it is predictable
-and recognized by multiple agent harnesses. Use a native target only when you
-want one explicitly:
+No Node.js or Python? Use the [clone-and-copy path](INSTALL.md#clone-and-copy-no-nodejs-or-python).
 
-```sh
-npx -y MPSMeridiaN/REVibe --local --harness claude
-npx -y MPSMeridiaN/REVibe --local --harness cursor
-npx -y MPSMeridiaN/REVibe --local --harness copilot
-npx -y MPSMeridiaN/REVibe --local --harness cline
-npx -y MPSMeridiaN/REVibe --local --harness qwen
-npx -y MPSMeridiaN/REVibe --local --harness kiro
+## Start here
+
+```text
+Use revibe to understand this project. Start with discovery, show me what you found, and help me decide what should change.
 ```
 
-If you want evidence-based adaptation, opt in explicitly with `--harness auto`.
-It adapts only when `REVIBE_HARNESS` or one unambiguous project marker provides a
-clear signal; otherwise it safely falls back to `.agents/skills`.
+To continue after an interruption or in a new session:
 
-### No Node.js or Python — clone and copy
-
-The installer is optional. If you only want the product files, Git and a file
-copy command are enough. Run this from the target project:
-
-macOS, Linux, or another POSIX shell:
-
-```sh
-git clone --depth 1 https://github.com/MPSMeridiaN/REVibe.git ../REVibe-source
-mkdir -p .agents/skills
-cp -R ../REVibe-source/product/skills/. .agents/skills/
+```text
+Use revibe to resume from this project's saved state.
 ```
 
-Windows PowerShell:
+## What it adds
 
-```powershell
-git clone --depth 1 https://github.com/MPSMeridiaN/REVibe.git ..\REVibe-source
-New-Item -ItemType Directory -Force .agents\skills
-Copy-Item -Path ..\REVibe-source\product\skills\* -Destination .\.agents\skills -Recurse -Force
-```
+REVibe adds 11 instruction-based skills and shared references. It adds no service,
+account, MCP server, background process, or project configuration.
 
-Copy the contents of `product/skills/`, not the `product` directory itself.
-The result is exactly the 11 REVibe skill directories under `.agents/skills/`;
-no manifest, lock file, installer state, or other metadata is created. For a
-user-global install, copy to `~/.agents/skills/` (PowerShell:
-`$env:USERPROFILE\.agents\skills`) instead. Remove the temporary clone when
-you are done. To target another supported harness manually, copy the same
-contents into the project or user path listed in the [harness matrix](docs/harnesses.md).
-Manual copies do not auto-update or uninstall; repeat the copy from a fresh
-clone when you want the latest release.
+| Scope | Destination |
+| --- | --- |
+| Local | `<project>/.agents/skills/` |
+| Global | `~/.agents/skills/` |
+| Native harness | Harness-specific skills directory |
 
-The remote launcher requires Node.js 18+ and Python 3.10+. A downloaded release
-archive or development checkout can use the same installer directly:
+The installer is stateless: reinstalling updates only the reserved `revibe` /
+`revibe-*` namespace and leaves unrelated skills alone. See the [harness
+matrix](docs/harnesses.md) for path support and evidence boundaries.
 
-```sh
-python /path/to/revibe/install.py --local
-python /path/to/revibe/install.py --global
-```
+## One controller, one handoff loop
 
-Then tell your agent:
+The [`revibe`](product/skills/revibe/SKILL.md) router is the workflow controller.
+For every stage, the active controller delegates bounded work to available
+workers, checks their evidence, keeps the user in the review loop, and owns the
+canonical state and handoff.
+Workers return narrow evidence packets; they do not ask the user, approve a
+recommendation, write `.revibe/state.json`, or advance a stage.
 
-> Use revibe to understand this project. Start with discovery, show me what you found, and help me decide what should change.
+When delegation is unavailable or prohibited, the agent performs the worker and
+controller roles sequentially and records the reduced independence of review.
 
-## What changes after installation
+The same contract runs at every stage boundary:
 
-REVibe adds 11 instruction-based skills and their shared references. It does not
-add a service, account, MCP server, background process, or project configuration.
-
-| Scope | Default destination | Best for |
-| --- | --- | --- |
-| Local | `<project>/.agents/skills/` | A repo-specific workflow and handoffs |
-| Global | `~/.agents/skills/` | Making REVibe available across projects |
-| Native harness | Harness-specific skills directory | An explicit host target when its native path is preferred |
-
-### Harness coverage
-
-REVibe uses the portable Agent Skills format: one directory per skill with a
-`SKILL.md` entrypoint. Path support below is verified against each host's primary
-documentation; live execution inside every host application is not part of CI.
-
-| Coverage | Hosts | Install route |
-| --- | --- | --- |
-| Shared `.agents/skills` path | Codex, GitHub Copilot, Cursor, Gemini CLI, OpenCode, Amp, Warp | Omit `--harness` |
-| Native target paths | Codex, GitHub Copilot, Claude Code, OpenCode, Cursor, Gemini CLI, Cline, Qwen Code, Kiro | `--harness <name>` |
-
-See the [full harness matrix](docs/harnesses.md) for project/global paths,
-precedence, compatibility aliases, and the evidence boundary for each claim.
-
-The installer is intentionally stateless. Reinstalling is a no-op when current,
-updates replace stale REVibe skills, removes old `revibe*` entries, and leaves
-unrelated skill names alone. It writes no manifest, lock, transaction journal,
-cache, or other bookkeeping into the project.
-
-The destination stays clean: `.agents/skills/` contains only the 11 skill
-directories. REVibe owns the reserved `revibe` / `revibe-*` namespace; keep
-personal skills under another name.
-
-## The workflow
-
-REVibe is a connected process, not a folder of unrelated prompts:
-
-1. **Discover** what the project contains and claims.
-2. **Verify** how it actually behaves.
-3. **Align** the target with the user's intent.
-4. **Design** the whole-system shape and boundaries.
-5. **Strategize** the feasible solution and tradeoffs.
-6. **Plan** executable work with dependencies and acceptance criteria.
-7. **Implement** changes without losing the decisions behind them.
-8. **Validate** by trying to disprove the result.
-9. **Cohere** the system, documentation, tests, and behavior into one product.
-10. **Finalize** the repository for use and maintenance.
-
-Every stage produces a durable handoff and pauses for review where user judgment
-matters. The agent discovers the current harness's question capability by
-behavior and schema rather than assuming one tool name; when available, it uses
-that capability for every review question, marks an evidence-backed
-recommendation, asks a final open-ended addition question, and states the exact
-command for continuing. Findings, decisions, risks, questions, and stage
-progress live in the project's `.revibe/` directory so a fresh session can
-resume without pretending that missing context never existed. This is workflow
-runtime data created when an agent runs REVibe; it is separate from installer
-state and is not created by installation alone.
+1. **Load and assign.** Validate the current state and prerequisite handoffs,
+   set the stage `in_progress`, and issue assignments with a baseline, revision,
+   scope, question, completion criteria, and expected evidence.
+2. **Receive and check.** Wait for final worker packets, inspect their source or
+   artifact references, reproduce material claims where feasible, and preserve
+   contradictions or evidence limits.
+3. **Repair gaps.** Send unsupported claims, conflicts, or missing deliverables
+   back as focused follow-ups. Preserve valid partial work and rerun only the
+   affected scope.
+4. **Review with the user.** Write a matched `awaiting_review` state and handoff.
+   Ask every meaningful decision with an evidence-backed `Recommended` choice,
+   tradeoffs, and a custom path, then finish with: “Is there anything REVibe
+   missed, misunderstood, or that you want to add?”
+5. **Apply feedback and route.** Record the actual response before changing
+   status. Complete only when the stage criteria and feedback are incorporated.
+   Corrections mark dependent work `stale` and route to the earliest affected
+   stage; otherwise `next_stage` recommends the next eligible stage.
+6. **Resume from artifacts.** The next controller reads the saved state and
+   relevant handoff, not worker IDs or conversation memory, and reports the
+   exact command to continue.
 
 ![REVibe handoff contract: evidence, user decisions, and dependencies produce a reviewed stage result.](docs/assets/handoff.svg)
 
-## The skill suite
+## The ten stages
 
-| Skill | Question it answers |
+| Stage | Purpose |
 | --- | --- |
-| `revibe` | Where should this run start or resume? |
-| `revibe-discover` | What is here, and what does it claim to do? |
-| `revibe-verify` | How does it actually behave, and why? |
-| `revibe-align` | What do you want it to become? |
-| `revibe-design` | What does that target mean across the system? |
-| `revibe-strategize` | Which solution and tradeoffs should we accept? |
-| `revibe-plan` | What work can be executed in what order? |
-| `revibe-implement` | How do we coordinate changes without drifting? |
-| `revibe-validate` | What survives attempts to break it? |
-| `revibe-cohere` | Does the result make sense as one product? |
-| `revibe-finalize` | Can someone build, use, and maintain it? |
+| [`discover`](product/skills/revibe-discover/SKILL.md) | Inventory the project and its candidate features. |
+| [`verify`](product/skills/revibe-verify/SKILL.md) | Trace confirmed features through implementation and behavior. |
+| [`align`](product/skills/revibe-align/SKILL.md) | Reconcile expectation, reality, and user intent into a target. |
+| [`design`](product/skills/revibe-design/SKILL.md) | Design one coherent system around the accepted target. |
+| [`strategize`](product/skills/revibe-strategize/SKILL.md) | Compare feasible solution directions and tradeoffs. |
+| [`plan`](product/skills/revibe-plan/SKILL.md) | Turn the accepted direction into dependency-aware work. |
+| [`implement`](product/skills/revibe-implement/SKILL.md) | Coordinate scoped changes and continuous checks. |
+| [`validate`](product/skills/revibe-validate/SKILL.md) | Try to disprove the implemented result. |
+| [`cohere`](product/skills/revibe-cohere/SKILL.md) | Check behavior, docs, tests, and responsibilities as one product. |
+| [`finalize`](product/skills/revibe-finalize/SKILL.md) | Leave the repository ready for use, maintenance, or release. |
 
-## Why it holds up under real work
+Every stage produces a reviewed handoff before the next one can consume it.
 
-- **Truth stays separate from intent.** A document, a test, a runtime observation,
-  and a user decision are not silently collapsed into one claim.
-- **Review is part of the workflow.** Recommendations become accepted direction
-  only after the user can confirm, correct, reject, defer, or replace them.
-- **Continuity is explicit.** Handoffs carry evidence, uncertainty, dependencies,
-  and revision context into the next stage.
-- **Capability adapts honestly.** Agents can use tools, subagents, and harness
-  features when available without treating missing capabilities as passing checks.
+## What persists
 
-## Repository and product
-
-| Repository | Product |
+| Artifact | Carries forward |
 | --- | --- |
-| Tests, validation, docs, packaging, CI, and release tooling | `product/skills/` and the installer |
-| Maintainer-facing and development-only | The files copied into the selected skills directory |
-| [Workflow docs](docs/workflow.md), [harness matrix](docs/harnesses.md), and [validation record](docs/validation.md) | The 11 skills plus shared protocol and workflow state template |
+| `.revibe/state.json` | Canonical revision, stage status, dependencies, findings, decisions, risks, questions, and `next_stage`. |
+| `.revibe/handoffs/<stage>.md` | Outcome, evidence and confidence, open issues, recommendations, user feedback, and controller trace. |
+| `.revibe/runs/` | Optional bounded evidence files and logs referenced by the handoffs. |
+
+The state is a compact index, not a transcript. If a baseline, assumption, or
+user decision changes, the controller preserves the earlier result, marks
+dependent work stale, and routes the affected stages back through verification
+and review.
 
 ## Learn more
 
-- [Installation, removal, and advanced targets](INSTALL.md)
-- [How state and handoffs work](docs/workflow.md)
+- [Workflow, handoffs, and recovery](docs/workflow.md)
+- [Shared operating protocol](product/skills/revibe/references/protocol.md)
 - [Harness support and portable discovery](docs/harnesses.md)
+- [Installation and maintenance](INSTALL.md)
 - [Development and release checks](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
 - [MIT license](LICENSE)
+
+If REVibe gives your agent a calmer, more accountable way to change code, [star
+the repository](https://github.com/MPSMeridiaN/REVibe) so more builders can find
+it.
 
 REVibe is an engineering reasoning workflow, not a guarantee of correctness. Its
 confidence is only as strong as the evidence the executing agent actually gathers.

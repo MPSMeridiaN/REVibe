@@ -17,7 +17,9 @@ Help the user decide whether the capability should remain, change, be redesigned
 
 ## Orchestration and decision framing
 
-Discover available product, domain, UX, architecture, and requirement-review capabilities. Parallelize preparation of independent feature decision packets, then serialize synthesis because one target choice can change another feature's meaning.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+
+Discover available product, domain, UX, architecture, and requirement-review capabilities. Delegate preparation of independent feature decision packets, then have the controller serialize synthesis because one target choice can change another feature's meaning.
 
 For every meaningful item, present a compact decision packet:
 

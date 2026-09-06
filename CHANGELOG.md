@@ -5,6 +5,19 @@ and floating; use a tag only when an exact historical build is required.
 
 ## [Unreleased]
 
+### Changed
+
+- Every workflow stage now uses a controller-led delegation loop: bounded worker
+  assignments, verified result packets, focused follow-ups, and user review.
+- Handoffs now retain controller checkpoints for partial work, evidence checks,
+  feedback, and the next owning stage without changing the state schema.
+- User feedback that requires work reruns the affected scope before completion;
+  router review reuses the stage's review cycle instead of duplicating questions.
+- Review guidance handles asynchronous answers and permitted plain-text fallback
+  explicitly while preserving the final open-ended addition question.
+- README and workflow documentation explain the controller loop with a shorter
+  introduction, installation path, and clearer continuation guidance.
+
 ## [1.2.0] - 2026-09-06
 
 ### Changed

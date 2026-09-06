@@ -42,7 +42,7 @@ only when requested.
 | --- | --- | --- |
 | Native skill discovery | Route by concise skill descriptions | Read the entrypoint directly |
 | Structured questions | Discover the capability by schema/description; use it for every review question with a `Recommended` choice and a final open-ended addition check | Plain-text questions plus custom response; record the capability limit |
-| Subagents | Scoped independent investigations and review | Sequential role passes by the orchestrator |
+| Subagents | Delegate substantive stage work; controller checks final packets and owns state and user review | Sequential worker/controller roles with reduced independence recorded |
 | Shell and test runtime | Reproduce behavior with commands and artifacts | Source-only findings with explicit confidence limits |
 | Browser/debugger | Inspect UI, lifecycle, runtime state | Record unavailable checks and a reproduction recipe |
 | Graph, search, language server | Follow relationships efficiently | Targeted source search and manual tracing |
@@ -56,6 +56,12 @@ or `clarify` are only search hints; do not assume one exists or treat a generic
 message, screen, approval, or notification tool as equivalent. Do not hardcode
 tool names, model names, agent counts, or hidden harness features in the core.
 An unavailable tool never means a check passed.
+
+Use capabilities only when permitted in the current mode. An asynchronous
+question stays pending until its answer arrives. Explicit plain-text answers
+can complete a fallback review; missing tools or elapsed time cannot. Delegation
+follows the same controller loop at every stage, without requiring a particular
+agent count or model.
 
 ## Design research
 

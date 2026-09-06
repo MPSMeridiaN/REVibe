@@ -22,13 +22,15 @@ Build a validation matrix that maps each accepted feature and important invarian
 - security, permission, performance, resource, platform, locale, and browser concerns when relevant;
 - documentation, configuration, build, packaging, and operational behavior.
 
-Choose checks proportional to the risk and project. Use existing tests, targeted new scenarios, runtime probes, static inspection, integration harnesses, browser flows, and separate review agents where available. State what each check can and cannot establish.
+Choose checks proportional to the risk and project. Use existing tests, targeted new scenarios, runtime probes, static inspection, integration harnesses, browser flows, and delegated review agents where available. State what each check can and cannot establish.
 
 ## Orchestration and adversarial review
 
-Discover available build, test, runtime, browser, profiler, static-analysis, fuzzing, dependency, and adversarial-review capabilities. Run independent feature or boundary checks in parallel only when they do not share mutable state; serialize migrations, persistent environments, lifecycle tests, and timing-sensitive scenarios.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
-Ask an independent reviewer, when available, to inspect the implementation and validation evidence against the target without being given the expected conclusion. Give it the feature/invariant, scenario, scope, and acceptance criterion. Merge its findings as evidence packets and preserve disagreements.
+Discover available build, test, runtime, browser, profiler, static-analysis, fuzzing, dependency, and adversarial-review capabilities. Delegate independent feature or boundary checks in parallel only when they do not share mutable state; serialize migrations, persistent environments, lifecycle tests, and timing-sensitive scenarios.
+
+When available, delegate a bounded independent reviewer to inspect the implementation and validation evidence against the target without being given the expected conclusion. Give it the feature/invariant, scenario, scope, and acceptance criterion. Treat its findings as evidence packets for controller verification, preserve disagreements, and do not treat reviewer completion as stage acceptance.
 
 For every check, record a trace:
 

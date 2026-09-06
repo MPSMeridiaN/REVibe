@@ -23,7 +23,9 @@ Do not treat a working feature as automatically belonging in the final product. 
 
 ## Orchestration and traces
 
-Discover available architecture, naming, dependency, UX, documentation, test, and repository-review capabilities. Use separate read-only lenses for cross-layer behavior, public contracts, state/lifecycle, and repository hygiene, then synthesize findings. Parallel reviewers must cite the same baseline and return bounded packets; the stage owner resolves contradictions.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+
+Discover available architecture, naming, dependency, UX, documentation, test, and repository-review capabilities. Delegate separate read-only lenses for cross-layer behavior, public contracts, state/lifecycle, and repository hygiene, then have the controller synthesize findings. All reviewers must cite the same baseline and return bounded packets; the controller resolves contradictions.
 
 For each finding create or link a stable record such as `ev.cohere.<topic>` or `risk.cohere.<topic>`:
 

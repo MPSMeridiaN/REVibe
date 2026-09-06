@@ -25,7 +25,9 @@ Keep the inventory high level. Follow a path deeply only when a shallow check is
 
 ## Orchestration
 
-Discover available repository search, parsers, language servers, build tools, test runners, agents, and harness capabilities. Use them when present, but retain a manual targeted path. Run independent read-only lanes where useful:
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+
+Discover available repository search, parsers, language servers, build tools, test runners, agents, and harness capabilities. Use them when present, but retain a manual targeted path. Delegate independent read-only lanes where useful:
 
 | Lane | Question | Typical scope |
 | --- | --- | --- |
@@ -34,7 +36,7 @@ Discover available repository search, parsers, language servers, build tools, te
 | Feature surface | What capabilities are claimed or visibly represented? | docs, UI routes, API schemas, commands, examples, fixtures |
 | Validation and operations | What evidence can later stages collect? | tests, checks, environments, observability, deploy/release config |
 
-Give each worker one lane or bounded path and the question it must answer. Ask for an evidence packet containing scope, finding, source refs, confidence, gaps, and a recommendation. Merge packets by stable feature and evidence IDs; preserve disagreements. Avoid asking every worker to read the full repository.
+The controller gives each worker one lane or bounded path and the question it must answer. Require an evidence packet containing scope, finding, source refs, confidence, gaps, and a recommendation. The controller merges packets by stable feature and evidence IDs; preserve disagreements. Avoid asking every worker to read the full repository.
 
 ## Feature and evidence trace
 
