@@ -21,7 +21,7 @@ Do not overwrite unrelated user work or assume a clean checkout. Respect reposit
 
 ## Orchestration
 
-**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Use the selected run throughout. After actual review answers, persist and read back the state/handoff, then dispatch the next stage automatically or rerun affected work; no new invocation is required. Pause only for an explicit stop, unanswered question, real blocker, or finished finalization. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
 Discover available coding agents, language tools, build systems, test runners, browsers, debuggers, and review skills. Use the smallest capability set that can make and verify each task. A single sequential worker role is a valid fallback only when delegation is unavailable or forbidden; record that limitation and perform controller review.
 
@@ -50,7 +50,7 @@ If implementation reveals that the accepted design, strategy, plan, or user inte
 
 ## Review and handoff
 
-Write `.revibe/handoffs/implement.md` with the implementation summary, task graph disposition, files or components changed, integration checkpoints, evidence and confidence, deviations, remaining risks, rollback state, and validation entry points. Include the baseline and any pre-existing work that limited attribution.
+Write `.revibe/<run-id>/handoffs/implement.md` with the implementation summary, task graph disposition, files or components changed, integration checkpoints, evidence and confidence, deviations, remaining risks, rollback state, and validation entry points. Include the baseline and any pre-existing work that limited attribution.
 
 Set `implement` to `awaiting_review`. Present meaningful user-visible changes, public-contract or migration effects, deviations, unresolved risks, and any task that could not be completed. Let the user confirm, correct, narrow, defer, or redirect work. Ask, “Is there anything REVibe missed, misunderstood, or that you want to add?” Incorporate feedback and make the handoff/state a matched pair with the same `output_revision` before setting `complete` and `next_stage: validate`. If material work remains, keep the stage `in_progress` or `awaiting_review` and do not imply implementation is done.
 

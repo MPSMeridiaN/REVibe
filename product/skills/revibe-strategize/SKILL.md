@@ -20,7 +20,7 @@ Require `design` to be `complete`. Set `strategize` to `in_progress` with the cu
 
 ## Orchestration and options
 
-**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Use the selected run throughout. After actual review answers, persist and read back the state/handoff, then dispatch the next stage automatically or rerun affected work; no new invocation is required. Pause only for an explicit stop, unanswered question, real blocker, or finished finalization. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
 Discover available architecture, delivery, migration, risk, and feasibility review capabilities. Delegate independent option analyses where useful, then have the controller synthesize one coherent recommendation. Do not create false precision from unavailable estimates or tool output.
 
@@ -41,7 +41,7 @@ Prefer the smallest strategy that meets the target and leaves a coherent system.
 
 ## Review and handoff
 
-Write `.revibe/handoffs/strategize.md` with the target restatement, options table, recommended strategy, scope boundaries, migration and rollback shape, risks, assumptions, feasibility gaps, and the decision needed before planning. Store recommendation decisions with stable IDs such as `dec.strategy.<name>` and link their sources and dependencies.
+Write `.revibe/<run-id>/handoffs/strategize.md` with the target restatement, options table, recommended strategy, scope boundaries, migration and rollback shape, risks, assumptions, feasibility gaps, and the decision needed before planning. Store recommendation decisions with stable IDs such as `dec.strategy.<name>` and link their sources and dependencies.
 
 Set `strategize` to `awaiting_review` and obtain explicit user direction on the recommendation and any material tradeoffs. Present alternatives and a custom direction. Ask, “Is there anything REVibe missed, misunderstood, or that you want to add?” Record accepted, rejected, deferred, and corrected strategy choices before setting `complete` and `next_stage: plan`. If no option is acceptable, keep the stage awaiting review and route back to `design` or `align` as appropriate.
 

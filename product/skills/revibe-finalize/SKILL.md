@@ -21,7 +21,7 @@ Compare every proposed cleanup with evidence and the accepted target. Consolidat
 
 ## Orchestration and audit trace
 
-**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Use the selected run throughout. After actual review answers, persist and read back the state/handoff, then dispatch the next stage automatically or rerun affected work; no new invocation is required. Pause only for an explicit stop, unanswered question, real blocker, or finished finalization. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
 Discover available repository, dependency, build, packaging, documentation, security, and release checks. Delegate independent read-only audits for source hygiene, docs/configuration, dependencies/build, and reproducibility, then have the controller synthesize. Do not ask all reviewers to load the whole repository.
 
@@ -41,9 +41,9 @@ Apply evidence-backed changes within the accepted scope. After each meaningful c
 
 ## Review and handoff
 
-Write `.revibe/handoffs/finalize.md` with the final readiness assessment, applied and deferred cleanup, documentation/configuration updates, validation evidence, remaining risks and limitations, recovery notes, and a concise continuation or release recommendation. Link actions to source refs, feature/decision/risk IDs, and the final baseline.
+Write `.revibe/<run-id>/handoffs/finalize.md` with the final readiness assessment, applied and deferred cleanup, documentation/configuration updates, validation evidence, remaining risks and limitations, recovery notes, and a concise continuation or release recommendation. Link actions to source refs, feature/decision/risk IDs, and the final baseline.
 
-Set `finalize` to `awaiting_review`. Present every material deletion, dependency or compatibility change, documentation claim, release/readiness limitation, and deferred risk. Let the user confirm, reject, modify, defer, or request a final check. Ask, “Is there anything REVibe missed, misunderstood, or that you want to add?” Incorporate the response, read back the matched state and handoff revisions, and set `finalize` to `complete` with `next_stage: null` only after the review is closed. If a correction affects prior behavior, mark the affected stage stale and route back instead of sealing an inconsistent repository.
+Set `finalize` to `awaiting_review`. Present every material deletion, dependency or compatibility change, documentation claim, release/readiness limitation, and deferred risk. Let the user confirm, reject, modify, defer, or request a final check. Ask, “Is there anything REVibe missed, misunderstood, or that you want to add?” Incorporate the response and set `finalize` and `run.status` to `complete` with `next_stage: null` only after the review is closed and required work is finished. Commit and read back the matched run identity, state, and handoff revisions before reporting completion. If a correction affects prior behavior, mark the affected stage stale and route back instead of sealing an inconsistent repository.
 
 ## Edge cases and recovery
 

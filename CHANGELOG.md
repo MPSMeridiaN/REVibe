@@ -7,6 +7,14 @@ and floating; use a tag only when an exact historical build is required.
 
 ### Changed
 
+- `/revibe <task>` now dispatches delegated work and continues between stages
+  automatically after actual review answers and verified state/handoff writes.
+  User-requested pauses, pending answers, blockers, and completion remain explicit.
+- Schema-2 state isolates each assignment under `.revibe/<run-id>/`, with run
+  identity on worker packets and handoffs, explicit resume selection, and a
+  non-destructive legacy-copy procedure.
+- State checks cover run selection and cross-run artifact isolation; README
+  visuals and install/uninstall guidance now describe the same continuous loop.
 - Every push to `main` now publishes a commit-specific GitHub release after all
   validation jobs pass, with the tested ZIP, checksum, and release changelog.
 - Release reruns reuse the same tag; branch and pull-request checks do not publish.

@@ -17,7 +17,7 @@ npm pack --dry-run
 
 The archive is written to `dist/revibe.zip` with `dist/SHA256SUMS`. Packaging uses sorted paths and fixed archive timestamps. Extract it and run its installer into a temporary destination before distributing. CI defines the same checks on Windows, Linux, and macOS; a workflow definition is not proof those remote jobs have run.
 
-For a saved run, `python tools/check_state.py /path/to/project` checks state references, dependency cycles, recorded decision feedback, and handoff revision consistency. It is a read-only development aid, not a required workflow runtime and not proof that the user actually gave the recorded approval.
+For a saved run, `python tools/check_state.py /path/to/project --run <run-id>` checks run identity, state references, dependency cycles, recorded decision feedback, and handoff revision consistency. Omit `--run` only when there is one unambiguous run; `--legacy` checks the old `.revibe/state.json` without migration. It is a read-only development aid, not a required workflow runtime and not proof that the user actually gave the recorded approval.
 
 ## Automatic releases
 

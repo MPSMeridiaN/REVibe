@@ -26,7 +26,7 @@ Choose checks proportional to the risk and project. Use existing tests, targeted
 
 ## Orchestration and adversarial review
 
-**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Use the selected run throughout. After actual review answers, persist and read back the state/handoff, then dispatch the next stage automatically or rerun affected work; no new invocation is required. Pause only for an explicit stop, unanswered question, real blocker, or finished finalization. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
 Discover available build, test, runtime, browser, profiler, static-analysis, fuzzing, dependency, and adversarial-review capabilities. Delegate independent feature or boundary checks in parallel only when they do not share mutable state; serialize migrations, persistent environments, lifecycle tests, and timing-sensitive scenarios.
 
@@ -52,7 +52,7 @@ Separate a failed product behavior from a failed environment setup. A flaky or n
 
 Classify every accepted feature and invariant as supported by evidence, failed, partial, or unverified. Link failures and gaps to risks and task or decision IDs. If a fix is required, state the smallest upstream stage that owns the choice: implementation for an accepted design defect, design/strategy/plan for an invalid solution, or alignment for changed intent. Do not silently patch a failed behavior while presenting a clean validation report.
 
-Write `.revibe/handoffs/validate.md` with the matrix, checks and results, adversarial findings, regressions, confidence, blocked checks, open risks, and recommended route. Keep run logs outside the handoff and reference stable paths.
+Write `.revibe/<run-id>/handoffs/validate.md` with the matrix, checks and results, adversarial findings, regressions, confidence, blocked checks, open risks, and recommended route. Keep run logs outside the handoff and reference stable paths.
 
 Set `validate` to `awaiting_review`. Present meaningful failures, inconclusive checks, residual risks, and the evidence supporting each positive claim. Let the user confirm, correct, request additional scenarios, accept a bounded risk, or route back for fixes. Ask, “Is there anything REVibe missed, misunderstood, or that you want to add?” Incorporate feedback and the matched output revision before setting `complete`. Use `next_stage: cohere` only when the reviewed result is sufficient; otherwise route to `implement` or the owning upstream stage.
 

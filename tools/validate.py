@@ -8,6 +8,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import install
 
+RUN_ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]{0,79}\Z")
+EXPECTED_TEMPLATE_RUN = {
+    "id": "new-run",
+    "request": "Describe the requested work",
+    "status": "active",
+}
+
 
 def validate(root: Path = ROOT) -> list[str]:
     errors = []
@@ -42,13 +49,21 @@ def validate(root: Path = ROOT) -> list[str]:
     template = skills / "revibe" / "references" / "state-template.json"
     try:
         state = json.loads(template.read_text(encoding="utf-8"))
-        if state["schema_version"] != 1 or state["revision"] != 0:
+        if state["schema_version"] != 2 or state["revision"] != 0:
             errors.append("Unexpected initial state schema/revision")
+        run = state.get("run")
+        if run != EXPECTED_TEMPLATE_RUN:
+            errors.append("Unexpected initial run metadata")
+        run_id = run.get("id") if isinstance(run, dict) else None
+        if not isinstance(run_id, str) or RUN_ID_PATTERN.fullmatch(run_id) is None:
+            errors.append("Invalid initial run ID")
         for stage, record in state["stages"].items():
             if "revibe-" + stage not in manifest["skills"]:
                 errors.append(f"State references missing skill: {stage}")
             if record["status"] != "pending" or record["input_revision"] != 0:
                 errors.append(f"Initial stage is not pending: {stage}")
+            if run_id is not None and record.get("artifact") != f".revibe/{run_id}/handoffs/{stage}.md":
+                errors.append(f"Initial stage artifact is not run-scoped: {stage}")
             if any(dep not in {"stage:" + key for key in state["stages"]} for dep in record.get("depends_on", [])):
                 errors.append(f"Unknown dependency: {stage}")
         if state["next_stage"] not in state["stages"]:

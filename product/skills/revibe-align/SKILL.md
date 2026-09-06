@@ -17,7 +17,7 @@ Help the user decide whether the capability should remain, change, be redesigned
 
 ## Orchestration and decision framing
 
-**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Use the selected run throughout. After actual review answers, persist and read back the state/handoff, then dispatch the next stage automatically or rerun affected work; no new invocation is required. Pause only for an explicit stop, unanswered question, real blocker, or finished finalization. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
 Discover available product, domain, UX, architecture, and requirement-review capabilities. Delegate preparation of independent feature decision packets, then have the controller serialize synthesis because one target choice can change another feature's meaning.
 
@@ -41,7 +41,7 @@ Resolve scope explicitly for competing stakeholders, multiple products, legacy c
 
 For each target item, link the decision to feature and evidence IDs, affected relationships, constraints, risks, and assumptions. Add target relationships when a user choice changes ownership, lifecycle, data flow, UX, or compatibility. State what remains unchanged where that boundary prevents accidental redesign.
 
-Write `.revibe/handoffs/align.md` with:
+Write `.revibe/<run-id>/handoffs/align.md` with:
 
 - a short target-product statement;
 - the expectation/actual/intent/target table;

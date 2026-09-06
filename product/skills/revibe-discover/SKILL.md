@@ -25,7 +25,7 @@ Keep the inventory high level. Follow a path deeply only when a shallow check is
 
 ## Orchestration
 
-**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Use the selected run throughout. After actual review answers, persist and read back the state/handoff, then dispatch the next stage automatically or rerun affected work; no new invocation is required. Pause only for an explicit stop, unanswered question, real blocker, or finished finalization. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
 Discover available repository search, parsers, language servers, build tools, test runners, agents, and harness capabilities. Use them when present, but retain a manual targeted path. Delegate independent read-only lanes where useful:
 
@@ -66,7 +66,7 @@ Do not inflate a feature list with implementation helpers, generated files, vend
 
 ## Review and handoff
 
-Write `.revibe/handoffs/discover.md` using the protocol sections. Include the project profile, feature inventory, evidence and confidence, source disagreements, open questions, constraints, and a recommended verification focus. Keep raw logs outside the handoff and reference them by stable artifact path if they matter.
+Write `.revibe/<run-id>/handoffs/discover.md` using the protocol sections. Include the project profile, feature inventory, evidence and confidence, source disagreements, open questions, constraints, and a recommended verification focus. Keep raw logs outside the handoff and reference them by stable artifact path if they matter.
 
 Set the stage to `awaiting_review` and review each meaningful candidate feature with the user individually. Offer confirm, reject, correct, merge, split, defer, and custom choices. Explain when a choice changes verification scope. Ask, “Is there anything REVibe missed, misunderstood, or that you want to add?” Record every response, including “not sure yet,” before setting the stage `complete` and `next_stage: verify`. An unanswered feature remains pending and must not be treated as confirmed.
 

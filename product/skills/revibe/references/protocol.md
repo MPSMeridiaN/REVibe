@@ -1,6 +1,8 @@
 # REVibe operating protocol
 
-This is the shared contract for the connected REVibe skills. Read it before creating or changing `.revibe/state.json` or a stage handoff. The contract is intentionally instruction-only: it does not require a runtime, package, service, or particular harness.
+This is the shared contract for the connected REVibe skills. Read it before creating or changing `.revibe/<run-id>/state.json` or a stage handoff. The contract is intentionally instruction-only: it does not require a runtime, package, service, or particular harness.
+
+Read [run identity and continuity](runs.md) before selecting state. All paths below use the selected run ID; substitute the actual value. A direct stage invocation uses the same controller, run-selection, and continuation rules as the router.
 
 ## Interactive user questions
 
@@ -20,7 +22,7 @@ REVibe moves a project through these short stages:
 
 The router may resume a stage, return to an earlier stage, or recommend a branch when evidence or user direction requires it. A later stage must consume the durable state and relevant handoffs; it must not rebuild context from conversation memory alone.
 
-The user owns intent, priorities, acceptance, and permission for consequential changes. Evidence can support a recommendation but cannot become user intent by implication. A stage may recommend the next stage, but it must not silently accept a recommendation, silently resolve a conflict, or silently treat an unanswered question as answered.
+The user owns intent, priorities, acceptance, and permission for consequential changes. Evidence can support a recommendation but cannot become user intent by implication. The controller continues automatically inside the requested scope after actual review; it must not silently accept a recommendation, resolve a conflict, or treat an unanswered question as answered. An explicitly stage-limited request ends after that reviewed scope and saves a paused continuation point; it does not authorize unrelated later work.
 
 At the end of every stage:
 
@@ -29,19 +31,20 @@ At the end of every stage:
 3. Ask the final open-ended addition question only after all other review questions have been answered, deferred, or blocked.
 4. Incorporate the response into the handoff and canonical state before marking the stage `complete`.
 5. Set `next_stage` to the recommended logical continuation, or to the earlier stage that must be revisited when the result is incomplete.
-6. Tell the user the current status, what the next stage will do, and the exact command to continue (for example, `Use revibe to continue to <next_stage>`); when review or a blocker remains, state the answer or command needed to resume the current stage.
+6. Once the actual final answer is incorporated and the matched state/handoff is read back, dispatch the next eligible stage in the same controller loop. State the transition briefly; do not require another invocation. If feedback requires work, persist and rerun its owning scope first. Only an explicit user pause, unanswered question, real blocker/permission boundary, or completed finalization stops continuation. Give a run-specific resume command only when paused or interrupted.
 
 Silence is pending. It does not mean approval, completion, or permission. If an interactive question mechanism is unavailable, leave the stage `awaiting_review`, record the questions, and return the review request in the conversation.
 
 ## Canonical state
 
-The project state lives at `.revibe/state.json`. Use [state-template.json](state-template.json) as the shape for a new project. Keep it compact: store decisions and traceable conclusions, not raw command output or a copy of the repository.
+The assignment's state lives at `.revibe/<run-id>/state.json`. Use [state-template.json](state-template.json) as the shape for a new run and replace its example identity and paths. Keep it compact: store decisions and traceable conclusions, not raw command output or a copy of the repository.
 
 The root object has:
 
 | Field | Contract |
 | --- | --- |
-| `schema_version` | Integer. The current contract is `1`. Do not silently migrate another schema. |
+| `schema_version` | Integer. The current contract is `2`; legacy schema `1` is preserved and explicitly copied as described in runs.md. |
+| `run` | `{id, request, status}`. Unique directory identity, user's assignment, and `active`, `paused`, `blocked`, or `complete`. Run status is distinct from stage status. |
 | `revision` | Nonnegative integer. Increase it for every canonical state write. |
 | `project` | `{root, baseline}`. `root` identifies the project examined; `baseline` identifies the commit, branch, snapshot, or explicit working-tree description. |
 | `stages` | Map keyed by `discover`, `verify`, `align`, `design`, `strategize`, `plan`, `implement`, `validate`, `cohere`, `finalize`. Each record has `status`, `input_revision`, `output_revision`, `artifact`, and may include `depends_on`. |
@@ -54,13 +57,13 @@ The root object has:
 | `relationships` | Important observed or target relationships between records or system parts. |
 | `assumptions` | Assumptions that remain unverified, confirmed, or invalidated. |
 | `tasks` | Compact task index: stable IDs, status, dependencies, scope, and a reference to the detailed plan packet. Initialize as an empty array; absent in earlier schema-1 runs means no indexed tasks yet. |
-| `next_stage` | A short stage key, or `null` when the workflow is complete or blocked pending direction. |
+| `next_stage` | Next owning stage to dispatch or resume; preserve it during a pause or known blocker. `null` only when finished or no supported route is known. |
 
 Every active record in the arrays has a stable `id`, a `status`, a `depends_on` array, and a `source_refs` array unless the record is a user decision with no external source. Keep IDs stable across revisions. Record IDs use disjoint prefixes: `feat.`, `ev.`, `dec.`, `risk.`, `q.`, `con.`, `rel.`, `asm.`, or `task.`. Stage dependencies use `stage:<short-stage>` and never collide with a record ID. A `depends_on` value may be either one of those stage IDs or a record ID. Dependencies refer to established inputs or earlier tasks, including ordered tasks in the same stage; never make a stage depend on a later stage's completion. The graph must remain acyclic.
 
 Each stage adds the specific prior record IDs it consumed to its `depends_on`, alongside predecessor stages. Do not add a stage's own produced records as its inputs; `origin_stage` is provenance, not a dependency edge. Record the producing stage on new records as `origin_stage`; for older records infer it from the referenced handoff or record the missing provenance. Task IDs must resolve through `tasks`, not exist only in a prose plan. Keep the detailed task packet in the plan handoff and its compact status/index in state. This makes corrections reachable through the dependency graph.
 
-The state is a bounded index, not an ever-growing journal. When a record is superseded or invalidated, write its full prior form to `.revibe/archive/records/<kind>-<id>.json` (or a clearly equivalent durable archive), add `superseded_by` or `invalidated_by` plus `archive_ref` to the replacement or compact tombstone, and remove the full record from the active arrays once no active record, feature `evidence_ids`, stage handoff, or open question references it. Keep a small tombstone with the pointer when an active reference must remain. Never delete an archive record that is needed to explain a user decision or evidence conflict.
+The state is a bounded index, not an ever-growing journal. When a record is superseded or invalidated, write its full prior form to `.revibe/<run-id>/archive/records/<kind>-<id>.json` (or a clearly equivalent durable archive), add `superseded_by` or `invalidated_by` plus `archive_ref` to the replacement or compact tombstone, and remove the full record from the active arrays once no active record, feature `evidence_ids`, stage handoff, or open question references it. Keep a small tombstone with the pointer when an active reference must remain. Never delete an archive record that is needed to explain a user decision or evidence conflict.
 
 Use these record shapes as a practical minimum:
 
@@ -85,7 +88,7 @@ Use these record shapes as a practical minimum:
     "status": "observed",
     "kind": "runtime",
     "claim": "What was actually observed",
-    "source_refs": ["command: npm test", ".revibe/runs/2026-01-01/test.log"],
+    "source_refs": ["command: npm test", ".revibe/<run-id>/evidence/2026-01-01/test.log"],
     "confidence": "high",
     "depends_on": ["feat.example"],
     "notes": "Conditions and limitations"
@@ -148,11 +151,12 @@ Merge packets by stable IDs and source references. Preserve contradictory packet
 
 ## Handoff artifact
 
-Each completed stage writes `.revibe/handoffs/<stage>.md`. Keep it concise enough for a later stage to read in one pass. It must contain these sections, in this order:
+Each completed stage writes `.revibe/<run-id>/handoffs/<stage>.md`. Keep it concise enough for a later stage to read in one pass. It must contain these sections, in this order:
 
 ```markdown
 # <stage> handoff
 
+- run_id: <selected run ID>
 - status: in_progress | awaiting_review | complete | stale
 - input_revision: <integer>
 - output_revision: <integer>
@@ -179,7 +183,7 @@ Each completed stage writes `.revibe/handoffs/<stage>.md`. Keep it concise enoug
 - <compact stage-specific actions, boundaries, skipped checks, and recovery notes>
 ```
 
-Before marking a handoff complete, make sure every meaningful recommendation has a status (`accepted`, `rejected`, `deferred`, or `pending`), every correction has a source and affected IDs, and `next_stage` is justified. Read the newly written handoff and canonical state back together; its `output_revision` must equal the stage record's `output_revision` and the root `revision` at that commit. Prior handoffs only need to match their own stage record. A handoff can remain `awaiting_review` with open items; later stages must not treat it as complete. `next_stage` is a recommendation, not permission to bypass a pending review. Reuse already accepted user decisions unless new evidence, a correction, or a scope change requires reconsideration.
+Before marking a handoff complete, make sure every meaningful recommendation has a status (`accepted`, `rejected`, `deferred`, or `pending`), every correction has a source and affected IDs, and `next_stage` is justified. Read the newly written handoff and canonical state back together; `run_id` must match the state's run and containing directory, and `output_revision` must equal the stage record's `output_revision` and the root `revision` at that commit. Prior handoffs only need to match their own stage record. A handoff can remain `awaiting_review` with open items; later stages must not treat it as complete. `next_stage` routes authorized work after review, never bypasses a pending review. Reuse already accepted user decisions unless new evidence, a correction, or a scope change requires reconsideration.
 
 ## Orchestration and capabilities
 
@@ -191,13 +195,13 @@ At stage start, discover the harness's agent and question capabilities and relev
 
 Give each worker a bounded assignment containing:
 
-- an assignment ID, stage, baseline, and consumed state revision;
+- the run ID and run directory, an assignment ID, stage, baseline, and consumed state revision;
 - the question, expected deliverable, completion criteria, and stopping condition;
 - relevant accepted decisions, dependency IDs, handoffs, and scoped source paths;
 - file ownership and permitted actions, including checks and explicit exclusions;
 - the required evidence packet and where to preserve partial work if interrupted.
 
-Workers return the evidence packet above plus their assignment ID, consumed baseline/revision, result (`done`, `partial`, or `blocked`), changed files or artifact references, checks actually run and their outcomes, and unresolved items. A worker's `done` means its assignment is finished, never that the stage is accepted. Workers do not write canonical state or stage handoffs, ask the user, approve decisions, or dispatch a downstream stage.
+Workers return the evidence packet above plus their run ID, assignment ID, consumed baseline/revision, result (`done`, `partial`, or `blocked`), changed files or artifact references, checks actually run and their outcomes, and unresolved items. Reject mismatched run IDs before consuming results. A worker's `done` means its assignment is finished, never that the stage is accepted. Workers do not write canonical state or stage handoffs, ask the user, approve decisions, or dispatch a downstream stage.
 
 Parallelize only independent scopes. Serialize dependent conclusions, overlapping writes, migrations, and checks that require a stable integrated result. Wait for assigned workers to finish before dependent synthesis or integration; progress messages are not final packets. If a worker fails or is interrupted, preserve its partial result, reconcile actual files, and reassign only the remaining scope. Do not launch a second writer while the first can still modify that scope.
 
@@ -210,9 +214,9 @@ If user feedback or new evidence invalidates an active assignment, stop or redir
 3. **Repair gaps.** Return unsupported claims, conflicts, failed checks, or missing deliverables to the appropriate worker with a precise follow-up. Stay `in_progress` while work is required. Preserve valid results; rerun only affected scopes. When progress needs a user decision or a blocker cannot be resolved, save the partial evidence and surface it for review instead of looping blindly.
 4. **Review with the user.** Publish a matched `awaiting_review` state/handoff pair. Summarize what is established, what remains uncertain, the controller's verification, and the decisions needed. Apply the same interactive question sequence at every stage, ending with the separate open-ended addition check. Reuse accepted answers unless new evidence or changed scope makes them relevant again.
 5. **Apply feedback and route.** Record actual answers before changing status. Editorial clarification can update the reviewed result directly. Feedback requiring new work returns the owning stage to `in_progress` (or marks an upstream owner and its dependents `stale`), creates a focused assignment, and repeats verification and review for changed conclusions. Set `complete` only when completion criteria are met, feedback is incorporated, and no unresolved item blocks the next stage. Explicitly deferred nonblocking items retain their IDs and disposition. Never complete a stage merely because the user replied or a worker finished.
-6. **Commit the handoff.** Use the matched-pair write and read-back procedure, record the recommended next stage and exact continuation command, and stop at the established review boundary. Another session resumes from those artifacts, not worker IDs or conversation memory.
+6. **Persist and continue.** Commit the current state and handoff, including feedback, invalidations, verification, run status, and next owner. Read back run identity and revisions before dispatch. A settled review continues directly to the next stage; requested changes loop through affected work; an explicit stop checkpoints the run as paused. Do not invent a separate proceed question. Another session resumes from these artifacts, not worker IDs or conversation memory.
 
-In each handoff's Trace, retain a compact controller checkpoint: assignment IDs and result/artifact references, consumed baseline/revision, accepted or returned packets and why, verification performed, outstanding work, feedback IDs, and the next action with its owning stage. Link lengthy packets rather than embedding logs. This extends the existing handoff content without new required JSON fields or a schema migration. On older handoffs, reconstruct missing checkpoints only from durable evidence and record any gap.
+In each handoff's Trace, retain a compact controller checkpoint: run and assignment IDs, result/artifact references, consumed baseline/revision, accepted or returned packets and why, verification performed, outstanding work, feedback IDs, and the next action with its owning stage. Link lengthy packets rather than embedding logs. On migrated handoffs, reconstruct missing checkpoints only from durable evidence and record any gap.
 
 Do not fabricate tool output, test success, runtime access, user feedback, or approval. If a command cannot run because of missing credentials, network, platform, data, or harness support, record the attempted check and its limitation. A partial result is useful when its boundary is explicit.
 
@@ -234,9 +238,9 @@ If a stage discovers a material mismatch, pause at the nearest review boundary a
 
 No executable state manager is required. Initialization creates revision `0` from the template without a handoff; pending stages may reference artifacts that do not yet exist. Routing-only updates and in-progress checkpoints may advance state without creating a handoff; preserve each stage's previous `output_revision`. Use these steps when committing a new or revised stage result:
 
-1. Read `.revibe/state.json`, validate `schema_version`, stage keys, statuses, IDs, dependencies, and `revision`; note the revision consumed.
-2. Prepare the complete next handoff with `output_revision: N+1` and the complete next JSON object with `revision: N+1` in same-directory temporary files: `.revibe/handoffs/<stage>.md.tmp` and `.revibe/state.json.tmp`. The stage record's `output_revision` and `artifact` must identify the same stage and revision.
-3. Read back and validate both temporary files before replacement. Check that the handoff's stage, `input_revision`, `output_revision`, and `next_stage` agree with state, and that all referenced IDs and dependencies exist.
+1. Read `.revibe/<run-id>/state.json`, validate `schema_version`, stage keys, statuses, IDs, dependencies, and `revision`; note the revision consumed.
+2. Prepare the complete next handoff with `output_revision: N+1` and the complete next JSON object with `revision: N+1` in same-directory temporary files: `.revibe/<run-id>/handoffs/<stage>.md.tmp` and `.revibe/<run-id>/state.json.tmp`. The stage record's `output_revision` and `artifact` must identify the same stage and revision.
+3. Read back and validate both temporary files before replacement. Check the handoff's `run_id` matches state and the containing run directory; check its stage, `input_revision`, `output_revision`, and `next_stage` agree with state, and that all referenced IDs and dependencies exist inside this run.
 4. Replace the handoff and state as one logical transaction, preserving `.bak` copies where supported. The state replacement is the commit point; verify by reading the canonical state and its referenced handoff back and checking that both output revisions equal the canonical `revision`.
 5. Remove temporary files only after the matched pair has been read back successfully. A progress checkpoint may advance state without a new artifact when the stage record remains `in_progress`; keep the prior artifact and `output_revision` unchanged. Any new or revised handoff, including an `awaiting_review` handoff, must use the matched pair procedure.
 

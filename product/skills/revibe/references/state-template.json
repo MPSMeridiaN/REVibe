@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "revision": 0,
   "project": {
     "root": ".",
@@ -10,71 +10,89 @@
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/discover.md",
+      "artifact": ".revibe/new-run/handoffs/discover.md",
       "depends_on": []
     },
     "verify": {
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/verify.md",
-      "depends_on": ["stage:discover"]
+      "artifact": ".revibe/new-run/handoffs/verify.md",
+      "depends_on": [
+        "stage:discover"
+      ]
     },
     "align": {
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/align.md",
-      "depends_on": ["stage:verify"]
+      "artifact": ".revibe/new-run/handoffs/align.md",
+      "depends_on": [
+        "stage:verify"
+      ]
     },
     "design": {
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/design.md",
-      "depends_on": ["stage:align"]
+      "artifact": ".revibe/new-run/handoffs/design.md",
+      "depends_on": [
+        "stage:align"
+      ]
     },
     "strategize": {
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/strategize.md",
-      "depends_on": ["stage:design"]
+      "artifact": ".revibe/new-run/handoffs/strategize.md",
+      "depends_on": [
+        "stage:design"
+      ]
     },
     "plan": {
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/plan.md",
-      "depends_on": ["stage:strategize"]
+      "artifact": ".revibe/new-run/handoffs/plan.md",
+      "depends_on": [
+        "stage:strategize"
+      ]
     },
     "implement": {
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/implement.md",
-      "depends_on": ["stage:plan"]
+      "artifact": ".revibe/new-run/handoffs/implement.md",
+      "depends_on": [
+        "stage:plan"
+      ]
     },
     "validate": {
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/validate.md",
-      "depends_on": ["stage:implement"]
+      "artifact": ".revibe/new-run/handoffs/validate.md",
+      "depends_on": [
+        "stage:implement"
+      ]
     },
     "cohere": {
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/cohere.md",
-      "depends_on": ["stage:validate"]
+      "artifact": ".revibe/new-run/handoffs/cohere.md",
+      "depends_on": [
+        "stage:validate"
+      ]
     },
     "finalize": {
       "status": "pending",
       "input_revision": 0,
       "output_revision": 0,
-      "artifact": ".revibe/handoffs/finalize.md",
-      "depends_on": ["stage:cohere"]
+      "artifact": ".revibe/new-run/handoffs/finalize.md",
+      "depends_on": [
+        "stage:cohere"
+      ]
     }
   },
   "features": [],
@@ -86,5 +104,10 @@
   "relationships": [],
   "assumptions": [],
   "tasks": [],
-  "next_stage": "discover"
+  "next_stage": "discover",
+  "run": {
+    "id": "new-run",
+    "request": "Describe the requested work",
+    "status": "active"
+  }
 }

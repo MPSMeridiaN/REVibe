@@ -25,7 +25,7 @@ Seek simplification. Remove accidental duplication and coupling when the evidenc
 
 ## Orchestration
 
-**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Use the selected run throughout. After actual review answers, persist and read back the state/handoff, then dispatch the next stage automatically or rerun affected work; no new invocation is required. Pause only for an explicit stop, unanswered question, real blocker, or finished finalization. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
 Discover available architecture, domain, UX, data-flow, dependency-graph, and risk-review capabilities. Delegate independent read-only lanes for separate concerns, then have the controller synthesize them because a state or boundary choice affects the whole product.
 
@@ -64,7 +64,7 @@ Check that frontend and backend expectations agree, every persistent or external
 
 ## Review and handoff
 
-Write `.revibe/handoffs/design.md` with the target architecture, component responsibilities, state/data/interface model, important relationships, invariants, alternatives, migration and recovery implications, verification seams, non-goals, risks, assumptions, and unresolved questions. Keep it reviewable; link to stable diagrams or source refs only when they add information.
+Write `.revibe/<run-id>/handoffs/design.md` with the target architecture, component responsibilities, state/data/interface model, important relationships, invariants, alternatives, migration and recovery implications, verification seams, non-goals, risks, assumptions, and unresolved questions. Keep it reviewable; link to stable diagrams or source refs only when they add information.
 
 Set `design` to `awaiting_review`. Present material boundary, contract, state, UX, migration, security, performance, and compatibility choices. Offer recommendations and tradeoffs, then allow the user to confirm, reject, correct, or defer each item. Ask, “Is there anything REVibe missed, misunderstood, or that you want to add?” Incorporate feedback, mark superseded decisions and affected downstream stages stale, then set `complete` and `next_stage: strategize` only after the target design is coherent enough for a strategy choice.
 

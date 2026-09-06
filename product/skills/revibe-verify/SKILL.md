@@ -19,7 +19,7 @@ Determine the feature's `runtime_status`: `working`, `partial`, `broken`, `misle
 
 ## Orchestration
 
-**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Use the selected run throughout. After actual review answers, persist and read back the state/handoff, then dispatch the next stage automatically or rerun affected work; no new invocation is required. Pause only for an explicit stop, unanswered question, real blocker, or finished finalization. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
 Discover available static analyzers, language servers, dependency graphs, test runners, browsers, debuggers, sandboxes, and runtime environments. Select the smallest useful combination. Delegate parallel lanes for independent feature paths or read-only static checks; serialize execution where shared state, migrations, timing, or environment setup makes results dependent.
 
@@ -60,7 +60,7 @@ Attempt to disprove the happy path. Keep test names and commands as evidence ref
 
 ## Review and handoff
 
-Write `.revibe/handoffs/verify.md` with a concise feature-by-feature truth table, execution traces, contradictions, confidence, open issues, risks, and verification limits. Link every conclusion to evidence IDs and stable source refs. Keep raw logs in a durable run artifact only when they can be reproduced or are needed to explain a failure.
+Write `.revibe/<run-id>/handoffs/verify.md` with a concise feature-by-feature truth table, execution traces, contradictions, confidence, open issues, risks, and verification limits. Link every conclusion to evidence IDs and stable source refs. Keep raw logs in a durable run artifact only when they can be reproduced or are needed to explain a failure.
 
 Set `verify` to `awaiting_review`. Present each meaningful classification and mismatch to the user, with options to confirm, correct, narrow scope, defer, or request another check. Ask, “Is there anything REVibe missed, misunderstood, or that you want to add?” Incorporate the response, mark new or superseded evidence, and set `complete` plus `next_stage: align` only after the review is addressed. If the user changes the feature surface, mark dependent verification and later stages stale.
 

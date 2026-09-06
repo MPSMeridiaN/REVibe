@@ -23,7 +23,7 @@ Do not treat a working feature as automatically belonging in the final product. 
 
 ## Orchestration and traces
 
-**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Apply feedback through the same rerun/review loop. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
+**Controller loop.** Act as this stage's controller under the shared protocol: delegate substantive work, wait for final packets, verify evidence, and return gaps as scoped follow-ups. Own canonical state, handoff, routing, and user review; worker completion is never stage acceptance. Use the selected run throughout. After actual review answers, persist and read back the state/handoff, then dispatch the next stage automatically or rerun affected work; no new invocation is required. Pause only for an explicit stop, unanswered question, real blocker, or finished finalization. When delegation is unavailable or forbidden, record the limitation and perform worker/controller roles sequentially without claiming independent review.
 
 Discover available architecture, naming, dependency, UX, documentation, test, and repository-review capabilities. Delegate separate read-only lenses for cross-layer behavior, public contracts, state/lifecycle, and repository hygiene, then have the controller synthesize findings. All reviewers must cite the same baseline and return bounded packets; the controller resolves contradictions.
 
@@ -44,7 +44,7 @@ Review naming and responsibility at the level of the whole project. Check that c
 
 ## Review and handoff
 
-Write `.revibe/handoffs/cohere.md` with the whole-system coherence assessment, cross-layer findings, retained versus cleanup candidates, documentation/configuration/test drift, risks, evidence limits, and recommendations for `finalize` or a return to implementation/upstream alignment.
+Write `.revibe/<run-id>/handoffs/cohere.md` with the whole-system coherence assessment, cross-layer findings, retained versus cleanup candidates, documentation/configuration/test drift, risks, evidence limits, and recommendations for `finalize` or a return to implementation/upstream alignment.
 
 Set `cohere` to `awaiting_review`. Present meaningful contradictions, cleanup candidates, compatibility decisions, documentation gaps, and residual risks. Offer recommended dispositions and custom choices. Ask, “Is there anything REVibe missed, misunderstood, or that you want to add?” Incorporate the response and match the handoff's `output_revision` to canonical state before setting `complete`. Set `next_stage: finalize` only when no material coherence issue is silently deferred; otherwise route to its owner.
 
