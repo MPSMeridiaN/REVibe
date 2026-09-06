@@ -5,8 +5,8 @@
 ### The 11-Skill Autonomous Engineering Suite for AI Coding Agents
 
 <p align="center">
-  <b>Turn ambiguous coding requests into verified, evidence-backed, resumable runs.</b><br/>
-  One controller · Bounded subagents · Contextual review questions · Resumable state isolation.
+  <b>Turn chaotic, hallucinated prompts into verified, evidence-backed, resumable engineering runs.</b><br/>
+  One controller · Bounded subagents · 6-part contextual review · Resumable state isolation.
 </p>
 
 <p align="center">
@@ -25,16 +25,34 @@
 
 </div>
 
-## Overview
+## The Problem with AI Coding Agents
 
-**REVibe** is not a bloated framework, heavy runtime, or closed SaaS. It is an ultra-lean suite of **11 native agent skills** designed to install directly into your AI coding assistant—including Claude Code, Cursor, Windsurf, OpenCode, Gemini, Cline, Kiro, and Qwen.
+Every developer who uses coding assistants (Claude Code, Cursor, Windsurf, OpenCode, Cline) knows this pain:
 
-Instead of letting agents hallucinate, modify files prematurely, or accept unverified worker output, REVibe enforces a disciplined engineering lifecycle:
+1. **Premature Mutations**: You ask for a feature, and within 30 seconds the agent edits 15 files without understanding your architecture.
+2. **Hallucinated Assumptions**: It invents internal APIs or assumes your database works in ways it never did.
+3. **Exhausting, Context-Free Questions**: It drops a vague prompt like *"I found 10 features, confirm them"* with zero file paths, evidence, or tradeoffs.
+4. **Context Degradation**: After 30 minutes in a single chat, the agent gets confused, repeats mistakes, or trashes working code.
 
-- **Orchestration**: A single Controller coordinates run-isolated state in `.revibe/<run-id>/` and dispatches bounded work.
-- **Specialized Workers**: Subagents operate strictly within assigned file scopes and return structured evidence packets (`scope`, `finding`, `evidence`, `gaps`).
-- **Contextual Review**: Critical decisions require 6-part context (Subject, Meaning, Origin, Observed, Impact, Decision) before consulting the human.
-- **Autonomous Continuation**: Automatically cycles through 10 engineering stages from initial discovery through final release.
+**REVibe fixes this at the root.** It gives your existing agent the disciplined workflow of a principal engineer.
+
+---
+
+## What is REVibe?
+
+REVibe is **not a heavy framework, bloated daemon, or closed SaaS**. It is an ultra-lean suite of **11 native agent skills** that install directly into your repository in 3 seconds. It works seamlessly inside whatever AI assistant you already use.
+
+Instead of letting an agent blindly modify code, REVibe orchestrates a structured, 10-stage engineering lifecycle:
+
+### Core Architecture & Selling Points
+
+* **One Controller, Bounded Subagents**: One coordinator owns the conversation, manages run state, and delegates tasks to specialized workers. Subagents operate within strictly defined file boundaries and return structured evidence packets (`scope`, `findings`, `proofs`, `gaps`)—they never touch global state.
+* **The 6-Part Review Contract**: Never suffer through vague questions again. Before asking for a decision, REVibe must provide:
+  `Subject` · `Practical Meaning` · `Origin (File & Line)` · `Observed Evidence` · `Downstream Impact` · `Recommended Option`.
+  Every review concludes with an open-ended feedback prompt: *"Is there anything REVibe missed, misunderstood, or that you want to add?"*
+* **Resumable State Isolation (`.revibe/<run-id>/`)**: Every run is stored in its own directory with canonical JSON state, handoff documents, and reproduction logs. If you close your laptop, hit rate limits, or switch chats, resume instantly with `/revibe resume <run-id>` with zero context loss.
+* **Targeted Invalidation, Not Blind Restarts**: When you give feedback during review, REVibe transitively marks only the affected dependencies stale and reruns that specific lane. It never scraps unrelated working code.
+* **10 Deliberate Stages**: Automatically advances from Discovery through Verification, Alignment, Architecture, Strategy, Planning, Implementation, Adversarial Validation, Coherence Audit, and Clean Finalization.
 
 ---
 
@@ -99,14 +117,22 @@ Every workflow run is isolated under `.revibe/<run-id>/` to guarantee determinis
 
 ---
 
+## Honest Reality Check
+
+> **REVibe is a disciplined reasoning and orchestration protocol, not a magic wand.**
+> 
+> It will not make a weak language model magically write flawless code. What it **does** do is prevent intelligent models from doing dumb things: it stops them from modifying files prematurely, guessing your requirements, hallucinating worker results, or trashing your git working tree. Confidence is always bounded by the empirical evidence available in your project.
+
+---
+
 ## Documentation
 
 - [Workflow & Review Protocol](docs/workflow.md)
-- [Installation & Harnesses](INSTALL.md)
+- [Installation & Supported Harnesses](INSTALL.md)
 - [Harness Capability Matrix](docs/harnesses.md)
 - [Validation Contract](docs/validation.md)
 - [Development & Contributing](CONTRIBUTING.md)
-- [Changelog](CHANGELOG.md)
+- [Versioned Changelog](CHANGELOG.md)
 
 ---
 
