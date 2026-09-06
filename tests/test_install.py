@@ -69,7 +69,7 @@ class InstallerTests(unittest.TestCase):
         installer.preflight(self.root, self.manifest())
         self.assertFalse(self.root.exists())
 
-    def test_removed_product_skill_is_removed_on_upgrade(self):
+    def test_unknown_revibe_prefixed_skill_is_preserved_on_upgrade(self):
         import shutil
         extra = self.source / "revibe-old"
         extra.mkdir()
@@ -77,7 +77,7 @@ class InstallerTests(unittest.TestCase):
         self.install()
         shutil.rmtree(extra)
         self.install()
-        self.assertFalse((self.root / "revibe-old").exists())
+        self.assertTrue((self.root / "revibe-old").is_dir())
 
     def test_manifest_traversal_is_rejected(self):
         for name in ("../revibe", "revibe/../../outside", "REVibe", "revibe:outside"):

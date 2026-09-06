@@ -242,12 +242,6 @@ def apply(root: Path, new: dict, source: Path = SOURCE, uninstall: bool = False)
                 raise Conflict("Product changed while preparing installation")
 
         root.mkdir(parents=True, exist_ok=True)
-        desired_names = set(new["skills"])
-        for child in sorted(root.iterdir(), key=lambda path: path.name):
-            if is_revibe_skill(child.name) and child.name not in desired_names:
-                remove_tree(child, root)
-                changed = True
-
         for name, files in new["skills"].items():
             destination = root / name
             if destination.exists() and inventory(destination) == files:

@@ -37,7 +37,7 @@ class StatelessInstallerTests(unittest.TestCase):
         self.assertFalse((self.root / ".revibe-lock").exists())
         self.assertFalse((self.root.parent / ".revibe").exists())
 
-    def test_unrelated_skill_is_preserved_and_stale_revibe_skill_is_removed(self):
+    def test_unrelated_and_unknown_prefixed_skills_are_preserved_on_upgrade(self):
         self.install()
         unrelated = self.root / "my-skill"
         unrelated.mkdir()
@@ -49,7 +49,7 @@ class StatelessInstallerTests(unittest.TestCase):
         self.install()
 
         self.assertTrue(unrelated.is_dir())
-        self.assertFalse(stale.exists())
+        self.assertTrue(stale.is_dir())
 
     def test_existing_revibe_skill_with_extra_file_is_refused(self):
         self.install()
