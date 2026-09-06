@@ -1,20 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" width="100%" height="100%" style="background:#06080D; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="100%" height="100%" style="background:#06080D; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
   <defs>
-    <!-- Ambient Radial Gradients -->
-    <radialGradient id="glowTop" cx="50%" cy="15%" r="55%">
-      <stop offset="0%" stop-color="#0C2540" stop-opacity="0.75"/>
+    <!-- Background Ambient Glows -->
+    <radialGradient id="glowCenter" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0E1D33" stop-opacity="0.8"/>
       <stop offset="100%" stop-color="#06080D" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="glowBottomLeft" cx="25%" cy="85%" r="50%">
-      <stop offset="0%" stop-color="#131835" stop-opacity="0.6"/>
+    <radialGradient id="glowTop" cx="50%" cy="10%" r="45%">
+      <stop offset="0%" stop-color="#0E2744" stop-opacity="0.6"/>
       <stop offset="100%" stop-color="#06080D" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="glowBottomRight" cx="80%" cy="85%" r="50%">
-      <stop offset="0%" stop-color="#0E2620" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#06080D" stop-opacity="0"/>
+    <radialGradient id="controllerCoreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.4"/>
+      <stop offset="60%" stop-color="#0284C7" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0B1322" stop-opacity="0"/>
     </radialGradient>
 
-    <!-- Linear Accent Gradients -->
+    <!-- Gradients -->
     <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#06B6D4"/>
       <stop offset="100%" stop-color="#38BDF8"/>
@@ -23,7 +24,7 @@
       <stop offset="0%" stop-color="#6366F1"/>
       <stop offset="100%" stop-color="#818CF8"/>
     </linearGradient>
-    <linearGradient id="violetGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#A855F7"/>
       <stop offset="100%" stop-color="#C084FC"/>
     </linearGradient>
@@ -35,347 +36,367 @@
       <stop offset="0%" stop-color="#F59E0B"/>
       <stop offset="100%" stop-color="#FBBF24"/>
     </linearGradient>
+
+    <!-- Borders & Glass -->
     <linearGradient id="cardBorder" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="rgba(255,255,255,0.12)"/>
-      <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
+      <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.03)"/>
+    </linearGradient>
+    <linearGradient id="pipelineLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="33%" stop-color="#6366F1"/>
+      <stop offset="66%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#10B981"/>
     </linearGradient>
 
-    <!-- Drop Shadow -->
-    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+    <!-- Filters -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
       <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+    <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
     </filter>
   </defs>
 
   <!-- Background Base -->
-  <rect width="1200" height="780" fill="#06080D"/>
-  <rect width="1200" height="780" fill="url(#glowTop)"/>
-  <rect width="1200" height="780" fill="url(#glowBottomLeft)"/>
-  <rect width="1200" height="780" fill="url(#glowBottomRight)"/>
+  <rect width="1200" height="700" fill="#06080D"/>
+  <rect width="1200" height="700" fill="url(#glowTop)"/>
+  <rect width="1200" height="700" fill="url(#glowCenter)"/>
 
-  <!-- High-Tech Micro-Grid -->
-  <g opacity="0.04" fill="#FFFFFF">
-    <circle cx="70" cy="80" r="1"/><circle cx="270" cy="80" r="1"/><circle cx="470" cy="80" r="1"/><circle cx="670" cy="80" r="1"/><circle cx="870" cy="80" r="1"/><circle cx="1070" cy="80" r="1"/>
-    <circle cx="70" cy="280" r="1"/><circle cx="270" cy="280" r="1"/><circle cx="470" cy="280" r="1"/><circle cx="670" cy="280" r="1"/><circle cx="870" cy="280" r="1"/><circle cx="1070" cy="280" r="1"/>
-    <circle cx="70" cy="480" r="1"/><circle cx="270" cy="480" r="1"/><circle cx="470" cy="480" r="1"/><circle cx="670" cy="480" r="1"/><circle cx="870" cy="480" r="1"/><circle cx="1070" cy="480" r="1"/>
-    <circle cx="70" cy="680" r="1"/><circle cx="270" cy="680" r="1"/><circle cx="470" cy="680" r="1"/><circle cx="670" cy="680" r="1"/><circle cx="870" cy="680" r="1"/><circle cx="1070" cy="680" r="1"/>
+  <!-- High-Tech Blueprint Matrix Lines -->
+  <g opacity="0.03" stroke="#FFFFFF" stroke-width="1">
+    <line x1="0" y1="90" x2="1200" y2="90"/>
+    <line x1="0" y1="260" x2="1200" y2="260"/>
+    <line x1="0" y1="560" x2="1200" y2="560"/>
+    <line x1="300" y1="0" x2="300" y2="700"/>
+    <line x1="600" y1="0" x2="600" y2="700"/>
+    <line x1="900" y1="0" x2="900" y2="700"/>
   </g>
 
-  <!-- ================= TOP HEADER (CENTERED) ================= -->
-  <g transform="translate(600, 36)" text-anchor="middle">
-    <!-- Tag Pill Badge -->
-    <rect x="-135" y="0" width="270" height="24" rx="12" fill="#0D1626" stroke="url(#cyanGrad)" stroke-width="1.2"/>
-    <circle cx="-115" cy="12" r="3.5" fill="#06B6D4"/>
-    <text x="5" y="16" fill="#E2E8F0" font-size="10.5" font-weight="700" letter-spacing="1.2">AUTONOMOUS ENGINEERING SUITE</text>
+  <!-- ================= 1. COMPACT HEADER ================= -->
+  <g transform="translate(600, 32)" text-anchor="middle">
+    <!-- Top Pill Badge -->
+    <rect x="-120" y="0" width="240" height="22" rx="11" fill="#0C1524" stroke="url(#cyanGrad)" stroke-width="1.2"/>
+    <circle cx="-100" cy="11" r="3.5" fill="#06B6D4"/>
+    <text x="8" y="15" fill="#E2E8F0" font-size="10" font-weight="700" letter-spacing="1.2">11 SKILLS &#183; 1 CONTROLLER</text>
 
     <!-- Main Title -->
-    <text x="0" y="56" fill="#FFFFFF" font-size="26" font-weight="800" letter-spacing="-0.5">The REVibe Orchestration &amp; Execution Pipeline</text>
-
-    <!-- Subtitle -->
-    <text x="0" y="78" fill="#94A3B8" font-size="13" font-weight="400">1 Controller Router &#183; 4 Connected Lifecycle Phases &#183; 10 Automated Stages &#183; 11 Native Skills</text>
+    <text x="0" y="52" fill="#FFFFFF" font-size="24" font-weight="800" letter-spacing="-0.5">The REVibe Autonomous Engineering Engine</text>
   </g>
 
-  <!-- ================= 4 PHASE CARDS (MIDDLE) ================= -->
-  <!-- Left Margin: 70px, Usable: 1060px, Gap: 28px, Card Width: 244px -->
-  <g transform="translate(70, 145)">
+  <!-- ================= 2. THE 4-PHASE MILESTONE PIPELINE ================= -->
+  <!-- Connected Horizontal Pipeline Track (y = 96 to 240) -->
+  <g transform="translate(70, 96)">
+    <!-- Continuous Pipeline Connector Track -->
+    <line x1="130" y1="45" x2="930" y2="45" stroke="url(#pipelineLine)" stroke-width="3" opacity="0.4"/>
+    <line x1="130" y1="45" x2="930" y2="45" stroke="url(#pipelineLine)" stroke-width="2" stroke-dasharray="8,6" opacity="0.9"/>
 
     <!-- PHASE 1: UNDERSTAND -->
     <g transform="translate(0, 0)">
-      <rect width="244" height="290" rx="12" fill="#09111E" stroke="url(#cardBorder)" stroke-width="1" filter="url(#dropShadow)"/>
-      <path d="M 0 12 Q 0 0 12 0 L 232 0 Q 244 0 244 12 L 244 42 L 0 42 Z" fill="#0D1F36"/>
+      <rect width="240" height="135" rx="12" fill="#091322" stroke="url(#cardBorder)" stroke-width="1" filter="url(#shadow)"/>
+      <!-- Header Badge -->
+      <rect x="12" y="12" width="216" height="28" rx="6" fill="#0E2138"/>
       <!-- Radar Icon -->
-      <circle cx="24" cy="21" r="9" fill="none" stroke="#06B6D4" stroke-width="1.5"/>
-      <circle cx="24" cy="21" r="4.5" fill="none" stroke="#06B6D4" stroke-width="1.2"/>
-      <circle cx="24" cy="21" r="1.5" fill="#22D3EE"/>
-      <text x="42" y="26" fill="#38BDF8" font-size="12" font-weight="750" letter-spacing="0.8">01 &#183; UNDERSTAND</text>
-      <text x="194" y="26" fill="#0284C7" font-size="9.5" font-weight="700">PHASE I</text>
+      <circle cx="28" cy="26" r="7" fill="none" stroke="#06B6D4" stroke-width="1.4"/>
+      <circle cx="28" cy="26" r="3" fill="#22D3EE"/>
+      <text x="44" y="30" fill="#38BDF8" font-size="11" font-weight="750" letter-spacing="0.6">01 &#183; UNDERSTAND</text>
+      <text x="214" y="30" text-anchor="end" fill="#0284C7" font-size="9" font-weight="700">PHASE I</text>
 
-      <!-- Skill 1: discover -->
-      <g transform="translate(12, 54)">
-        <rect width="220" height="66" rx="8" fill="#0E1C2E" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-discover</text>
-        <rect x="132" y="11" width="76" height="18" rx="4" fill="rgba(6,182,212,0.2)"/>
-        <text x="170" y="24" text-anchor="middle" fill="#22D3EE" font-size="9" font-weight="700">INVENTORY</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">Structure, tools &amp; entry points</text>
+      <!-- 3 Skill Flow Chips -->
+      <g transform="translate(12, 48)">
+        <!-- discover -->
+        <rect x="0" y="0" width="216" height="22" rx="4" fill="#0B1B30" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
+        <circle cx="10" cy="11" r="2.5" fill="#38BDF8"/>
+        <text x="20" y="15" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-discover</text>
+        <text x="206" y="15" text-anchor="end" fill="#22D3EE" font-size="8.5" font-weight="700">INVENTORY</text>
+
+        <!-- verify -->
+        <rect x="0" y="27" width="216" height="22" rx="4" fill="#0B1B30" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
+        <circle cx="10" cy="11" r="2.5" fill="#38BDF8"/>
+        <text x="20" y="15" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-verify</text>
+        <text x="206" y="15" text-anchor="end" fill="#22D3EE" font-size="8.5" font-weight="700">TRACE PROOF</text>
+
+        <!-- align -->
+        <rect x="0" y="54" width="216" height="22" rx="4" fill="#0B1B30" stroke="rgba(6,182,212,0.25)" stroke-width="1"/>
+        <circle cx="10" cy="11" r="2.5" fill="#38BDF8"/>
+        <text x="20" y="15" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-align</text>
+        <text x="206" y="15" text-anchor="end" fill="#22D3EE" font-size="8.5" font-weight="700">TARGET CONTRACT</text>
       </g>
-
-      <!-- Skill 2: verify -->
-      <g transform="translate(12, 128)">
-        <rect width="220" height="66" rx="8" fill="#0E1C2E" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-verify</text>
-        <rect x="142" y="11" width="66" height="18" rx="4" fill="rgba(6,182,212,0.2)"/>
-        <text x="175" y="24" text-anchor="middle" fill="#22D3EE" font-size="9" font-weight="700">EVIDENCE</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">Trace runtime &amp; test claims</text>
-      </g>
-
-      <!-- Skill 3: align -->
-      <g transform="translate(12, 202)">
-        <rect width="220" height="66" rx="8" fill="#0E1C2E" stroke="rgba(6,182,212,0.25)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-align</text>
-        <rect x="136" y="11" width="72" height="18" rx="4" fill="rgba(6,182,212,0.2)"/>
-        <text x="172" y="24" text-anchor="middle" fill="#22D3EE" font-size="9" font-weight="700">CONTRACT</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">Reconcile facts with intent</text>
-      </g>
-    </g>
-
-    <!-- Connector Arrow 1 -> 2 -->
-    <g transform="translate(244, 140)">
-      <line x1="5" y1="0" x2="22" y2="0" stroke="#38BDF8" stroke-width="2" stroke-dasharray="3,3"/>
-      <polygon points="20,-4 26,0 20,4" fill="#38BDF8"/>
     </g>
 
     <!-- PHASE 2: BLUEPRINT -->
-    <g transform="translate(272, 0)">
-      <rect width="244" height="290" rx="12" fill="#0F0D1F" stroke="url(#cardBorder)" stroke-width="1" filter="url(#dropShadow)"/>
-      <path d="M 0 12 Q 0 0 12 0 L 232 0 Q 244 0 244 12 L 244 42 L 0 42 Z" fill="#1B1638"/>
+    <g transform="translate(273, 0)">
+      <rect width="240" height="135" rx="12" fill="#0E0C22" stroke="url(#cardBorder)" stroke-width="1" filter="url(#shadow)"/>
+      <rect x="12" y="12" width="216" height="28" rx="6" fill="#18153B"/>
       <!-- Layers Icon -->
-      <polygon points="24,14 32,18 24,22 16,18" fill="none" stroke="#818CF8" stroke-width="1.3"/>
-      <polygon points="24,20 32,24 24,28 16,24" fill="none" stroke="#818CF8" stroke-width="1.3"/>
-      <text x="42" y="26" fill="#A5B4FC" font-size="12" font-weight="750" letter-spacing="0.8">02 &#183; BLUEPRINT</text>
-      <text x="190" y="26" fill="#6366F1" font-size="9.5" font-weight="700">PHASE II</text>
+      <polygon points="28,21 35,24 28,27 21,24" fill="none" stroke="#818CF8" stroke-width="1.3"/>
+      <polygon points="28,26 35,29 28,32 21,29" fill="none" stroke="#818CF8" stroke-width="1.3"/>
+      <text x="44" y="30" fill="#A5B4FC" font-size="11" font-weight="750" letter-spacing="0.6">02 &#183; BLUEPRINT</text>
+      <text x="214" y="30" text-anchor="end" fill="#6366F1" font-size="9" font-weight="700">PHASE II</text>
 
-      <!-- Skill 4: design -->
-      <g transform="translate(12, 54)">
-        <rect width="220" height="66" rx="8" fill="#171431" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-design</text>
-        <rect x="124" y="11" width="84" height="18" rx="4" fill="rgba(99,102,241,0.2)"/>
-        <text x="166" y="24" text-anchor="middle" fill="#A5B4FC" font-size="9" font-weight="700">ARCHITECTURE</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">System boundaries &amp; state</text>
+      <g transform="translate(12, 48)">
+        <!-- design -->
+        <rect x="0" y="0" width="216" height="22" rx="4" fill="#151235" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
+        <circle cx="10" cy="11" r="2.5" fill="#818CF8"/>
+        <text x="20" y="15" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-design</text>
+        <text x="206" y="15" text-anchor="end" fill="#A5B4FC" font-size="8.5" font-weight="700">ARCHITECTURE</text>
+
+        <!-- strategize -->
+        <rect x="0" y="27" width="216" height="22" rx="4" fill="#151235" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
+        <circle cx="10" cy="11" r="2.5" fill="#818CF8"/>
+        <text x="20" y="15" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-strategize</text>
+        <text x="206" y="15" text-anchor="end" fill="#A5B4FC" font-size="8.5" font-weight="700">TRADEOFFS</text>
+
+        <!-- plan -->
+        <rect x="0" y="54" width="216" height="22" rx="4" fill="#151235" stroke="rgba(99,102,241,0.25)" stroke-width="1"/>
+        <circle cx="10" cy="11" r="2.5" fill="#818CF8"/>
+        <text x="20" y="15" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-plan</text>
+        <text x="206" y="15" text-anchor="end" fill="#A5B4FC" font-size="8.5" font-weight="700">TASK DAG</text>
       </g>
-
-      <!-- Skill 5: strategize -->
-      <g transform="translate(12, 128)">
-        <rect width="220" height="66" rx="8" fill="#171431" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-strategize</text>
-        <rect x="136" y="11" width="72" height="18" rx="4" fill="rgba(99,102,241,0.2)"/>
-        <text x="172" y="24" text-anchor="middle" fill="#A5B4FC" font-size="9" font-weight="700">TRADEOFF</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">Migration paths &amp; risk profiles</text>
-      </g>
-
-      <!-- Skill 6: plan -->
-      <g transform="translate(12, 202)">
-        <rect width="220" height="66" rx="8" fill="#171431" stroke="rgba(99,102,241,0.25)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-plan</text>
-        <rect x="142" y="11" width="66" height="18" rx="4" fill="rgba(99,102,241,0.2)"/>
-        <text x="175" y="24" text-anchor="middle" fill="#A5B4FC" font-size="9" font-weight="700">TASK DAG</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">Atomic, parallel work packets</text>
-      </g>
-    </g>
-
-    <!-- Connector Arrow 2 -> 3 -->
-    <g transform="translate(516, 140)">
-      <line x1="5" y1="0" x2="22" y2="0" stroke="#818CF8" stroke-width="2" stroke-dasharray="3,3"/>
-      <polygon points="20,-4 26,0 20,4" fill="#818CF8"/>
     </g>
 
     <!-- PHASE 3: EXECUTE -->
-    <g transform="translate(544, 0)">
-      <rect width="244" height="290" rx="12" fill="#140C1D" stroke="url(#cardBorder)" stroke-width="1" filter="url(#dropShadow)"/>
-      <path d="M 0 12 Q 0 0 12 0 L 232 0 Q 244 0 244 12 L 244 42 L 0 42 Z" fill="#261338"/>
+    <g transform="translate(546, 0)">
+      <rect width="240" height="135" rx="12" fill="#130B1E" stroke="url(#cardBorder)" stroke-width="1" filter="url(#shadow)"/>
+      <rect x="12" y="12" width="216" height="28" rx="6" fill="#241238"/>
       <!-- Terminal Icon -->
-      <rect x="16" y="13" width="16" height="14" rx="2.5" fill="none" stroke="#C084FC" stroke-width="1.3"/>
-      <polyline points="19,18 22,20 19,22" fill="none" stroke="#C084FC" stroke-width="1.2"/>
-      <line x1="23" y1="22" x2="28" y2="22" stroke="#C084FC" stroke-width="1.2"/>
-      <text x="42" y="26" fill="#E9D5FF" font-size="12" font-weight="750" letter-spacing="0.8">03 &#183; EXECUTE</text>
-      <text x="186" y="26" fill="#A855F7" font-size="9.5" font-weight="700">PHASE III</text>
+      <rect x="22" y="20" width="13" height="11" rx="2" fill="none" stroke="#C084FC" stroke-width="1.2"/>
+      <polyline points="24,24 27,26 24,28" fill="none" stroke="#C084FC" stroke-width="1.1"/>
+      <text x="44" y="30" fill="#E9D5FF" font-size="11" font-weight="750" letter-spacing="0.6">03 &#183; EXECUTE</text>
+      <text x="214" y="30" text-anchor="end" fill="#A855F7" font-size="9" font-weight="700">PHASE III</text>
 
-      <!-- Skill 7: implement -->
-      <g transform="translate(12, 54)">
-        <rect width="220" height="88" rx="8" fill="#20112F" stroke="rgba(168,85,247,0.25)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-implement</text>
-        <rect x="130" y="11" width="78" height="18" rx="4" fill="rgba(168,85,247,0.2)"/>
-        <text x="169" y="24" text-anchor="middle" fill="#D8B4FE" font-size="9" font-weight="700">SUBAGENTS</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">Bounded work packets &amp; scoped edits</text>
-        <rect x="12" y="60" width="196" height="18" rx="3" fill="rgba(168,85,247,0.12)"/>
-        <text x="110" y="73" text-anchor="middle" fill="#E9D5FF" font-size="9.5" font-weight="600">Strict File Ownership Lanes</text>
+      <g transform="translate(12, 48)">
+        <!-- implement -->
+        <rect x="0" y="0" width="216" height="34" rx="4" fill="#1F0E31" stroke="rgba(168,85,247,0.25)" stroke-width="1"/>
+        <circle cx="10" cy="12" r="2.5" fill="#C084FC"/>
+        <text x="20" y="16" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-implement</text>
+        <text x="206" y="16" text-anchor="end" fill="#D8B4FE" font-size="8.5" font-weight="700">SUBAGENTS</text>
+        <text x="20" y="28" fill="#A855F7" font-size="9" font-weight="500">Bounded File-Scope Mutations</text>
+
+        <!-- validate -->
+        <rect x="0" y="42" width="216" height="34" rx="4" fill="#1F0E31" stroke="rgba(168,85,247,0.25)" stroke-width="1"/>
+        <circle cx="10" cy="12" r="2.5" fill="#C084FC"/>
+        <text x="20" y="16" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-validate</text>
+        <text x="206" y="16" text-anchor="end" fill="#D8B4FE" font-size="8.5" font-weight="700">ADVERSARIAL</text>
+        <text x="20" y="28" fill="#A855F7" font-size="9" font-weight="500">Lifecycle &amp; Failure Checks</text>
       </g>
-
-      <!-- Skill 8: validate -->
-      <g transform="translate(12, 150)">
-        <rect width="220" height="88" rx="8" fill="#20112F" stroke="rgba(168,85,247,0.25)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-validate</text>
-        <rect x="122" y="11" width="86" height="18" rx="4" fill="rgba(168,85,247,0.2)"/>
-        <text x="165" y="24" text-anchor="middle" fill="#D8B4FE" font-size="9" font-weight="700">ADVERSARIAL</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">Disprove correctness &amp; edge tests</text>
-        <rect x="12" y="60" width="196" height="18" rx="3" fill="rgba(168,85,247,0.12)"/>
-        <text x="110" y="73" text-anchor="middle" fill="#E9D5FF" font-size="9.5" font-weight="600">Lifecycle &amp; Recovery Checks</text>
-      </g>
-
-      <!-- Phase Footer Chip -->
-      <g transform="translate(12, 248)">
-        <rect width="220" height="28" rx="6" fill="#160A22" stroke="rgba(168,85,247,0.15)" stroke-width="1"/>
-        <circle cx="22" cy="14" r="3" fill="#C084FC"/>
-        <text x="32" y="18" fill="#D8B4FE" font-size="10" font-weight="600">Continuous Quality Gates</text>
-      </g>
-    </g>
-
-    <!-- Connector Arrow 3 -> 4 -->
-    <g transform="translate(788, 140)">
-      <line x1="5" y1="0" x2="22" y2="0" stroke="#C084FC" stroke-width="2" stroke-dasharray="3,3"/>
-      <polygon points="20,-4 26,0 20,4" fill="#C084FC"/>
     </g>
 
     <!-- PHASE 4: DELIVER -->
-    <g transform="translate(816, 0)">
-      <rect width="244" height="290" rx="12" fill="#081412" stroke="url(#cardBorder)" stroke-width="1" filter="url(#dropShadow)"/>
-      <path d="M 0 12 Q 0 0 12 0 L 232 0 Q 244 0 244 12 L 244 42 L 0 42 Z" fill="#0E2A23"/>
+    <g transform="translate(820, 0)">
+      <rect width="240" height="135" rx="12" fill="#081311" stroke="url(#cardBorder)" stroke-width="1" filter="url(#shadow)"/>
+      <rect x="12" y="12" width="216" height="28" rx="6" fill="#0D2721"/>
       <!-- Shield Icon -->
-      <path d="M 24 13 L 31 16 L 31 22 Q 31 28 24 30 Q 17 28 17 22 L 17 16 Z" fill="none" stroke="#34D399" stroke-width="1.3"/>
-      <polyline points="21,21 23,23 27,19" fill="none" stroke="#34D399" stroke-width="1.2"/>
-      <text x="42" y="26" fill="#A7F3D0" font-size="12" font-weight="750" letter-spacing="0.8">04 &#183; DELIVER</text>
-      <text x="188" y="26" fill="#10B981" font-size="9.5" font-weight="700">PHASE IV</text>
+      <path d="M 28 20 L 33 22 L 33 26 Q 33 30 28 32 Q 23 30 23 26 L 23 22 Z" fill="none" stroke="#34D399" stroke-width="1.3"/>
+      <polyline points="26,26 27,27 30,24" fill="none" stroke="#34D399" stroke-width="1.1"/>
+      <text x="44" y="30" fill="#A7F3D0" font-size="11" font-weight="750" letter-spacing="0.6">04 &#183; DELIVER</text>
+      <text x="214" y="30" text-anchor="end" fill="#10B981" font-size="9" font-weight="700">PHASE IV</text>
 
-      <!-- Skill 9: cohere -->
-      <g transform="translate(12, 54)">
-        <rect width="220" height="88" rx="8" fill="#0D211C" stroke="rgba(16,185,129,0.25)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-cohere</text>
-        <rect x="136" y="11" width="72" height="18" rx="4" fill="rgba(16,185,129,0.2)"/>
-        <text x="172" y="24" text-anchor="middle" fill="#6EE7B7" font-size="9" font-weight="700">INTEGRITY</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">Cross-layer audit &amp; stale docs</text>
-        <rect x="12" y="60" width="196" height="18" rx="3" fill="rgba(16,185,129,0.12)"/>
-        <text x="110" y="73" text-anchor="middle" fill="#A7F3D0" font-size="9.5" font-weight="600">Eliminate Historic Debris</text>
-      </g>
+      <g transform="translate(12, 48)">
+        <!-- cohere -->
+        <rect x="0" y="0" width="216" height="34" rx="4" fill="#0C201C" stroke="rgba(16,185,129,0.25)" stroke-width="1"/>
+        <circle cx="10" cy="12" r="2.5" fill="#34D399"/>
+        <text x="20" y="16" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-cohere</text>
+        <text x="206" y="16" text-anchor="end" fill="#6EE7B7" font-size="8.5" font-weight="700">INTEGRITY</text>
+        <text x="20" y="28" fill="#10B981" font-size="9" font-weight="500">Cross-Layer Contradiction Audit</text>
 
-      <!-- Skill 10: finalize -->
-      <g transform="translate(12, 150)">
-        <rect width="220" height="88" rx="8" fill="#0D211C" stroke="rgba(16,185,129,0.25)" stroke-width="1"/>
-        <text x="12" y="24" fill="#FFFFFF" font-size="13" font-weight="650">revibe-finalize</text>
-        <rect x="142" y="11" width="66" height="18" rx="4" fill="rgba(16,185,129,0.2)"/>
-        <text x="175" y="24" text-anchor="middle" fill="#6EE7B7" font-size="9" font-weight="700">RELEASE</text>
-        <text x="12" y="48" fill="#94A3B8" font-size="11">Repository hygiene &amp; release audit</text>
-        <rect x="12" y="60" width="196" height="18" rx="3" fill="rgba(16,185,129,0.12)"/>
-        <text x="110" y="73" text-anchor="middle" fill="#A7F3D0" font-size="9.5" font-weight="600">Evidence-Backed Clean Ship</text>
-      </g>
-
-      <!-- Phase Footer Chip -->
-      <g transform="translate(12, 248)">
-        <rect width="220" height="28" rx="6" fill="#071512" stroke="rgba(16,185,129,0.15)" stroke-width="1"/>
-        <circle cx="22" cy="14" r="3" fill="#34D399"/>
-        <text x="32" y="18" fill="#A7F3D0" font-size="10" font-weight="600">Production Delivery Gate</text>
+        <!-- finalize -->
+        <rect x="0" y="42" width="216" height="34" rx="4" fill="#0C201C" stroke="rgba(16,185,129,0.25)" stroke-width="1"/>
+        <circle cx="10" cy="12" r="2.5" fill="#34D399"/>
+        <text x="20" y="16" fill="#FFFFFF" font-size="10.5" font-weight="600">revibe-finalize</text>
+        <text x="206" y="16" text-anchor="end" fill="#6EE7B7" font-size="8.5" font-weight="700">CLEAN SHIP</text>
+        <text x="20" y="28" fill="#10B981" font-size="9" font-weight="500">Repo Hygiene &amp; Release Ready</text>
       </g>
     </g>
   </g>
 
-  <!-- ================= BOTTOM SECTION: 2 BALANCED CARDS ================= -->
-  <!-- Left Margin: 70px, Width: 1060px, Gap: 30px, Card Width: 515px -->
-  <g transform="translate(70, 460)">
+  <!-- ================= 3. THE DUAL ORCHESTRATION ENGINE (VISUAL CIRCUIT) ================= -->
+  <!-- Outer Box (y = 255 to 615, height 360) -->
+  <g transform="translate(70, 255)">
+    <rect width="1060" height="360" rx="14" fill="#080C16" stroke="url(#cardBorder)" stroke-width="1" filter="url(#shadow)"/>
 
-    <!-- CARD A: THE DELEGATION & EVIDENCE ENGINE -->
-    <g transform="translate(0, 0)">
-      <rect width="515" height="240" rx="12" fill="#090D18" stroke="url(#cardBorder)" stroke-width="1" filter="url(#dropShadow)"/>
-      <path d="M 0 12 Q 0 0 12 0 L 503 0 Q 515 0 515 12 L 515 38 L 0 38 Z" fill="#0E1628"/>
-      <circle cx="22" cy="19" r="4" fill="#38BDF8"/>
-      <text x="34" y="23" fill="#BAE6FD" font-size="11.5" font-weight="750" letter-spacing="0.8">THE DELEGATION &amp; EVIDENCE ENGINE</text>
-      <text x="340" y="23" fill="#64748B" font-size="10" font-weight="600">STRICT WORKER CONTRACT</text>
+    <!-- ================= A. LEFT WING: WORKER DELEGATION ================= -->
+    <g transform="translate(30, 25)">
+      <!-- Panel Header -->
+      <rect x="0" y="0" width="310" height="24" rx="5" fill="#0C1728"/>
+      <circle cx="12" cy="12" r="3" fill="#38BDF8"/>
+      <text x="24" y="16" fill="#BAE6FD" font-size="10.5" font-weight="700" letter-spacing="0.8">BOUNDED SUBAGENT WORKERS</text>
 
-      <!-- Visual 3-Node Architecture -->
-      <g transform="translate(16, 52)">
-        <!-- Node 1: Controller Router -->
-        <rect x="0" y="0" width="138" height="104" rx="8" fill="#0F192C" stroke="rgba(56,189,248,0.3)" stroke-width="1"/>
-        <circle cx="20" cy="22" r="8" fill="#0284C7"/>
-        <text x="16.5" y="26" fill="#FFFFFF" font-size="9.5" font-weight="800">M</text>
-        <text x="36" y="25" fill="#FFFFFF" font-size="12" font-weight="700">Controller</text>
-        <text x="12" y="46" fill="#38BDF8" font-size="10" font-weight="600">Router &amp; State</text>
-        <text x="12" y="64" fill="#94A3B8" font-size="9.5">&#8226; Task breakdown</text>
-        <text x="12" y="78" fill="#94A3B8" font-size="9.5">&#8226; File boundaries</text>
-        <text x="12" y="92" fill="#94A3B8" font-size="9.5">&#8226; Commit point</text>
+      <!-- Worker Container Box -->
+      <rect x="0" y="36" width="310" height="215" rx="10" fill="#0B1322" stroke="rgba(56,189,248,0.2)" stroke-width="1"/>
 
-        <!-- Connector Arrow: Controller -> Worker -->
-        <g transform="translate(142, 45)">
-          <line x1="4" y1="0" x2="24" y2="0" stroke="#38BDF8" stroke-width="1.8"/>
-          <polygon points="22,-3 28,0 22,3" fill="#38BDF8"/>
-          <text x="15" y="-6" text-anchor="middle" fill="#0284C7" font-size="8.5" font-weight="700">DISPATCH</text>
-        </g>
-
-        <!-- Node 2: Subagents / Workers -->
-        <rect x="174" y="0" width="138" height="104" rx="8" fill="#16152F" stroke="rgba(129,140,248,0.3)" stroke-width="1"/>
-        <circle cx="194" cy="22" r="8" fill="#6366F1"/>
-        <text x="190.5" y="26" fill="#FFFFFF" font-size="9.5" font-weight="800">L</text>
-        <text x="210" y="25" fill="#FFFFFF" font-size="12" font-weight="700">Subagents</text>
-        <text x="186" y="46" fill="#A5B4FC" font-size="10" font-weight="600">Bounded Workers</text>
-        <text x="186" y="64" fill="#94A3B8" font-size="9.5">&#8226; Focused scope</text>
-        <text x="186" y="78" fill="#94A3B8" font-size="9.5">&#8226; Scoped mutations</text>
-        <text x="186" y="92" fill="#94A3B8" font-size="9.5">&#8226; Never touch state</text>
-
-        <!-- Connector Arrow: Worker -> Evidence -->
-        <g transform="translate(316, 45)">
-          <line x1="4" y1="0" x2="24" y2="0" stroke="#34D399" stroke-width="1.8"/>
-          <polygon points="22,-3 28,0 22,3" fill="#34D399"/>
-          <text x="15" y="-6" text-anchor="middle" fill="#059669" font-size="8.5" font-weight="700">RETURNS</text>
-        </g>
-
-        <!-- Node 3: Structured Evidence -->
-        <rect x="348" y="0" width="135" height="104" rx="8" fill="#0C1D18" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
-        <circle cx="368" cy="22" r="8" fill="#10B981"/>
-        <text x="364.5" y="25" fill="#FFFFFF" font-size="10" font-weight="800">&#10003;</text>
-        <text x="384" y="25" fill="#FFFFFF" font-size="12" font-weight="700">Evidence</text>
-        <text x="360" y="46" fill="#6EE7B7" font-size="10" font-weight="600">Strict Packet</text>
-        <text x="360" y="64" fill="#94A3B8" font-size="9.5">&#8226; Concrete proofs</text>
-        <text x="360" y="78" fill="#94A3B8" font-size="9.5">&#8226; Reproduction logs</text>
-        <text x="360" y="92" fill="#94A3B8" font-size="9.5">&#8226; Confidence &amp; gaps</text>
+      <!-- Worker 1 -->
+      <g transform="translate(14, 50)">
+        <rect width="282" height="60" rx="8" fill="#0E1C30" stroke="rgba(6,182,212,0.25)" stroke-width="1"/>
+        <circle cx="18" cy="20" r="7" fill="#0284C7"/>
+        <text x="15" y="23" fill="#FFFFFF" font-size="9" font-weight="800">W1</text>
+        <text x="32" y="22" fill="#FFFFFF" font-size="11.5" font-weight="700">Subagent Worker #1</text>
+        <rect x="180" y="10" width="90" height="18" rx="4" fill="rgba(6,182,212,0.2)"/>
+        <text x="225" y="22" text-anchor="middle" fill="#38BDF8" font-size="9" font-weight="700">FILE SCOPED</text>
+        <!-- Bounded Scope Badge -->
+        <rect x="12" y="36" width="258" height="16" rx="3" fill="#07101E"/>
+        <text x="18" y="48" fill="#94A3B8" font-family="'JetBrains Mono', monospace" font-size="9.5">scope: src/core/* &#183; strict AST edit</text>
       </g>
 
-      <!-- Bottom Principle Bar -->
-      <g transform="translate(16, 172)">
-        <rect width="483" height="48" rx="6" fill="#0D1322" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-        <text x="16" y="21" fill="#38BDF8" font-size="10.5" font-weight="700">CORE GUARANTEE</text>
-        <text x="16" y="37" fill="#94A3B8" font-size="10">Zero hallucinated handoffs &#183; Atomic state replacement &#183; Deterministic reproducibility</text>
+      <!-- Worker 2 -->
+      <g transform="translate(14, 120)">
+        <rect width="282" height="60" rx="8" fill="#14112E" stroke="rgba(99,102,241,0.25)" stroke-width="1"/>
+        <circle cx="18" cy="20" r="7" fill="#6366F1"/>
+        <text x="15" y="23" fill="#FFFFFF" font-size="9" font-weight="800">W2</text>
+        <text x="32" y="22" fill="#FFFFFF" font-size="11.5" font-weight="700">Subagent Worker #2</text>
+        <rect x="180" y="10" width="90" height="18" rx="4" fill="rgba(99,102,241,0.2)"/>
+        <text x="225" y="22" text-anchor="middle" fill="#A5B4FC" font-size="9" font-weight="700">ISOLATED</text>
+        <!-- Bounded Scope Badge -->
+        <rect x="12" y="36" width="258" height="16" rx="3" fill="#090818"/>
+        <text x="18" y="48" fill="#94A3B8" font-family="'JetBrains Mono', monospace" font-size="9.5">scope: tests/* &#183; adversarial trace</text>
+      </g>
+
+      <!-- Worker Output Badge -->
+      <g transform="translate(14, 190)">
+        <rect width="282" height="48" rx="6" fill="#0A1E18" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+        <circle cx="18" cy="18" r="5" fill="#10B981"/>
+        <text x="15" y="21" fill="#FFFFFF" font-size="9" font-weight="800">&#10003;</text>
+        <text x="30" y="20" fill="#6EE7B7" font-size="11" font-weight="700">Structured Evidence Packet</text>
+        <text x="14" y="38" fill="#A7F3D0" font-size="9.5">proofs &#183; reproducer logs &#183; diffs &#183; confidence</text>
       </g>
     </g>
 
-    <!-- CARD B: CONTEXTUAL REVIEW & CONTINUATION GATE -->
-    <g transform="translate(545, 0)">
-      <rect width="515" height="240" rx="12" fill="#0C0D17" stroke="url(#cardBorder)" stroke-width="1" filter="url(#dropShadow)"/>
-      <path d="M 0 12 Q 0 0 12 0 L 503 0 Q 515 0 515 12 L 515 38 L 0 38 Z" fill="#1A1728"/>
-      <circle cx="22" cy="19" r="4" fill="#F59E0B"/>
-      <text x="34" y="23" fill="#FDE68A" font-size="11.5" font-weight="750" letter-spacing="0.8">CONTEXTUAL REVIEW &amp; CONTINUATION GATE</text>
-      <text x="350" y="23" fill="#64748B" font-size="10" font-weight="600">HUMAN-IN-THE-LOOP</text>
+    <!-- Dispatch Line: Controller -> Workers -->
+    <g transform="translate(345, 105)">
+      <line x1="75" y1="0" x2="5" y2="0" stroke="#38BDF8" stroke-width="2" stroke-dasharray="5,4"/>
+      <polygon points="5,-4 -2,0 5,4" fill="#38BDF8"/>
+      <rect x="12" y="-12" width="56" height="16" rx="3" fill="#0C1C30"/>
+      <text x="40" y="-1" text-anchor="middle" fill="#38BDF8" font-size="8.5" font-weight="700">DISPATCH</text>
+    </g>
 
-      <!-- Review Flow Nodes -->
-      <g transform="translate(16, 52)">
-        <!-- Review Gate Box -->
-        <rect x="0" y="0" width="215" height="104" rx="8" fill="#16132A" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
-        <rect x="12" y="10" width="191" height="20" rx="4" fill="rgba(245,158,11,0.18)"/>
-        <text x="107" y="24" text-anchor="middle" fill="#FBBF24" font-size="9.5" font-weight="700">6-PART CONTEXT LINTER</text>
-        <text x="16" y="46" fill="#E2E8F0" font-size="9.5">1. Subject &amp; Meaning</text>
-        <text x="16" y="60" fill="#E2E8F0" font-size="9.5">2. Artifact Origin &amp; Proof</text>
-        <text x="16" y="74" fill="#E2E8F0" font-size="9.5">3. Downstream Impact</text>
-        <text x="16" y="90" fill="#FDE68A" font-size="9.5" font-weight="600">+ Final Open-Ended Feedback</text>
+    <!-- Return Line: Workers -> Controller -->
+    <g transform="translate(345, 230)">
+      <line x1="0" y1="0" x2="70" y2="0" stroke="#10B981" stroke-width="2" stroke-dasharray="5,4"/>
+      <polygon points="70,-4 77,0 70,4" fill="#10B981"/>
+      <rect x="8" y="-12" width="62" height="16" rx="3" fill="#0C241C"/>
+      <text x="39" y="-1" text-anchor="middle" fill="#34D399" font-size="8.5" font-weight="700">EVIDENCE</text>
+    </g>
 
-        <!-- Branching Decision Nodes -->
-        <!-- Branch 1: Accepted -->
-        <g transform="translate(240, 4)">
-          <line x1="-20" y1="20" x2="10" y2="20" stroke="#10B981" stroke-width="1.8"/>
-          <polygon points="8,17 14,20 8,23" fill="#10B981"/>
-          <rect x="14" y="0" width="229" height="44" rx="6" fill="#0C1D18" stroke="rgba(16,185,129,0.35)" stroke-width="1"/>
-          <circle cx="28" cy="22" r="5" fill="#10B981"/>
-          <text x="42" y="20" fill="#FFFFFF" font-size="11" font-weight="700">Accepted</text>
-          <text x="110" y="20" fill="#34D399" font-size="9.5" font-weight="600">&#8594; Auto-Advance</text>
-          <text x="42" y="35" fill="#6EE7B7" font-size="9">Commits state.json &amp; launches next stage</text>
-        </g>
+    <!-- ================= B. CENTER HUB: CONTROLLER BRAIN ================= -->
+    <g transform="translate(425, 30)">
+      <!-- Ambient Glow Under Hub -->
+      <circle cx="105" cy="140" r="95" fill="url(#controllerCoreGlow)"/>
 
-        <!-- Branch 2: Feedback Given -->
-        <g transform="translate(240, 56)">
-          <line x1="-20" y1="22" x2="10" y2="22" stroke="#38BDF8" stroke-width="1.8"/>
-          <polygon points="8,19 14,22 8,25" fill="#38BDF8"/>
-          <rect x="14" y="0" width="229" height="44" rx="6" fill="#0E1B2C" stroke="rgba(56,189,248,0.35)" stroke-width="1"/>
-          <circle cx="28" cy="22" r="5" fill="#38BDF8"/>
-          <text x="42" y="20" fill="#FFFFFF" font-size="11" font-weight="700">Feedback</text>
-          <text x="108" y="20" fill="#38BDF8" font-size="9.5" font-weight="600">&#8594; Targeted Rerun</text>
-          <text x="42" y="35" fill="#BAE6FD" font-size="9">Marks scope stale &amp; reruns affected lane</text>
-        </g>
+      <!-- Controller Command Hex/Card -->
+      <rect x="0" y="10" width="210" height="260" rx="14" fill="#0A1424" stroke="url(#cyanGrad)" stroke-width="1.5" filter="url(#shadow)"/>
+
+      <!-- Glowing Header -->
+      <rect x="10" y="20" width="190" height="30" rx="6" fill="#0F243E"/>
+      <circle cx="26" cy="35" r="5" fill="#38BDF8" filter="url(#glowFilter)"/>
+      <text x="38" y="39" fill="#FFFFFF" font-size="12" font-weight="800" letter-spacing="0.8">CONTROLLER</text>
+      <text x="190" y="39" text-anchor="end" fill="#38BDF8" font-size="9" font-weight="700">ROUTER</text>
+
+      <!-- Center Icon: Glowing CPU Core -->
+      <g transform="translate(70, 65)">
+        <rect width="70" height="70" rx="12" fill="#070E1A" stroke="#0284C7" stroke-width="1.5"/>
+        <rect x="10" y="10" width="50" height="50" rx="8" fill="#0D2540" stroke="#38BDF8" stroke-width="1"/>
+        <circle cx="35" cy="35" r="12" fill="#0284C7"/>
+        <circle cx="35" cy="35" r="6" fill="#FFFFFF"/>
+        <!-- Circuit Pins -->
+        <line x1="35" y1="0" x2="35" y2="10" stroke="#38BDF8" stroke-width="2"/>
+        <line x1="35" y1="60" x2="35" y2="70" stroke="#38BDF8" stroke-width="2"/>
+        <line x1="0" y1="35" x2="10" y2="35" stroke="#38BDF8" stroke-width="2"/>
+        <line x1="60" y1="35" x2="70" y2="35" stroke="#38BDF8" stroke-width="2"/>
       </g>
 
-      <!-- Bottom Loop Guarantee Bar -->
-      <g transform="translate(16, 172)">
-        <rect width="483" height="48" rx="6" fill="#121022" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-        <text x="16" y="21" fill="#FBBF24" font-size="10.5" font-weight="700">AUTONOMOUS CONTINUATION</text>
-        <text x="16" y="37" fill="#94A3B8" font-size="10">Cycles through 10 stages &#183; Silence is never approval &#183; Resumes without memory loss</text>
+      <!-- Controller Responsibilities -->
+      <g transform="translate(15, 150)">
+        <rect width="180" height="22" rx="4" fill="#0D1E33"/>
+        <text x="90" y="15" text-anchor="middle" fill="#BAE6FD" font-size="9.5" font-weight="700">Owns Run State Machine</text>
+
+        <rect y="28" width="180" height="22" rx="4" fill="#0D1E33"/>
+        <text x="90" y="43" text-anchor="middle" fill="#BAE6FD" font-size="9.5" font-weight="700">Audits Evidence Packets</text>
+
+        <rect y="56" width="180" height="22" rx="4" fill="#0D1E33"/>
+        <text x="90" y="71" text-anchor="middle" fill="#BAE6FD" font-size="9.5" font-weight="700">Single State Committer</text>
       </g>
+
+      <!-- State Vault Path Indicator -->
+      <g transform="translate(15, 235)">
+        <rect width="180" height="24" rx="5" fill="#070E1A" stroke="rgba(56,189,248,0.3)" stroke-width="1"/>
+        <text x="90" y="16" text-anchor="middle" fill="#38BDF8" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="600">.revibe/&lt;run-id&gt;/</text>
+      </g>
+    </g>
+
+    <!-- Review Line: Controller -> Review Gate -->
+    <g transform="translate(640, 105)">
+      <line x1="0" y1="0" x2="75" y2="0" stroke="#F59E0B" stroke-width="2" stroke-dasharray="5,4"/>
+      <polygon points="75,-4 82,0 75,4" fill="#F59E0B"/>
+      <rect x="12" y="-12" width="56" height="16" rx="3" fill="#241908"/>
+      <text x="40" y="-1" text-anchor="middle" fill="#FBBF24" font-size="8.5" font-weight="700">REVIEW</text>
+    </g>
+
+    <!-- ================= C. RIGHT WING: CONTEXTUAL REVIEW & FORK ================= -->
+    <g transform="translate(725, 25)">
+      <!-- Panel Header -->
+      <rect x="0" y="0" width="305" height="24" rx="5" fill="#1C170B"/>
+      <circle cx="12" cy="12" r="3" fill="#F59E0B"/>
+      <text x="24" y="16" fill="#FDE68A" font-size="10.5" font-weight="700" letter-spacing="0.8">HUMAN-IN-THE-LOOP REVIEW GATE</text>
+
+      <!-- Review Container Box -->
+      <rect x="0" y="36" width="305" height="215" rx="10" fill="#120E1C" stroke="rgba(245,158,11,0.25)" stroke-width="1"/>
+
+      <!-- 6-Part Context Linter Badge -->
+      <g transform="translate(14, 48)">
+        <rect width="277" height="42" rx="6" fill="#1F170D" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+        <text x="12" y="18" fill="#FBBF24" font-size="10" font-weight="750">6-PART CONTEXT LINTER</text>
+        <text x="12" y="33" fill="#94A3B8" font-size="9">Subject &#183; Meaning &#183; Origin &#183; Proof &#183; Impact &#183; Rec</text>
+      </g>
+
+      <!-- Decision Fork 1: ACCEPTED -->
+      <g transform="translate(14, 100)">
+        <rect width="277" height="48" rx="7" fill="#0C201A" stroke="#10B981" stroke-width="1.2"/>
+        <circle cx="18" cy="18" r="6" fill="#10B981"/>
+        <text x="14" y="22" fill="#FFFFFF" font-size="10" font-weight="800">&#10003;</text>
+        <text x="32" y="21" fill="#FFFFFF" font-size="11.5" font-weight="700">ACCEPTED</text>
+        <rect x="180" y="10" width="85" height="18" rx="4" fill="rgba(16,185,129,0.2)"/>
+        <text x="222" y="22" text-anchor="middle" fill="#34D399" font-size="9" font-weight="700">AUTO-ADVANCE</text>
+        <text x="14" y="39" fill="#A7F3D0" font-size="9">Commits state.json &amp; launches next stage</text>
+      </g>
+
+      <!-- Decision Fork 2: FEEDBACK GIVEN -->
+      <g transform="translate(14, 158)">
+        <rect width="277" height="48" rx="7" fill="#0C1B2C" stroke="#38BDF8" stroke-width="1.2"/>
+        <circle cx="18" cy="18" r="6" fill="#38BDF8"/>
+        <text x="13.5" y="22" fill="#06080D" font-size="10" font-weight="900">&#8635;</text>
+        <text x="32" y="21" fill="#FFFFFF" font-size="11.5" font-weight="700">FEEDBACK GIVEN</text>
+        <rect x="175" y="10" width="90" height="18" rx="4" fill="rgba(56,189,248,0.2)"/>
+        <text x="220" y="22" text-anchor="middle" fill="#38BDF8" font-size="9" font-weight="700">TARGETED RERUN</text>
+        <text x="14" y="39" fill="#BAE6FD" font-size="9">Invalidates only affected scope &amp; reruns lane</text>
+      </g>
+
+      <!-- Closing Prompt -->
+      <g transform="translate(14, 214)">
+        <rect width="277" height="26" rx="5" fill="#181325"/>
+        <text x="138" y="17" text-anchor="middle" fill="#FDE68A" font-size="9.5" font-style="italic">"Is there anything REVibe missed or that you want to add?"</text>
+      </g>
+    </g>
+
+    <!-- Bottom Architectural Guarantee Strip -->
+    <g transform="translate(30, 300)">
+      <rect width="1000" height="42" rx="8" fill="#0C1322" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <!-- Pill 1 -->
+      <circle cx="28" cy="21" r="4" fill="#10B981"/>
+      <text x="40" y="25" fill="#E2E8F0" font-size="11" font-weight="600">State Persistence</text>
+      <text x="145" y="25" fill="#64748B" font-size="11">.revibe/&lt;run-id&gt;/ guarantees zero context drift on resume</text>
+
+      <line x1="500" y1="10" x2="500" y2="32" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+      <!-- Pill 2 -->
+      <circle cx="528" cy="21" r="4" fill="#38BDF8"/>
+      <text x="540" y="25" fill="#E2E8F0" font-size="11" font-weight="600">Zero Hallucination</text>
+      <text x="660" y="25" fill="#64748B" font-size="11">Subagents return empirical proof before human review</text>
     </g>
   </g>
 
-  <!-- ================= SUBTLE BRAND FOOTER ================= -->
-  <g transform="translate(600, 745)" text-anchor="middle">
+  <!-- ================= 4. BRAND FOOTER ================= -->
+  <g transform="translate(600, 672)" text-anchor="middle">
     <text fill="#475569" font-size="11" font-weight="500" letter-spacing="0.5">REVibe Architecture &#183; Production-grade Agentic Engineering &#183; 11 Native Skills</text>
   </g>
 </svg>
