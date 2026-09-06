@@ -3,6 +3,18 @@
 All notable REVibe releases are recorded here. The release command stays short
 and floating; use a tag only when an exact historical build is required.
 
+## [1.4.0] - 2026-09-06
+
+### Added
+
+- Packaged the runtime controller state verification tool (`product/skills/revibe/scripts/check_state.py`) directly into the canonical skill bundle.
+- Introduced modern vector workflow infographic (`docs/assets/revibe-workflow.svg`) with obsidian glassmorphism.
+
+### Changed
+
+- Hardened orchestration protocol to guarantee 100% deterministic hold-up: mandatory pre-flight dispatch gate, strict worker packet schema validation, pre-question linter gate, and context bounding.
+- Streamlined `README.md` into a minimal premium product landing page with center-aligned hero, 11-skill directory, and eliminated redundant ASCII diagrams.
+
 ## [1.3.2] - 2026-09-06
 
 ### Changed
@@ -136,7 +148,8 @@ and floating; use a tag only when an exact historical build is required.
 
 - Initial public REVibe release.
 
-[Unreleased]: https://github.com/MPSMeridiaN/REVibe/compare/v1.3.2...HEAD
+[Unreleased]: https://github.com/MPSMeridiaN/REVibe/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.4.0
 [1.3.2]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.3.2
 [1.3.1]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.3.1
 [1.3.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.3.0

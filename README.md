@@ -10,143 +10,55 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/MPSMeridiaN/REVibe/releases/latest"><img src="https://img.shields.io/github/v/release/MPSMeridiaN/REVibe?display_name=tag&label=latest" alt="Latest release"></a>
-  <a href="https://github.com/MPSMeridiaN/REVibe/actions/workflows/check.yml"><img src="https://img.shields.io/github/actions/workflow/status/MPSMeridiaN/REVibe/check.yml?label=CI" alt="CI"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-111827.svg" alt="License: MIT"></a>
-  <img src="https://img.shields.io/badge/skills-11%20native%20modules-0284c7.svg" alt="11 Native Skills">
-  <img src="https://img.shields.io/badge/harness-universal-10b981.svg" alt="Universal Harness">
+  <a href="https://github.com/MPSMeridiaN/REVibe/releases/latest"><img src="https://img.shields.io/github/v/release/MPSMeridiaN/REVibe?display_name=tag&label=release&color=0284c7" alt="Latest release"></a>
+  <a href="https://github.com/MPSMeridiaN/REVibe/actions/workflows/check.yml"><img src="https://img.shields.io/github/actions/workflow/status/MPSMeridiaN/REVibe/check.yml?label=CI&color=10b981" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-64748b.svg" alt="License: MIT"></a>
+  <a href="#the-11-skills"><img src="https://img.shields.io/badge/skills-11%20native-6366f1.svg" alt="11 Native Skills"></a>
 </p>
 
-<p align="center">
-  <b><a href="#quickstart">Quickstart</a></b> · <b><a href="#the-orchestration-loop">Orchestration Loop</a></b> · <b><a href="#the-11-skills">The 11 Skills</a></b> · <b><a href="#why-revibe">Why REVibe</a></b> · <b><a href="#documentation">Documentation</a></b>
-</p>
+<br/>
+
+<img src="docs/assets/revibe-workflow.svg" alt="REVibe 11-Skill Architecture and Workflow Lifecycle" width="100%">
+
+<br/>
+<br/>
 
 </div>
 
-<p align="center">
-  <img src="docs/assets/revibe-workflow.svg" alt="REVibe 11-Skill Architecture and Workflow Lifecycle" width="100%">
-</p>
+## Overview
 
----
+**REVibe** is not a bloated framework, heavy runtime, or closed SaaS. It is an ultra-lean suite of **11 native agent skills** designed to install directly into your AI coding assistant—including Claude Code, Cursor, Windsurf, OpenCode, Gemini, Cline, Kiro, and Qwen.
 
-## What is REVibe?
+Instead of letting agents hallucinate, modify files prematurely, or accept unverified worker output, REVibe enforces a disciplined engineering lifecycle:
 
-REVibe is **not a bloated framework, heavy runtime, or closed SaaS**. It is a portable suite of **11 native agent skills** designed to install directly into your AI coding assistant (Claude Code, Cursor, Windsurf, OpenCode, Gemini, Cline, Kiro, Qwen, etc.).
-
-When an agent works without a protocol, it edits files prematurely, invents assumptions, accepts hallucinated subagent outputs, and asks vague questions like *"confirm the 10 features"*.
-
-REVibe transforms your agent into a disciplined engineering team:
-- **One Controller** owns the conversation, manages run-isolated state, and dispatches bounded work.
-- **Specialized Subagents** investigate, design, code, and test within strictly defined file boundaries.
-- **Contextual Review Contract**: Every question explains *what it is, where it came from, observed evidence, downstream impact, and recommended choice*—ending with an open-ended feedback prompt.
-- **Automatic Continuation**: The controller loops through all 10 stages automatically, rerunning only affected scopes when feedback is given, and checkpointing safely if blocked.
-
----
-
-## The Orchestration Loop
-
-```text
-               User Prompt: /revibe <task>
-                             │
-                             ▼
-┌──────────────────────────────────────────────────────────────┐
-│                      CONTROLLER ROUTER                       │
-│  • Selects / creates isolated run: .revibe/<run-id>/         │
-│  • Deconstructs task into bounded packets with file scopes   │
-└──────────────────────────────┬───────────────────────────────┘
-                               │ Dispatches bounded lanes
-                               ▼
-┌──────────────────────────────────────────────────────────────┐
-│                     SUBAGENTS / WORKERS                      │
-│  • Investigate, implement, or validate within assigned scope │
-│  • Return narrow evidence packets (never touch global state) │
-└──────────────────────────────┬───────────────────────────────┘
-                               │ Returns evidence packet
-                               ▼
-┌──────────────────────────────────────────────────────────────┐
-│                   EVIDENCE AUDIT & HANDOFF                   │
-│  • Verifies returned evidence against completion criteria    │
-│  • Prepares stage handoff (.revibe/<run-id>/handoffs/*.md)   │
-└──────────────────────────────┬───────────────────────────────┘
-                               │ Formulates contextual questions
-                               ▼
-┌──────────────────────────────────────────────────────────────┐
-│                 CONTEXTUAL HUMAN REVIEW                      │
-│  1. Subject: Named feature / boundary in plain language      │
-│  2. Meaning: What this means in practice                     │
-│  3. Origin: Source artifact, file path, line numbers         │
-│  4. Observed: Concrete evidence, logs, test findings         │
-│  5. Impact: Downstream effect of accepting / rejecting       │
-│  6. Decision: Recommended choice + trade-offs + custom path  │
-│  ──────────────────────────────────────────────────────────  │
-│  Final Question: "Is there anything REVibe missed,          │
-│                   misunderstood, or that you want to add?"   │
-└──────────────────────────────┬───────────────────────────────┘
-                               │
-            ┌──────────────────┴──────────────────┐
-            ▼                                     ▼
-      [ Feedback Given ]                     [ Accepted ]
-            │                                     │
-   Marks affected scope stale          Commits state.json + handoff
-   and reruns targeted lane            and auto-advances to next stage
-            │                                     │
-            └──────────────────┬──────────────────┘
-                               │
-                               ▼
-               Cycles through the 10 stages:
-   discover → verify → align → design → strategize →
-   plan → implement → validate → cohere → finalize
-```
-
----
-
-## The 11 Skills
-
-REVibe ships as 11 decoupled, cohesive skill modules mapped across 4 deliberate engineering phases:
-
-| Phase | Skill | Role | Primary Objective |
-| :--- | :--- | :--- | :--- |
-| **Router** | [`revibe`](product/skills/revibe/SKILL.md) | **Workflow Controller** | Initializes run, manages DAG dependencies, routes stages, enforces review contract |
-| **1. Understand** | [`revibe-discover`](product/skills/revibe-discover/SKILL.md) | Repo Inventory | Inventories structure, tools, entry points, and candidate features |
-| | [`revibe-verify`](product/skills/revibe-verify/SKILL.md) | Runtime Trace | Gathers behavioral evidence and separates claims from reality |
-| | [`revibe-align`](product/skills/revibe-align/SKILL.md) | Intent Reconciliation | Reconciles discrepancies into an accepted target definition |
-| **2. Blueprint** | [`revibe-design`](product/skills/revibe-design/SKILL.md) | System Architecture | Models whole-system boundaries, interfaces, state, and security |
-| | [`revibe-strategize`](product/skills/revibe-strategize/SKILL.md) | Trade-off Analysis | Evaluates solution directions, migration paths, and risk profiles |
-| | [`revibe-plan`](product/skills/revibe-plan/SKILL.md) | Task DAG | Converts strategy into bounded, dependency-aware work packets |
-| **3. Execute** | [`revibe-implement`](product/skills/revibe-implement/SKILL.md) | Subagent Coordination | Orchestrates scoped edits with continuous verification gates |
-| | [`revibe-validate`](product/skills/revibe-validate/SKILL.md) | Adversarial Testing | Attempts to disprove correctness via lifecycle & failure checks |
-| **4. Deliver** | [`revibe-cohere`](product/skills/revibe-cohere/SKILL.md) | Cross-layer Audit | Detects cross-layer contradictions, stale docs, and leftover debris |
-| | [`revibe-finalize`](product/skills/revibe-finalize/SKILL.md) | Release Readiness | Audits repository hygiene, documentation, and release readiness |
+- **Orchestration**: A single Controller coordinates run-isolated state in `.revibe/<run-id>/` and dispatches bounded work.
+- **Specialized Workers**: Subagents operate strictly within assigned file scopes and return structured evidence packets (`scope`, `finding`, `evidence`, `gaps`).
+- **Contextual Review**: Critical decisions require 6-part context (Subject, Meaning, Origin, Observed, Impact, Decision) before consulting the human.
+- **Autonomous Continuation**: Automatically cycles through 10 engineering stages from initial discovery through final release.
 
 ---
 
 ## Quickstart
 
-### 1. Install Skills into Your Repository
-
-Run this in the project root where your AI coding assistant operates:
+### 1. Install Skills
 
 ```sh
-# Project-local installation (recommended)
+# Local installation into repository (recommended)
 npx -y MPSMeridiaN/REVibe --local
 
-# Global installation (current user)
+# Or global installation for current user
 npx -y MPSMeridiaN/REVibe --global
 ```
 
-*Compatible with Claude Code, Cursor, Windsurf, OpenCode, Gemini, Cline, and any agent supporting skill directories (`--harness <name>`).*
+*Compatible with Claude Code, Cursor, Windsurf, OpenCode, Gemini, Cline, Kiro, and Qwen.*
 
-### 2. Run the Workflow
-
-Start any complex assignment with:
+### 2. Run Any Task
 
 ```text
-/revibe Refactor the authentication layer to support session revocation
+/revibe Refactor authentication to support session revocation
 ```
 
-### 3. Resume Anytime Without Context Loss
-
-If you close the session, switch chats, or pause work, resume with zero memory drift:
+### 3. Resume Seamlessly
 
 ```text
 /revibe resume <run-id>
@@ -154,46 +66,50 @@ If you close the session, switch chats, or pause work, resume with zero memory d
 
 ---
 
-## Runs Stay Isolated
+## The 11 Skills
 
-Every task is isolated in its own directory under `.revibe/<run-id>/`, preventing history merges or polluted baselines across concurrent tasks:
+REVibe ships as 11 decoupled, cohesive native skills mapped across 4 deliberate engineering phases:
 
-```text
-.revibe/<run-id>/
-├── state.json       # Canonical controller state & dependency graph
-├── handoffs/        # Reviewed stage artifacts with evidence & trace
-├── evidence/        # Bounded logs, traces, and reproduction proofs
-└── archive/         # Superseded records preserved for auditability
-```
+| Phase | Skill | Role & Primary Objective |
+| :--- | :--- | :--- |
+| **Router** | [`revibe`](product/skills/revibe/SKILL.md) | **Controller**: Manages run state, dispatches workers, audits evidence, gates stages |
+| **1. Understand** | [`revibe-discover`](product/skills/revibe-discover/SKILL.md) | **Repo Inventory**: Catalogs structure, tools, entry points, and baseline claims |
+| | [`revibe-verify`](product/skills/revibe-verify/SKILL.md) | **Runtime Trace**: Gathers behavioral proof, separating codebase reality from doc claims |
+| | [`revibe-align`](product/skills/revibe-align/SKILL.md) | **Intent Reconciliation**: Reconciles codebase facts with user goals into an accepted target |
+| **2. Blueprint** | [`revibe-design`](product/skills/revibe-design/SKILL.md) | **Architecture**: Models whole-system boundaries, interfaces, schemas, and security |
+| | [`revibe-strategize`](product/skills/revibe-strategize/SKILL.md) | **Trade-offs**: Evaluates migration paths, solution directions, and operational risk |
+| | [`revibe-plan`](product/skills/revibe-plan/SKILL.md) | **Task DAG**: Generates atomic, dependency-aware work packets with verification gates |
+| **3. Execute** | [`revibe-implement`](product/skills/revibe-implement/SKILL.md) | **Subagent Coordination**: Coordinates parallel subagents to apply surgical, verified changes |
+| | [`revibe-validate`](product/skills/revibe-validate/SKILL.md) | **Adversarial Testing**: Proves system correctness through edge-case and lifecycle checks |
+| **4. Deliver** | [`revibe-cohere`](product/skills/revibe-cohere/SKILL.md) | **Cross-layer Audit**: Detects cross-layer contradictions, stale documentation, and debris |
+| | [`revibe-finalize`](product/skills/revibe-finalize/SKILL.md) | **Release Readiness**: Audits repository hygiene, dependencies, and deployment readiness |
 
 ---
 
-## Why REVibe
+## State Isolation
 
-| Common Failure in AI Coding | How REVibe Solves It |
-| :--- | :--- |
-| **Premature file modifications** | Enforces discovery, verification, and alignment before touching code |
-| **Hallucinated subagent outputs** | Subagents return strict evidence packets audited by the controller |
-| **Confusing, context-free questions** | Every question provides 6-part context (Subject, Meaning, Origin, Evidence, Impact, Recommendation) |
-| **Silent assumptions & drift** | Feedback marks downstream dependencies stale; silence is never approval |
-| **Lost context across chat sessions** | Runs persist in `.revibe/<run-id>/` and resume deterministically |
-| **Accidental regressions & debris** | Dedicated coherence and adversarial validation stages before finalization |
+Every workflow run is isolated under `.revibe/<run-id>/` to guarantee determinism and auditability:
+
+```text
+.revibe/<run-id>/
+├── state.json       # Canonical state machine, stage statuses, and dependency DAG
+├── handoffs/        # Durable evidence, trade-offs, and verification traces
+└── evidence/        # Reproduction proofs, benchmark outputs, and diffs
+```
 
 ---
 
 ## Documentation
 
-- [Workflow, questions, handoffs, and recovery](docs/workflow.md)
-- [Installation, harnesses, offline mode, and removal](INSTALL.md)
-- [Harness capability matrix](docs/harnesses.md)
-- [Validation and evidence contract](docs/validation.md)
-- [Development and release checks](CONTRIBUTING.md)
-- [Versioned changelog](CHANGELOG.md)
+- [Workflow & Review Protocol](docs/workflow.md)
+- [Installation & Harnesses](INSTALL.md)
+- [Harness Capability Matrix](docs/harnesses.md)
+- [Validation Contract](docs/validation.md)
+- [Development & Contributing](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
 
 ---
 
-## Releases
-
-Releases are published automatically on every push to `main`. The release workflow verifies semantic versioning from [`VERSION`](VERSION), packages the 11 skill modules, generates release notes, and attaches distribution bundles with SHA-256 checksums.
-
-> *REVibe is a disciplined reasoning and orchestration protocol, not a correctness guarantee. Confidence is bounded by the empirical evidence available to the executing harness.*
+<div align="center">
+<sub>MIT License · Maintained by <a href="https://github.com/MPSMeridiaN">MPSMeridiaN</a></sub>
+</div>
