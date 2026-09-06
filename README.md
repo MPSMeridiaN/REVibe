@@ -18,7 +18,7 @@
 </div>
 
 <p align="center">
-  <img src="docs/assets/revibe-run.svg" alt="REVibe controller loop: request, assign, work, verify, then advance, rerun, or pause" width="900">
+  <img src="docs/assets/revibe-flow-v2.svg" alt="REVibe controller loop: request, assign, work, verify, then advance, rerun, or pause" width="900">
 </p>
 
 ## Why REVibe
@@ -129,4 +129,3 @@ The controller validates the run identity and baseline before continuing. Legacy
 Releases are created automatically on every push to `main`. The workflow reads the semantic version from [`VERSION`](VERSION), validates the package, generates matching release notes, uploads the ZIP and checksum, and retires obsolete commit-hash releases.
 
 REVibe is a reasoning workflow, not a correctness guarantee. Confidence is bounded by the evidence available to the executing harness.
-

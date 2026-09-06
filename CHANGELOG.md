@@ -11,6 +11,8 @@ and floating; use a tag only when an exact historical build is required.
   controller-led flow, isolated-run example, install and uninstall paths, and
   direct documentation links.
 - Removed two unreferenced legacy diagram assets from `docs/assets/`.
+- Replaced the cached diagram path with `revibe-flow-v2.svg` so GitHub renders
+  the new mobile-readable flow asset instead of a stale CDN copy.
 
 ## [Unreleased]
 
