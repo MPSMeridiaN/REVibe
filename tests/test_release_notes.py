@@ -12,15 +12,15 @@ SPEC.loader.exec_module(release_notes)
 
 class ReleaseNotesTests(unittest.TestCase):
     def test_highlights_exclude_historical_releases(self):
-        changelog = "# Changelog\n\n## [Unreleased]\n\n### Changed\n\n- New loop\n\n## [1.2.0]\n\n- Old change\n"
-        result = release_notes.notes("1.2.0", "abc123", "v1.2.0", "- Fix loop (abc123)", changelog)
+        changelog = "# Changelog\n\n## [Unreleased]\n\n## [1.3.0] - 2026-09-06\n\n### Changed\n\n- New loop\n\n## [1.2.0]\n\n- Old change\n"
+        result = release_notes.notes("1.3.0", "abc123", "v1.2.0", "- Fix loop (abc123)", changelog)
         self.assertIn("New loop", result)
         self.assertNotIn("Old change", result)
         self.assertIn("Fix loop (abc123)", result)
 
     def test_empty_highlights_still_include_direct_commits(self):
-        result = release_notes.notes("1.2.0", "abc123", "v1.2.0", "- Fix typo (abc123)", "")
-        self.assertNotIn("Maintained changelog highlights", result)
+        result = release_notes.notes("1.3.0", "abc123", "v1.2.0", "- Fix typo (abc123)", "")
+        self.assertNotIn("Changelog", result)
         self.assertIn("Fix typo (abc123)", result)
 
     def test_rerun_keeps_tag_and_commit_range(self):
@@ -31,7 +31,7 @@ class ReleaseNotesTests(unittest.TestCase):
             git("init", "-q")
             git("config", "user.email", "test@example.invalid")
             git("config", "user.name", "Release test")
-            (root / "VERSION").write_text("1.2.0\n", encoding="utf-8")
+            (root / "VERSION").write_text("1.3.0\n", encoding="utf-8")
             (root / "CHANGELOG.md").write_text("## [Unreleased]\n\n", encoding="utf-8")
             git("add", ".")
             git("commit", "-qm", "Original release")

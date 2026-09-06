@@ -5,6 +5,8 @@ and floating; use a tag only when an exact historical build is required.
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-09-06
+
 ### Changed
 
 - `/revibe <task>` now dispatches delegated work and continues between stages
@@ -22,9 +24,10 @@ and floating; use a tag only when an exact historical build is required.
   third-party `revibe-*` directories as well as unrelated skills.
 - Updates use the same ownership boundary and no longer remove unknown prefixed
   directories.
-- Every push to `main` now publishes a commit-specific GitHub release after all
-  validation jobs pass, with the tested ZIP, checksum, and release changelog.
-- Release reruns reuse the same tag; branch and pull-request checks do not publish.
+- Releases now use the semantic version from `VERSION` (`v1.3.0` for this
+  update), with the matching changelog section, tested ZIP, and checksum.
+- CI creates or updates that versioned release after validation; commit-hash
+  releases are retired automatically while historical semantic versions remain.
 - Every workflow stage now uses a controller-led delegation loop: bounded worker
   assignments, verified result packets, focused follow-ups, and user review.
 - Handoffs now retain controller checkpoints for partial work, evidence checks,
@@ -106,7 +109,8 @@ and floating; use a tag only when an exact historical build is required.
 
 - Initial public REVibe release.
 
-[Unreleased]: https://github.com/MPSMeridiaN/REVibe/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/MPSMeridiaN/REVibe/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.3.0
 [1.2.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.2.0
 [1.1.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.1.0
 [1.0.5]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.0.5

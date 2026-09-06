@@ -21,24 +21,26 @@ For a saved run, `python tools/check_state.py /path/to/project --run <run-id>` c
 
 ## Automatic releases
 
-Every push to `main` runs the complete validation matrix, then publishes the
-tested Ubuntu/Python 3.12 archive and checksum as a GitHub release. Other branches,
-pull requests, and manual validation runs do not publish. Failed checks prevent
-publication; rerun the failed workflow after resolving infrastructure problems.
+Every push to `main` runs the complete validation matrix, then publishes or
+updates the semantic-version release named `v<VERSION>` with the tested
+Ubuntu/Python 3.12 archive, checksum, and matching changelog section. Other
+branches, pull requests, and manual validation runs do not publish. Failed
+checks prevent publication; rerun the failed workflow after resolving
+infrastructure problems.
 
-Tags use `v<VERSION>+sha.<commit>` so each push has an immutable build identity
-without a bot commit or a version-bump loop. `VERSION`, `package.json`, and the
-installer keep the product version; update them together for a new product
-version. Release notes include direct commits since the nearest ancestor version
-tag and maintained Unreleased highlights when the changelog changed. Keep those
-highlights concise; move them into a versioned section when bumping the product
-version. Release notes are generated even for pushes without a changelog edit.
+When behavior changes, choose the next version using SemVer: patch for fixes,
+minor for backward-compatible capabilities, and major for breaking contracts.
+Update `VERSION`, `package.json`, `install.py`, and the matching dated
+`CHANGELOG.md` section in the same commit. Keep `## [Unreleased]` for work not
+yet assigned to a release. The bot creates the tag and release; no manual tag
+or release command is needed. Repeated pushes at the same version update that
+version's release assets and notes.
 
 Publishing first creates a draft, attaches both verified assets, then publishes.
-A retry resumes the draft or leaves an already published release unchanged.
-Older builds finishing after a newer release do not intentionally replace it as
-Latest. The install command continues to follow `main`; a release ZIP pins the
-exact validated commit. The workflow uses the repository's built-in token with
+A retry resumes the draft or updates the same version. Obsolete commit-hash
+releases are removed automatically; historical semantic versions remain. The
+install command continues to follow `main`; a release ZIP pins the exact
+validated commit. The workflow uses the repository's built-in token with
 `contents: write` only in the release job; no additional secret is required.
 
 ## Changes worth making

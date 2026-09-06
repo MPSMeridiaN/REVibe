@@ -56,21 +56,16 @@ jobs:
         run: |
           set -euo pipefail
           tag=$(cat dist/release-tag.txt)
-          if gh release view "$tag" --json isDraft --jq '.isDraft' > dist/is-draft.txt 2>/dev/null; then
-            if [ "$(cat dist/is-draft.txt)" = false ]; then
-              echo "Release already published: $tag"
-              exit 0
-            fi
-          else
+          if ! gh release view "$tag" --json isDraft --jq '.isDraft' > dist/is-draft.txt 2>/dev/null; then
             gh release create "$tag" --target "$GITHUB_SHA" --draft \
               --title "REVibe $tag" --notes-file dist/release-notes.md
           fi
+          gh release edit "$tag" --target "$GITHUB_SHA" --title "REVibe $tag" --notes-file dist/release-notes.md
           gh release upload "$tag" dist/revibe.zip dist/SHA256SUMS --clobber
-          latest=true
-          if previous=$(gh release view --json tagName --jq '.tagName' 2>/dev/null); then
-            git fetch origin "refs/tags/$previous:refs/tags/$previous"
-            if ! git merge-base --is-ancestor "$previous" "$GITHUB_SHA"; then
-              latest=false
+          gh release edit "$tag" --draft=false --latest
+          # Remove obsolete commit-hash releases; retain semantic versions.
+          gh release list --limit 100 --json tagName --jq '.[].tagName' | while read -r old; do
+            if [[ "$old" == *+sha.* && "$old" != "$tag" ]]; then
+              gh release delete "$old" --yes --cleanup-tag
             fi
-          fi
-          gh release edit "$tag" --draft=false --latest="$latest"
+          done
