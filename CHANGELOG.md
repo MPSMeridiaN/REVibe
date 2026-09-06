@@ -8,7 +8,7 @@ and floating; use a tag only when an exact historical build is required.
 ### Added
 
 - Packaged the runtime controller state verification tool (`product/skills/revibe/scripts/check_state.py`) directly into the canonical skill bundle.
-- Introduced modern vector workflow infographic (`docs/assets/revibe-workflow.svg`) with obsidian glassmorphism.
+- Introduced modern vector workflow infographic (`docs/assets/revibe-workflow-v2.svg`) with obsidian glassmorphism.
 
 ### Changed
 
