@@ -20,11 +20,24 @@ impact: what accepting, rejecting, or deferring changes downstream
 question: one precise choice or request for missing information
 ```
 
-The user-facing wording must name the subject and cite the evidence in human-readable form. Never ask “confirm the 10 features” without listing or linking the ten feature IDs/names, where they were found, and what confirmation changes. Every choice question must identify one evidence-backed option as `Recommended`, include a concise reason and material tradeoffs, and provide a custom/free-text path. After each answer, update its question record and context before asking the next question. After all decision questions, ask one separate final open-ended question equivalent in the user's language to: “Is there anything REVibe missed, misunderstood, or that you want to add?” If the tool requires options, include a no-additions option marked `Recommended` plus a free-text/custom option; the prompt must remain open-ended. If the answer introduces a new material decision, process it as a new question cycle and repeat the final open-ended question last.
+The user-facing wording must name the subject and cite the evidence in human-readable form. The controller must explain the subject before asking for a decision: state what the item is, where it appears, what was observed, and why the answer matters. Do not expose an internal noun by itself (for example, “feature 7”, “the ten features”, “this option”, or “the change”). Expand it to a numbered, individually described item when there is more than one item. Never ask “confirm the 10 features” without first showing each feature's name, plain-language purpose, source location, current status, and the consequence of confirming it. Every choice question must identify one evidence-backed option as `Recommended`, include a concise reason and material tradeoffs, and provide a custom/free-text path. After each answer, update its question record and context before asking the next question. After all decision questions, ask one separate final open-ended question equivalent in the user's language to: “Is there anything REVibe missed, misunderstood, or that you want to add?” If the tool requires options, include a no-additions option marked `Recommended` plus a free-text/custom option; the prompt must remain open-ended. If the answer introduces a new material decision, process it as a new question cycle and repeat the final open-ended question last.
+
+Render every review item in this order before invoking the question tool:
+
+```text
+1. Subject — the feature, decision, risk, or proposed change in plain language
+2. What this means — one or two sentences describing the behavior or boundary
+3. Where it came from — file/line, handoff section, worker packet, or test
+4. What we observed — current evidence and confidence, including unknowns
+5. Why your answer matters — the downstream scope, risk, or next-stage effect
+6. Decision — one question with choices and a recommended option
+```
+
+If the controller cannot fill items 1–5, it must not ask the question yet; it must collect the missing evidence or ask a smaller clarification question that defines the subject first. A batch is allowed only for independent items that each have their own six-part explanation. The final open-ended addition check never replaces these explanations.
 
 Record the question IDs, recommendations, answers, deferrals, and blockers in the handoff/state. If no permitted structured question tool exists, use the plain-text fallback and record the unavailable capability. Keep the stage `awaiting_review` until the actual response is incorporated; an explicit plain-text answer can satisfy review just as a structured answer can. Absence of the tool is never approval.
 
-Before sending a question, run a question-quality gate: reject it if the subject, claim, evidence reference, impact, or requested decision is missing; if a noun such as “features,” “options,” or “the change” is not defined in the cited artifact; or if it combines multiple dependent decisions. Rewrite it with the missing context or ask the smallest prerequisite question first. Store the rendered context packet in the handoff Trace so a later controller can reproduce exactly what the user was shown.
+Before sending a question, run a question-quality gate: reject it if the subject, plain-language explanation, claim, evidence reference, impact, or requested decision is missing; if a noun such as “features,” “options,” or “the change” is not defined in the cited artifact; if the user cannot identify the artifact being discussed from the question alone; or if it combines multiple dependent decisions. Rewrite it with the missing context or ask the smallest prerequisite question first. Store the rendered context packet in the handoff Trace so a later controller can reproduce exactly what the user was shown.
 
 ## Workflow and authority
 

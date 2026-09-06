@@ -3,6 +3,14 @@
 All notable REVibe releases are recorded here. The release command stays short
 and floating; use a tag only when an exact historical build is required.
 
+## [1.3.2] - 2026-09-06
+
+### Changed
+
+- Strengthened the shared review contract so every question explains its subject,
+  source artifact, observed claim, confidence, and downstream impact before asking
+  for a decision. Multiple findings must be explained and reviewed individually.
+
 ## [1.3.1] - 2026-09-06
 
 ### Changed
@@ -126,7 +134,8 @@ and floating; use a tag only when an exact historical build is required.
 
 - Initial public REVibe release.
 
-[Unreleased]: https://github.com/MPSMeridiaN/REVibe/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/MPSMeridiaN/REVibe/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.3.2
 [1.3.1]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.3.1
 [1.3.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.3.0
 [1.2.0]: https://github.com/MPSMeridiaN/REVibe/releases/tag/v1.2.0

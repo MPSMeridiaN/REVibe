@@ -12,11 +12,14 @@ fixed name; different harnesses may call the same question capability different
 things. If a structured question tool exists, the stage uses it for every
 user-facing review question. It enumerates all meaningful decisions, asks them
 until each is answered, deferred, or blocked, and uses one question at a time by
-default. Each question names the exact subject, states the current claim, links
-the evidence and impact, and asks one decision. Each choice has an evidence-backed
-`Recommended` option, its tradeoffs, and a custom/free-text path where useful.
-“Confirm the 10 features” is invalid unless the handoff lists the ten feature
-IDs/names, source locations, and why confirmation changes the run.
+default. Before the question, the controller explains the exact subject in plain
+language, names the artifact that introduced it, states the current claim and
+confidence, links the evidence and impact, and asks one decision. Each choice has
+an evidence-backed `Recommended` option, its tradeoffs, and a custom/free-text path.
+“Confirm the 10 features” is invalid unless the handoff lists each feature's name,
+purpose, source location, current status, and why confirming that specific feature
+changes the run. Present those features one at a time unless they are independent
+and each has its own explanation.
 
 You can accept, reject, correct, modify, prioritize, or defer any item. The final question in each review cycle is a separate open-ended check:
 

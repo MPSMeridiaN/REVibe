@@ -11,7 +11,7 @@ import stat
 import sys
 import tempfile
 
-VERSION = "1.3.1"
+VERSION = "1.3.2"
 SOURCE = Path(__file__).resolve().parent / "product" / "skills"
 DIRECTORY_HASH = hashlib.sha256(b"directory").hexdigest()
 PATHS = {
