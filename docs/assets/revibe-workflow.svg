@@ -1,0 +1,380 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#07090E; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+  <defs>
+    <!-- Background Ambient Glows -->
+    <radialGradient id="bgGlowCenter" cx="50%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#0E2138" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#07090E" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bgGlowBottomLeft" cx="20%" cy="80%" r="50%">
+      <stop offset="0%" stop-color="#141E34" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#07090E" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bgGlowBottomRight" cx="80%" cy="80%" r="50%">
+      <stop offset="0%" stop-color="#181330" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#07090E" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Card Borders & Fills -->
+    <linearGradient id="cardBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.12)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="indigoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="800" fill="#07090E"/>
+  <rect width="1200" height="800" fill="url(#bgGlowCenter)"/>
+  <rect width="1200" height="800" fill="url(#bgGlowBottomLeft)"/>
+  <rect width="1200" height="800" fill="url(#bgGlowBottomRight)"/>
+
+  <!-- Blueprint Subtle Grid Pattern -->
+  <g opacity="0.035" stroke="#FFFFFF" stroke-width="1">
+    <line x1="0" y1="90" x2="1200" y2="90"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="480" x2="1200" y2="480"/>
+    <line x1="0" y1="730" x2="1200" y2="730"/>
+    <line x1="200" y1="0" x2="200" y2="800"/>
+    <line x1="600" y1="0" x2="600" y2="800"/>
+    <line x1="1000" y1="0" x2="1000" y2="800"/>
+  </g>
+
+  <!-- ================= CENTER-ALIGNED HEADER ================= -->
+  <g transform="translate(600, 36)" text-anchor="middle">
+    <!-- Top Pill Badges -->
+    <g transform="translate(-160, 0)">
+      <rect x="0" y="0" width="320" height="26" rx="13" fill="#0B1220" stroke="url(#cyanGrad)" stroke-width="1.2"/>
+      <circle cx="18" cy="13" r="4" fill="#06B6D4"/>
+      <text x="165" y="17" fill="#E2E8F0" font-size="11" font-weight="600" letter-spacing="1.2">11 NATIVE SKILLS · 1 CONTROLLER</text>
+    </g>
+
+    <!-- Main Title -->
+    <text x="0" y="62" fill="#FFFFFF" font-size="28" font-weight="750" letter-spacing="-0.5">The Autonomous Engineering Pipeline</text>
+
+    <!-- Subtitle -->
+    <text x="0" y="86" fill="#94A3B8" font-size="13" font-weight="400">One Controller · Bounded Subagents · Contextual Decision Gates · Resumable State</text>
+
+    <!-- Command Trigger Box -->
+    <g transform="translate(-140, 102)">
+      <rect width="280" height="32" rx="8" fill="#0E1626" stroke="url(#cardBorder)" stroke-width="1"/>
+      <circle cx="14" cy="16" r="3" fill="#10B981"/>
+      <text x="32" y="21" fill="#38BDF8" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" text-anchor="start">$ /revibe</text>
+      <text x="106" y="21" fill="#E2E8F0" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="start">&lt;request&gt;</text>
+      <text x="220" y="20" fill="#64748B" font-size="10" font-weight="600" text-anchor="start">START RUN</text>
+    </g>
+  </g>
+
+  <!-- ================= 10-STAGE PIPELINE IN 4 PHASES ================= -->
+  <g transform="translate(60, 192)">
+    <!-- Phase Label Header -->
+    <text x="540" y="0" text-anchor="middle" fill="#64748B" font-size="11" font-weight="600" letter-spacing="1.5">FOUR DELIBERATE LIFECYCLE PHASES</text>
+
+    <!-- Container for 4 Phase Columns (Total Width: 1080px) -->
+    <g transform="translate(0, 14)">
+
+      <!-- ================= PHASE 1: UNDERSTAND ================= -->
+      <g transform="translate(0, 0)">
+        <rect width="258" height="248" rx="14" fill="#0A111E" stroke="url(#cardBorder)" stroke-width="1" filter="url(#subtleShadow)"/>
+        <!-- Header Ribbon -->
+        <path d="M 0 14 Q 0 0 14 0 L 244 0 Q 258 0 258 14 L 258 38 L 0 38 Z" fill="#0D1D33"/>
+        <circle cx="18" cy="19" r="4" fill="#06B6D4"/>
+        <text x="28" y="23" fill="#38BDF8" font-size="12" font-weight="700" letter-spacing="1">1. UNDERSTAND</text>
+        <text x="186" y="23" fill="#0284C7" font-size="10" font-weight="700">PHASE I</text>
+
+        <!-- Stage 1: discover -->
+        <g transform="translate(13, 50)">
+          <rect width="232" height="54" rx="8" fill="#0E1929" stroke="rgba(6,182,212,0.25)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-discover</text>
+          <rect x="148" y="10" width="72" height="16" rx="4" fill="rgba(6,182,212,0.18)"/>
+          <text x="184" y="22" text-anchor="middle" fill="#22D3EE" font-size="9" font-weight="700">INVENTORY</text>
+          <text x="12" y="41" fill="#94A3B8" font-size="11">Structure, tools &amp; entry points</text>
+        </g>
+
+        <!-- Stage 2: verify -->
+        <g transform="translate(13, 114)">
+          <rect width="232" height="54" rx="8" fill="#0E1929" stroke="rgba(6,182,212,0.25)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-verify</text>
+          <rect x="156" y="10" width="64" height="16" rx="4" fill="rgba(6,182,212,0.18)"/>
+          <text x="188" y="22" text-anchor="middle" fill="#22D3EE" font-size="9" font-weight="700">EVIDENCE</text>
+          <text x="12" y="41" fill="#94A3B8" font-size="11">Trace runtime &amp; test claims</text>
+        </g>
+
+        <!-- Stage 3: align -->
+        <g transform="translate(13, 178)">
+          <rect width="232" height="56" rx="8" fill="#0E1929" stroke="rgba(6,182,212,0.35)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-align</text>
+          <rect x="150" y="10" width="70" height="16" rx="4" fill="rgba(6,182,212,0.2)"/>
+          <text x="185" y="22" text-anchor="middle" fill="#22D3EE" font-size="9" font-weight="700">CONTRACT</text>
+          <text x="12" y="41" fill="#94A3B8" font-size="11">Reconcile expectations &amp; goals</text>
+        </g>
+      </g>
+
+      <!-- Flow Arrow 1 -> 2 -->
+      <g transform="translate(258, 120)">
+        <line x1="4" y1="0" x2="12" y2="0" stroke="#38BDF8" stroke-width="2"/>
+        <polygon points="12,-4 18,0 12,4" fill="#38BDF8"/>
+      </g>
+
+      <!-- ================= PHASE 2: BLUEPRINT ================= -->
+      <g transform="translate(278, 0)">
+        <rect width="258" height="248" rx="14" fill="#100E22" stroke="url(#cardBorder)" stroke-width="1" filter="url(#subtleShadow)"/>
+        <!-- Header Ribbon -->
+        <path d="M 0 14 Q 0 0 14 0 L 244 0 Q 258 0 258 14 L 258 38 L 0 38 Z" fill="#181435"/>
+        <circle cx="18" cy="19" r="4" fill="#818CF8"/>
+        <text x="28" y="23" fill="#A5B4FC" font-size="12" font-weight="700" letter-spacing="1">2. BLUEPRINT</text>
+        <text x="180" y="23" fill="#6366F1" font-size="10" font-weight="700">PHASE II</text>
+
+        <!-- Stage 4: design -->
+        <g transform="translate(13, 50)">
+          <rect width="232" height="54" rx="8" fill="#15132F" stroke="rgba(129,140,248,0.25)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-design</text>
+          <rect x="140" y="10" width="80" height="16" rx="4" fill="rgba(99,102,241,0.18)"/>
+          <text x="180" y="22" text-anchor="middle" fill="#A5B4FC" font-size="9" font-weight="700">BOUNDARIES</text>
+          <text x="12" y="41" fill="#94A3B8" font-size="11">System state &amp; core interfaces</text>
+        </g>
+
+        <!-- Stage 5: strategize -->
+        <g transform="translate(13, 114)">
+          <rect width="232" height="54" rx="8" fill="#15132F" stroke="rgba(129,140,248,0.25)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-strategize</text>
+          <rect x="150" y="10" width="70" height="16" rx="4" fill="rgba(99,102,241,0.18)"/>
+          <text x="185" y="22" text-anchor="middle" fill="#A5B4FC" font-size="9" font-weight="700">TRADEOFF</text>
+          <text x="12" y="41" fill="#94A3B8" font-size="11">Compare feasible paths &amp; risk</text>
+        </g>
+
+        <!-- Stage 6: plan -->
+        <g transform="translate(13, 178)">
+          <rect width="232" height="56" rx="8" fill="#15132F" stroke="rgba(129,140,248,0.35)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-plan</text>
+          <rect x="154" y="10" width="66" height="16" rx="4" fill="rgba(99,102,241,0.2)"/>
+          <text x="187" y="22" text-anchor="middle" fill="#A5B4FC" font-size="9" font-weight="700">TASK DAG</text>
+          <text x="12" y="41" fill="#94A3B8" font-size="11">Parallel tasks &amp; rollback limits</text>
+        </g>
+      </g>
+
+      <!-- Flow Arrow 2 -> 3 -->
+      <g transform="translate(536, 120)">
+        <line x1="4" y1="0" x2="12" y2="0" stroke="#818CF8" stroke-width="2"/>
+        <polygon points="12,-4 18,0 12,4" fill="#818CF8"/>
+      </g>
+
+      <!-- ================= PHASE 3: EXECUTE ================= -->
+      <g transform="translate(556, 0)">
+        <rect width="250" height="248" rx="14" fill="#140C1E" stroke="url(#cardBorder)" stroke-width="1" filter="url(#subtleShadow)"/>
+        <!-- Header Ribbon -->
+        <path d="M 0 14 Q 0 0 14 0 L 236 0 Q 250 0 250 14 L 250 38 L 0 38 Z" fill="#241334"/>
+        <circle cx="18" cy="19" r="4" fill="#C084FC"/>
+        <text x="28" y="23" fill="#E9D5FF" font-size="12" font-weight="700" letter-spacing="1">3. EXECUTE</text>
+        <text x="170" y="23" fill="#A855F7" font-size="10" font-weight="700">PHASE III</text>
+
+        <!-- Stage 7: implement -->
+        <g transform="translate(13, 50)">
+          <rect width="224" height="84" rx="8" fill="#1E112A" stroke="rgba(192,132,252,0.3)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-implement</text>
+          <rect x="134" y="10" width="78" height="16" rx="4" fill="rgba(168,85,247,0.2)"/>
+          <text x="173" y="22" text-anchor="middle" fill="#D8B4FE" font-size="9" font-weight="700">SUBAGENTS</text>
+          <text x="12" y="44" fill="#94A3B8" font-size="11">Bounded work packets,</text>
+          <text x="12" y="62" fill="#94A3B8" font-size="11">scoped edits &amp; local checks</text>
+        </g>
+
+        <!-- Stage 8: validate -->
+        <g transform="translate(13, 148)">
+          <rect width="224" height="86" rx="8" fill="#1E112A" stroke="rgba(192,132,252,0.3)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-validate</text>
+          <rect x="130" y="10" width="82" height="16" rx="4" fill="rgba(168,85,247,0.2)"/>
+          <text x="171" y="22" text-anchor="middle" fill="#D8B4FE" font-size="9" font-weight="700">ADVERSARIAL</text>
+          <text x="12" y="44" fill="#94A3B8" font-size="11">Disprove correctness,</text>
+          <text x="12" y="62" fill="#94A3B8" font-size="11">lifecycle checks &amp; recovery</text>
+        </g>
+      </g>
+
+      <!-- Flow Arrow 3 -> 4 -->
+      <g transform="translate(806, 120)">
+        <line x1="4" y1="0" x2="12" y2="0" stroke="#C084FC" stroke-width="2"/>
+        <polygon points="12,-4 18,0 12,4" fill="#C084FC"/>
+      </g>
+
+      <!-- ================= PHASE 4: DELIVER ================= -->
+      <g transform="translate(826, 0)">
+        <rect width="254" height="248" rx="14" fill="#091513" stroke="url(#cardBorder)" stroke-width="1" filter="url(#subtleShadow)"/>
+        <!-- Header Ribbon -->
+        <path d="M 0 14 Q 0 0 14 0 L 240 0 Q 254 0 254 14 L 254 38 L 0 38 Z" fill="#0F2B24"/>
+        <circle cx="18" cy="19" r="4" fill="#34D399"/>
+        <text x="28" y="23" fill="#A7F3D0" font-size="12" font-weight="700" letter-spacing="1">4. DELIVER</text>
+        <text x="174" y="23" fill="#10B981" font-size="10" font-weight="700">PHASE IV</text>
+
+        <!-- Stage 9: cohere -->
+        <g transform="translate(13, 50)">
+          <rect width="228" height="84" rx="8" fill="#0B201B" stroke="rgba(52,211,153,0.3)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-cohere</text>
+          <rect x="144" y="10" width="72" height="16" rx="4" fill="rgba(16,185,129,0.2)"/>
+          <text x="180" y="22" text-anchor="middle" fill="#6EE7B7" font-size="9" font-weight="700">INTEGRITY</text>
+          <text x="12" y="44" fill="#94A3B8" font-size="11">Detect contradictions,</text>
+          <text x="12" y="62" fill="#94A3B8" font-size="11">stale docs &amp; leftover debris</text>
+        </g>
+
+        <!-- Stage 10: finalize -->
+        <g transform="translate(13, 148)">
+          <rect width="228" height="86" rx="8" fill="#0B201B" stroke="rgba(52,211,153,0.3)" stroke-width="1"/>
+          <text x="12" y="22" fill="#FFFFFF" font-size="13" font-weight="600">revibe-finalize</text>
+          <rect x="148" y="10" width="68" height="16" rx="4" fill="rgba(16,185,129,0.2)"/>
+          <text x="182" y="22" text-anchor="middle" fill="#6EE7B7" font-size="9" font-weight="700">RELEASE</text>
+          <text x="12" y="44" fill="#94A3B8" font-size="11">Clean repo hygiene,</text>
+          <text x="12" y="62" fill="#94A3B8" font-size="11">docs &amp; release readiness</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ================= BOTTOM ARCHITECTURAL PANELS ================= -->
+  <g transform="translate(60, 480)">
+
+    <!-- PANEL A: CONTROLLER & HUMAN-IN-THE-LOOP REVIEW CONTRACT -->
+    <g transform="translate(0, 0)">
+      <rect width="668" height="266" rx="14" fill="#0B0F1A" stroke="url(#cardBorder)" stroke-width="1" filter="url(#subtleShadow)"/>
+      <path d="M 0 14 Q 0 0 14 0 L 654 0 Q 668 0 668 14 L 668 38 L 0 38 Z" fill="#111827"/>
+      <circle cx="20" cy="19" r="4" fill="#F59E0B"/>
+      <text x="32" y="23" fill="#FDE68A" font-size="12" font-weight="700" letter-spacing="0.8">THE ORCHESTRATION &amp; REVIEW CONTRACT</text>
+      <text x="440" y="23" fill="#94A3B8" font-size="11">Silence never becomes approval</text>
+
+      <!-- 3-Step Process Cards -->
+      <g transform="translate(18, 52)">
+        <!-- Step 1: Dispatch -->
+        <rect width="200" height="114" rx="8" fill="#121828" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <circle cx="18" cy="20" r="9" fill="#1E293B"/>
+        <text x="15" y="24" fill="#94A3B8" font-size="10" font-weight="750">1</text>
+        <text x="36" y="23" fill="#FFFFFF" font-size="12" font-weight="600">Dispatch Workers</text>
+        <text x="14" y="46" fill="#94A3B8" font-size="11">Controller assigns</text>
+        <text x="14" y="62" fill="#94A3B8" font-size="11">bounded work to subagents</text>
+        <text x="14" y="78" fill="#94A3B8" font-size="11">with strict file ownership.</text>
+        <rect x="14" y="90" width="102" height="15" rx="3" fill="#0B1322"/>
+        <text x="18" y="101" fill="#38BDF8" font-size="9" font-weight="600">Narrow Evidence</text>
+
+        <!-- Step 2: Verify -->
+        <g transform="translate(214, 0)">
+          <rect width="200" height="114" rx="8" fill="#121828" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <circle cx="18" cy="20" r="9" fill="#1E293B"/>
+          <text x="15" y="24" fill="#94A3B8" font-size="10" font-weight="750">2</text>
+          <text x="36" y="23" fill="#FFFFFF" font-size="12" font-weight="600">Verify Evidence</text>
+          <text x="14" y="46" fill="#94A3B8" font-size="11">Subagents return proof.</text>
+          <text x="14" y="62" fill="#94A3B8" font-size="11">Controller checks claims</text>
+          <text x="14" y="78" fill="#94A3B8" font-size="11">&amp; drafts stage handoff.</text>
+          <rect x="14" y="90" width="106" height="15" rx="3" fill="#0B1322"/>
+          <text x="18" y="101" fill="#FBBF24" font-size="9" font-weight="600">Audit &amp; Checkpoint</text>
+        </g>
+
+        <!-- Step 3: Contextual Question -->
+        <g transform="translate(428, 0)">
+          <rect width="204" height="114" rx="8" fill="#121828" stroke="rgba(245,158,11,0.25)" stroke-width="1"/>
+          <circle cx="18" cy="20" r="9" fill="#F59E0B"/>
+          <text x="15" y="24" fill="#000000" font-size="10" font-weight="750">3</text>
+          <text x="36" y="23" fill="#FDE68A" font-size="12" font-weight="600">Contextual Review</text>
+          <text x="14" y="46" fill="#94A3B8" font-size="11">1 decision at a time with</text>
+          <text x="14" y="62" fill="#94A3B8" font-size="11">subject, evidence, tradeoffs</text>
+          <text x="14" y="78" fill="#94A3B8" font-size="11">+ final open-ended check.</text>
+          <rect x="14" y="90" width="112" height="15" rx="3" fill="#0B1322"/>
+          <text x="18" y="101" fill="#4ADE80" font-size="9" font-weight="600">No Random Prompts</text>
+        </g>
+      </g>
+
+      <!-- Outcome Branches Bar -->
+      <g transform="translate(18, 180)">
+        <rect width="632" height="70" rx="8" fill="#0E1424" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+        <!-- Accept -->
+        <g transform="translate(18, 12)">
+          <circle cx="8" cy="10" r="4.5" fill="#10B981"/>
+          <text x="20" y="14" fill="#FFFFFF" font-size="12" font-weight="600">Accepted</text>
+          <text x="20" y="32" fill="#64748B" font-size="11">Advances state &amp; starts next stage</text>
+        </g>
+
+        <!-- Feedback -->
+        <g transform="translate(225, 12)">
+          <circle cx="8" cy="10" r="4.5" fill="#38BDF8"/>
+          <text x="20" y="14" fill="#FFFFFF" font-size="12" font-weight="600">Feedback Given</text>
+          <text x="20" y="32" fill="#64748B" font-size="11">Targeted rerun of affected scope</text>
+        </g>
+
+        <!-- Pause / Blocker -->
+        <g transform="translate(435, 12)">
+          <circle cx="8" cy="10" r="4.5" fill="#EF4444"/>
+          <text x="20" y="14" fill="#FFFFFF" font-size="12" font-weight="600">Pause / Blocker</text>
+          <text x="20" y="32" fill="#64748B" font-size="11">Saves checkpoint, stays waiting</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- PANEL B: RUN-ISOLATED PERSISTENCE ANATOMY -->
+    <g transform="translate(690, 0)">
+      <rect width="390" height="266" rx="14" fill="#0A0F1A" stroke="url(#cardBorder)" stroke-width="1" filter="url(#subtleShadow)"/>
+      <path d="M 0 14 Q 0 0 14 0 L 376 0 Q 390 0 390 14 L 390 38 L 0 38 Z" fill="#111B2E"/>
+      <circle cx="20" cy="19" r="4" fill="#38BDF8"/>
+      <text x="32" y="23" fill="#BAE6FD" font-size="12" font-weight="700" letter-spacing="0.8">RUN-ISOLATED PERSISTENCE</text>
+
+      <!-- Directory Tree Card -->
+      <g transform="translate(18, 50)">
+        <rect width="354" height="138" rx="8" fill="#070C15" stroke="rgba(56,189,248,0.18)" stroke-width="1"/>
+
+        <!-- Root -->
+        <text x="16" y="26" fill="#38BDF8" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600">.revibe/&lt;run-id&gt;/</text>
+        <text x="180" y="26" fill="#475569" font-size="11">Never merges histories</text>
+
+        <!-- Branch 1 -->
+        <line x1="26" y1="36" x2="26" y2="120" stroke="#1E293B" stroke-width="1.5"/>
+        <line x1="26" y1="50" x2="38" y2="50" stroke="#1E293B" stroke-width="1.5"/>
+        <text x="44" y="53" fill="#E2E8F0" font-family="'JetBrains Mono', monospace" font-size="11">├── state.json</text>
+        <text x="175" y="53" fill="#64748B" font-size="11">Canonical baseline</text>
+
+        <!-- Branch 2 -->
+        <line x1="26" y1="74" x2="38" y2="74" stroke="#1E293B" stroke-width="1.5"/>
+        <text x="44" y="77" fill="#E2E8F0" font-family="'JetBrains Mono', monospace" font-size="11">├── handoffs/</text>
+        <text x="175" y="77" fill="#64748B" font-size="11">Reviewed stage output</text>
+
+        <!-- Branch 3 -->
+        <line x1="26" y1="98" x2="38" y2="98" stroke="#1E293B" stroke-width="1.5"/>
+        <text x="44" y="101" fill="#E2E8F0" font-family="'JetBrains Mono', monospace" font-size="11">├── evidence/</text>
+        <text x="175" y="101" fill="#64748B" font-size="11">Bounded logs &amp; proofs</text>
+
+        <!-- Branch 4 -->
+        <line x1="26" y1="120" x2="38" y2="120" stroke="#1E293B" stroke-width="1.5"/>
+        <text x="44" y="123" fill="#E2E8F0" font-family="'JetBrains Mono', monospace" font-size="11">└── archive/</text>
+        <text x="175" y="123" fill="#64748B" font-size="11">Traceable supersede</text>
+      </g>
+
+      <!-- Resume command snippet -->
+      <g transform="translate(18, 200)">
+        <rect width="354" height="48" rx="8" fill="#131B2D" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <text x="14" y="20" fill="#94A3B8" font-size="10" font-weight="600">ZERO CONTEXT LOSS ON RESUME</text>
+        <text x="14" y="37" fill="#38BDF8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600">$ /revibe resume</text>
+        <text x="140" y="37" fill="#E2E8F0" font-family="'JetBrains Mono', monospace" font-size="11">&lt;run-id&gt;</text>
+        <circle cx="324" cy="24" r="4" fill="#10B981"/>
+        <text x="334" y="27" fill="#10B981" font-size="10" font-weight="600">SAFE</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Brand Center Footer -->
+  <g transform="translate(600, 780)" text-anchor="middle">
+    <text fill="#475569" font-size="11" font-weight="500">REVibe Architecture Specification · Production-grade Agentic Engineering · 11 Native Skills</text>
+  </g>
+</svg>
