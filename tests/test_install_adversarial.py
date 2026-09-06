@@ -112,7 +112,7 @@ class StatelessInstallerTests(unittest.TestCase):
             installer.apply(link / "skills", self.manifest(), self.source)
         self.assertFalse((outside / "skills").exists())
 
-    def test_uninstall_removes_reserved_namespace_without_touching_unrelated(self):
+    def test_uninstall_removes_owned_names_without_touching_unrelated(self):
         self.install()
         stale = self.root / "revibe-old"
         stale.mkdir()
@@ -124,8 +124,19 @@ class StatelessInstallerTests(unittest.TestCase):
         installer.apply(self.root, self.manifest(), self.source, uninstall=True)
 
         self.assertFalse((self.root / "revibe").exists())
-        self.assertFalse(stale.exists())
+        self.assertTrue(stale.is_dir())
         self.assertTrue(unrelated.is_dir())
+
+    def test_uninstall_preserves_unknown_revibe_prefixed_skill(self):
+        self.install()
+        other = self.root / "revibe-third-party"
+        other.mkdir()
+        (other / "SKILL.md").write_text("third-party")
+
+        installer.apply(self.root, self.manifest(), self.source, uninstall=True)
+
+        self.assertFalse((self.root / "revibe").exists())
+        self.assertTrue((other / "SKILL.md").is_file())
 
 
 if __name__ == "__main__":

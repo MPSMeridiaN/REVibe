@@ -15,6 +15,8 @@ and floating; use a tag only when an exact historical build is required.
   non-destructive legacy-copy procedure.
 - State checks cover run selection and cross-run artifact isolation; README
   visuals and install/uninstall guidance now describe the same continuous loop.
+- Uninstall now removes only exact shipped REVibe skill names, preserving unknown
+  third-party `revibe-*` directories as well as unrelated skills.
 - Every push to `main` now publishes a commit-specific GitHub release after all
   validation jobs pass, with the tested ZIP, checksum, and release changelog.
 - Release reruns reuse the same tag; branch and pull-request checks do not publish.

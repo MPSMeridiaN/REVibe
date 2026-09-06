@@ -72,7 +72,7 @@ until ownership is resolved.
 - Multi-target installation commits each destination separately rather than as
   one cross-directory transaction.
 - The installer keeps no persistent recovery journal. A process or power loss
-  during the final update may require inspecting the reserved `revibe*` entries
-  and rerunning the command.
-- The installer owns the reserved `revibe` / `revibe-*` namespace; personal
-  skills should use another name.
+  during the final update may require inspecting the shipped REVibe entries and
+  rerunning the command.
+- Uninstall removes only exact skill names present in the current product
+  manifest; unknown third-party `revibe-*` directories are preserved.

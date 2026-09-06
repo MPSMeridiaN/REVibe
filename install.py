@@ -220,7 +220,9 @@ def apply(root: Path, new: dict, source: Path = SOURCE, uninstall: bool = False)
         changed = False
         if root.exists():
             for child in sorted(root.iterdir(), key=lambda path: path.name):
-                if is_revibe_skill(child.name):
+                # Only remove names owned by this product manifest. Similar
+                # third-party prefixes must remain untouched.
+                if child.name in new["skills"]:
                     remove_tree(child, root)
                     changed = True
         changed = cleanup_persistent_state(root) or changed

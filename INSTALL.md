@@ -59,8 +59,8 @@ multiple native targets can make the same skill appear more than once.
 ## Update
 
 Rerun the exact install command. The installer is stateless: it replaces only
-the reserved `revibe` and `revibe-*` skill directories, leaves unrelated skills
-alone, and creates no manifest, lock, cache, or transaction journal. A current
+the exact shipped REVibe skill names, leaves unrelated skills—including unknown
+`revibe-*` directories—alone, and creates no manifest, lock, cache, or transaction journal. A current
 install also removes bookkeeping left by older releases without touching the
 project's `.revibe/` workflow history.
 
@@ -82,16 +82,17 @@ npx -y MPSMeridiaN/REVibe --local --harness claude --uninstall
 python install.py --destination /custom/skills --uninstall
 ```
 
-Uninstall removes REVibe directories whose names are exactly `revibe` or begin
-with `revibe-`, plus legacy installer bookkeeping in that skills directory. It
-preserves unrelated skills, source files, and all project workflow history under
+Uninstall removes only the exact REVibe skill names shipped by the current
+manifest, plus legacy installer bookkeeping in that skills directory. It
+preserves unrelated skills, including unknown `revibe-*` directories, source
+files, and all project workflow history under
 `.revibe/`, including `.revibe/state.json` and its legacy artifacts. It does not
 remove the skills directory itself.
 
-If you used the clone-and-copy method below, remove only those same
-`revibe`/`revibe-*` directories from the chosen skills directory. Keep personal
-skills under other names; `.revibe/` is outside the install target and remains
-untouched.
+If you used the clone-and-copy method below, remove only the exact shipped
+REVibe directories from the chosen skills directory. Keep personal skills,
+including unknown `revibe-*` directories; `.revibe/` is outside the install
+target and remains untouched.
 
 ## Clone and copy (no Node.js or Python)
 
@@ -117,7 +118,8 @@ Copy-Item -Path ..\REVibe-source\product\skills\* -Destination .\.agents\skills 
 For a global copy, replace `.agents/skills` with `~/.agents/skills` or
 `$env:USERPROFILE\.agents\skills`. Delete the temporary clone when finished.
 Manual copies have no automatic update or uninstall command; repeat the copy
-from a fresh clone to update, or follow the manual removal instruction above.
+from a fresh clone to update, or remove only the exact shipped REVibe directories
+listed in the product manifest. Leave unknown `revibe-*` directories alone.
 
 ## If installation stops midway
 

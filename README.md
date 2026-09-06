@@ -84,9 +84,9 @@ npx -y MPSMeridiaN/REVibe --local --uninstall
 npx -y MPSMeridiaN/REVibe --global --uninstall
 ```
 
-Uninstall removes only REVibe's reserved skill directories and legacy installer
-bookkeeping. It preserves unrelated skills and every `.revibe/` run, including
-legacy state.
+Uninstall removes only the exact REVibe skill names shipped by the installer and
+legacy installer bookkeeping. It preserves unrelated skills, including unknown
+`revibe-*` directories, and every `.revibe/` run.
 
 ## Read next
 
