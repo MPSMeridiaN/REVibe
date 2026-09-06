@@ -1,5 +1,9 @@
 name: Validate REVibe
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -26,3 +30,47 @@ jobs:
         with:
           name: revibe-${{ matrix.os }}-${{ matrix.python }}
           path: dist/
+  release:
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: revibe-ubuntu-latest-3.12
+          path: dist/
+      - name: Prepare release changelog
+        run: python tools/release_notes.py
+      - name: Publish the verified commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag=$(cat dist/release-tag.txt)
+          if gh release view "$tag" --json isDraft --jq '.isDraft' > dist/is-draft.txt 2>/dev/null; then
+            if [ "$(cat dist/is-draft.txt)" = false ]; then
+              echo "Release already published: $tag"
+              exit 0
+            fi
+          else
+            gh release create "$tag" --target "$GITHUB_SHA" --draft \
+              --title "REVibe $tag" --notes-file dist/release-notes.md
+          fi
+          gh release upload "$tag" dist/revibe.zip dist/SHA256SUMS --clobber
+          latest=true
+          if previous=$(gh release view --json tagName --jq '.tagName' 2>/dev/null); then
+            git fetch origin "refs/tags/$previous:refs/tags/$previous"
+            if ! git merge-base --is-ancestor "$previous" "$GITHUB_SHA"; then
+              latest=false
+            fi
+          fi
+          gh release edit "$tag" --draft=false --latest="$latest"

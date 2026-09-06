@@ -7,6 +7,9 @@ and floating; use a tag only when an exact historical build is required.
 
 ### Changed
 
+- Every push to `main` now publishes a commit-specific GitHub release after all
+  validation jobs pass, with the tested ZIP, checksum, and release changelog.
+- Release reruns reuse the same tag; branch and pull-request checks do not publish.
 - Every workflow stage now uses a controller-led delegation loop: bounded worker
   assignments, verified result packets, focused follow-ups, and user review.
 - Handoffs now retain controller checkpoints for partial work, evidence checks,

@@ -2,7 +2,7 @@
 
 ### The engineering operating system for AI coding agents.
 
-[![Release](https://img.shields.io/github/v/release/MPSMeridiaN/REVibe?display_name=tag&sort=semver)](https://github.com/MPSMeridiaN/REVibe/releases)
+[![Release](https://img.shields.io/github/v/release/MPSMeridiaN/REVibe?display_name=tag)](https://github.com/MPSMeridiaN/REVibe/releases/latest)
 [![CI](https://github.com/MPSMeridiaN/REVibe/actions/workflows/check.yml/badge.svg)](https://github.com/MPSMeridiaN/REVibe/actions/workflows/check.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-111827.svg)](LICENSE)
 
@@ -27,6 +27,10 @@ npx -y MPSMeridiaN/REVibe --local
 ```
 
 Installs the 11 skills into `<project>/.agents/skills/`.
+
+The command follows `main`. Every push to `main` that passes validation also
+publishes a [release](https://github.com/MPSMeridiaN/REVibe/releases/latest)
+with its commit-specific tag, changelog, ZIP, and checksum.
 
 ### User-global
 

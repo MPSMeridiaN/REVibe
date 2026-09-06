@@ -19,6 +19,28 @@ The archive is written to `dist/revibe.zip` with `dist/SHA256SUMS`. Packaging us
 
 For a saved run, `python tools/check_state.py /path/to/project` checks state references, dependency cycles, recorded decision feedback, and handoff revision consistency. It is a read-only development aid, not a required workflow runtime and not proof that the user actually gave the recorded approval.
 
+## Automatic releases
+
+Every push to `main` runs the complete validation matrix, then publishes the
+tested Ubuntu/Python 3.12 archive and checksum as a GitHub release. Other branches,
+pull requests, and manual validation runs do not publish. Failed checks prevent
+publication; rerun the failed workflow after resolving infrastructure problems.
+
+Tags use `v<VERSION>+sha.<commit>` so each push has an immutable build identity
+without a bot commit or a version-bump loop. `VERSION`, `package.json`, and the
+installer keep the product version; update them together for a new product
+version. Release notes include direct commits since the nearest ancestor version
+tag and maintained Unreleased highlights when the changelog changed. Keep those
+highlights concise; move them into a versioned section when bumping the product
+version. Release notes are generated even for pushes without a changelog edit.
+
+Publishing first creates a draft, attaches both verified assets, then publishes.
+A retry resumes the draft or leaves an already published release unchanged.
+Older builds finishing after a newer release do not intentionally replace it as
+Latest. The install command continues to follow `main`; a release ZIP pins the
+exact validated commit. The workflow uses the repository's built-in token with
+`contents: write` only in the release job; no additional secret is required.
+
 ## Changes worth making
 
 Keep one canonical workflow. Give each stage a distinct question, concrete evidence requirements, a durable handoff, and a user review gate. Load prior findings instead of re-investigating without cause. Add deterministic scripts only where they improve a fragile operation; do not turn the instruction suite into a mandatory runtime framework.
