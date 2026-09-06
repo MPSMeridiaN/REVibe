@@ -18,7 +18,7 @@
 
 <br/>
 
-<img src="docs/assets/revibe-workflow-v2.svg" alt="REVibe 11-Skill Architecture and Workflow Lifecycle" width="100%">
+<img src="docs/assets/revibe-architecture.svg" alt="REVibe 11-Skill Architecture and Workflow Lifecycle" width="100%">
 
 <br/>
 <br/>
