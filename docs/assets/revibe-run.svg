@@ -1,25 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
-  <title id="title">REVibe controller run loop</title>
-  <desc id="desc">A request creates an isolated run. A controller delegates work, verifies evidence, reviews with the user, persists state, and advances or reruns.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">REVibe continuous controller loop</title>
+  <desc id="desc">A request becomes an isolated run. The controller delegates work, verifies evidence, asks contextual questions, persists the answer, and advances or reruns.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#111827"/><stop offset="1" stop-color="#1e293b"/></linearGradient>
-    <linearGradient id="accent" x1="0" x2="1"><stop stop-color="#67e8f9"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".25"/></filter>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#67e8f9"/></marker>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b1220"/><stop offset="1" stop-color="#18253a"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#020617" flood-opacity=".42"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#67e8f9"/></marker>
   </defs>
-  <rect width="1200" height="430" rx="26" fill="url(#bg)"/>
-  <text x="62" y="66" fill="#f8fafc" font-family="Inter,Segoe UI,sans-serif" font-size="29" font-weight="700">One controller. One isolated run. Continuous progress.</text>
-  <text x="62" y="98" fill="#cbd5e1" font-family="Inter,Segoe UI,sans-serif" font-size="16">Every answer becomes durable state before the next move.</text>
-  <g filter="url(#shadow)" font-family="Inter,Segoe UI,sans-serif" text-anchor="middle">
-    <g><rect x="55" y="157" width="180" height="104" rx="18" fill="#f8fafc"/><text x="145" y="198" fill="#0f172a" font-size="17" font-weight="700">REQUEST</text><text x="145" y="227" fill="#475569" font-size="14">/revibe &lt;task&gt;</text></g>
-    <g><rect x="276" y="157" width="180" height="104" rx="18" fill="#e0f2fe"/><text x="366" y="198" fill="#0f172a" font-size="17" font-weight="700">RUN</text><text x="366" y="227" fill="#475569" font-size="14">.revibe/&lt;id&gt;/</text></g>
-    <g><rect x="497" y="157" width="180" height="104" rx="18" fill="#ede9fe"/><text x="587" y="198" fill="#0f172a" font-size="17" font-weight="700">DELEGATE</text><text x="587" y="227" fill="#475569" font-size="14">bounded workers</text></g>
-    <g><rect x="718" y="157" width="180" height="104" rx="18" fill="#dcfce7"/><text x="808" y="198" fill="#0f172a" font-size="17" font-weight="700">VERIFY</text><text x="808" y="227" fill="#475569" font-size="14">evidence packets</text></g>
-    <g><rect x="939" y="157" width="206" height="104" rx="18" fill="#fef3c7"/><text x="1042" y="198" fill="#0f172a" font-size="17" font-weight="700">REVIEW</text><text x="1042" y="227" fill="#475569" font-size="14">user answers</text></g>
+  <rect width="1200" height="760" rx="32" fill="url(#bg)"/>
+  <circle cx="72" cy="70" r="7" fill="#a7f3d0"/>
+  <text x="100" y="80" fill="#a7f3d0" font-family="Inter,Segoe UI,sans-serif" font-size="18" font-weight="700" letter-spacing="2">REVIBE  /  CONTINUOUS RUN</text>
+  <text x="64" y="145" fill="#f8fafc" font-family="Inter,Segoe UI,sans-serif" font-size="42" font-weight="750">One controller. Clear handoffs.</text>
+  <text x="64" y="185" fill="#cbd5e1" font-family="Inter,Segoe UI,sans-serif" font-size="21">Every answer becomes state before the next stage begins.</text>
+  <g filter="url(#shadow)" font-family="Inter,Segoe UI,sans-serif">
+    <g><rect x="64" y="245" width="322" height="150" rx="24" fill="#f8fafc"/><rect x="64" y="245" width="10" height="150" rx="5" fill="#0ea5e9"/><text x="100" y="288" fill="#0f172a" font-size="17" font-weight="800" letter-spacing="1">01  REQUEST</text><text x="100" y="332" fill="#0f172a" font-size="27" font-weight="700">/revibe &lt;task&gt;</text><text x="100" y="366" fill="#475569" font-size="17">create a new isolated run</text></g>
+    <g><rect x="439" y="245" width="322" height="150" rx="24" fill="#e0f2fe"/><rect x="439" y="245" width="10" height="150" rx="5" fill="#38bdf8"/><text x="475" y="288" fill="#0f172a" font-size="17" font-weight="800" letter-spacing="1">02  CONTROLLER</text><text x="475" y="332" fill="#0f172a" font-size="27" font-weight="700">assign the work</text><text x="475" y="366" fill="#475569" font-size="17">choose lanes and workers</text></g>
+    <g><rect x="814" y="245" width="322" height="150" rx="24" fill="#ede9fe"/><rect x="814" y="245" width="10" height="150" rx="5" fill="#8b5cf6"/><text x="850" y="288" fill="#0f172a" font-size="17" font-weight="800" letter-spacing="1">03  WORKERS</text><text x="850" y="332" fill="#0f172a" font-size="27" font-weight="700">do the scoped work</text><text x="850" y="366" fill="#475569" font-size="17">return evidence packets</text></g>
   </g>
-  <g stroke="#67e8f9" stroke-width="3" fill="none" marker-end="url(#arrow)"><path d="M235 209h38"/><path d="M456 209h38"/><path d="M677 209h38"/><path d="M898 209h35"/><path d="M1042 270v70H366v-70"/></g>
-  <rect x="274" y="313" width="184" height="54" rx="16" fill="#334155"/><text x="366" y="346" fill="#f8fafc" font-family="Inter,Segoe UI,sans-serif" font-size="15" text-anchor="middle">persist state + handoff</text>
-  <rect x="718" y="313" width="184" height="54" rx="16" fill="url(#accent)"/><text x="810" y="346" fill="#0f172a" font-family="Inter,Segoe UI,sans-serif" font-size="15" text-anchor="middle" font-weight="700">advance / rerun / pause</text>
-  <path d="M458 340h250" stroke="#67e8f9" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
-  <text x="62" y="400" fill="#94a3b8" font-family="Inter,Segoe UI,sans-serif" font-size="14">discover → verify → align → design → strategize → plan → implement → validate → cohere → finalize</text>
+  <g stroke="#67e8f9" stroke-width="4" fill="none" marker-end="url(#arrow)"><path d="M386 320h45"/><path d="M761 320h45"/></g>
+  <g filter="url(#shadow)" font-family="Inter,Segoe UI,sans-serif">
+    <g><rect x="176" y="485" width="360" height="150" rx="24" fill="#dcfce7"/><rect x="176" y="485" width="10" height="150" rx="5" fill="#22c55e"/><text x="214" y="528" fill="#0f172a" font-size="17" font-weight="800" letter-spacing="1">04  VERIFY + REVIEW</text><text x="214" y="572" fill="#0f172a" font-size="27" font-weight="700">check, then ask</text><text x="214" y="606" fill="#475569" font-size="17">one contextual decision at a time</text></g>
+    <g><rect x="664" y="485" width="360" height="150" rx="24" fill="#fef3c7"/><rect x="664" y="485" width="10" height="150" rx="5" fill="#f59e0b"/><text x="702" y="528" fill="#0f172a" font-size="17" font-weight="800" letter-spacing="1">05  PERSIST + ROUTE</text><text x="702" y="572" fill="#0f172a" font-size="27" font-weight="700">save, rerun, or advance</text><text x="702" y="606" fill="#475569" font-size="17">never lose the next move</text></g>
+  </g>
+  <path d="M974 485V438H356V395" stroke="#67e8f9" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M536 560h120" stroke="#67e8f9" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <rect x="64" y="682" width="1072" height="46" rx="23" fill="#24344b" stroke="#3b526d"/>
+  <text x="600" y="712" text-anchor="middle" fill="#dbeafe" font-family="Inter,Segoe UI,sans-serif" font-size="16" font-weight="650">discover  ·  verify  ·  align  ·  design  ·  strategize  ·  plan  ·  implement  ·  validate  ·  cohere  ·  finalize</text>
 </svg>

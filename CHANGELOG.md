@@ -5,6 +5,12 @@ and floating; use a tag only when an exact historical build is required.
 
 ## [Unreleased]
 
+### Changed
+
+- Redesigned the README run-loop infographic for readable rendering at narrow
+  widths: five clear controller-loop moments, larger type, and a separate stage
+  rail.
+
 ## [1.3.0] - 2026-09-06
 
 ### Changed
