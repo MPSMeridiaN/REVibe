@@ -13,6 +13,9 @@ and floating; use a tag only when an exact historical build is required.
 - Schema-2 state isolates each assignment under `.revibe/<run-id>/`, with run
   identity on worker packets and handoffs, explicit resume selection, and a
   non-destructive legacy-copy procedure.
+- Review questions now require a subject, current claim, evidence references,
+  impact, and one decision; subagent capability discovery must result in an
+  actual dispatch for every substantive stage lane.
 - State checks cover run selection and cross-run artifact isolation; README
   visuals and install/uninstall guidance now describe the same continuous loop.
 - Uninstall now removes only exact shipped REVibe skill names, preserving unknown

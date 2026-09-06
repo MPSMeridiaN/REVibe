@@ -63,6 +63,21 @@ not a live multi-agent execution or proof of every harness's cancellation behavi
 Worker cancellation remains harness-dependent; replacement writes must wait
 until ownership is resolved.
 
+## Review and delegation contract review — 2026-09-06
+
+The review contract now rejects an unanchored question before it reaches the
+user. Each question must identify its subject, current claim, evidence refs,
+downstream impact, and one decision; the controller asks one decision at a time
+and stores the rendered context packet in the handoff trace. A question such as
+“confirm the 10 features” is invalid without the feature IDs/names and source
+locations.
+
+At stage start, the controller must discover subagent dispatch by capability and
+schema and call it for every substantive lane. Discovery without a dispatch is
+recorded as orchestration failure. Sequential work is a fallback only when the
+catalog proves no permitted dispatch capability exists; a failed dispatch keeps
+the stage in progress or blocked. All eleven stage entrypoints carry this rule.
+
 ## Known limits
 
 - Skill discovery depends on the executing harness and agent following the

@@ -48,10 +48,11 @@ discover → verify → align → design → strategize → plan →
 implement → validate → cohere → finalize
 ```
 
-At each stage, the controller reads the router protocol, immediately delegates
-bounded substantive work, waits for final results, verifies material claims,
-then asks the meaningful choices with evidence, tradeoffs, and a recommended
-path. The review always ends with:
+At each stage, the controller reads the router protocol, discovers and calls the
+harness's subagent-dispatch capability for every substantive lane, waits for
+final results, verifies material claims, then asks one meaningful choice at a
+time. Every question names its subject, current claim, evidence, downstream
+impact, and recommended path. The review always ends with:
 
 > Is there anything REVibe missed, misunderstood, or that you want to add?
 

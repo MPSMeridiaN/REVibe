@@ -11,9 +11,12 @@ checks the current harness's exposed tools and schemas by capability, not by a
 fixed name; different harnesses may call the same question capability different
 things. If a structured question tool exists, the stage uses it for every
 user-facing review question. It enumerates all meaningful decisions, asks them
-until each is answered, deferred, or blocked, and uses manageable batches only
-for independent questions. Each choice has an evidence-backed `Recommended`
-option, its tradeoffs, and a custom/free-text path where useful.
+until each is answered, deferred, or blocked, and uses one question at a time by
+default. Each question names the exact subject, states the current claim, links
+the evidence and impact, and asks one decision. Each choice has an evidence-backed
+`Recommended` option, its tradeoffs, and a custom/free-text path where useful.
+“Confirm the 10 features” is invalid unless the handoff lists the ten feature
+IDs/names, source locations, and why confirmation changes the run.
 
 You can accept, reject, correct, modify, prioritize, or defer any item. The final question in each review cycle is a separate open-ended check:
 
@@ -81,7 +84,14 @@ For a narrower run, keep the same contracts. A documentation-only project has no
 
 ## One controller, every stage
 
-The router and each stage share one controller role. It assigns substantive work to available, permitted subagents, checks their returned evidence, and owns the conversation and canonical state. Invoking a stage directly uses the same loop. Workers investigate, propose, edit, or test within their assigned scope; finishing an assignment does not complete the stage.
+The router and each stage share one controller role. It discovers the harness's
+subagent dispatch capability by schema and calls it for every substantive lane
+before doing that work. It checks returned evidence and owns the conversation
+and canonical state. Invoking a stage directly uses the same loop. Workers
+investigate, propose, edit, or test within their assigned scope; finishing an
+assignment does not complete the stage. A sequential fallback is valid only
+when the catalog proves no permitted dispatch capability exists, and that limit
+is recorded.
 
 1. **Assign:** provide a question, baseline/revision, accepted inputs, file ownership, expected evidence, and completion criteria.
 2. **Check:** wait for final worker results, inspect artifacts and material claims, and compare the result with the criteria.

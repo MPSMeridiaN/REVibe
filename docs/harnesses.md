@@ -41,8 +41,8 @@ only when requested.
 | Capability present | Use | Fallback |
 | --- | --- | --- |
 | Native skill discovery | Route by concise skill descriptions | Read the entrypoint directly |
-| Structured questions | Discover the capability by schema/description; use it for every review question with a `Recommended` choice and a final open-ended addition check | Plain-text questions plus custom response; record the capability limit |
-| Subagents | Delegate substantive stage work; controller checks final packets and owns state and user review | Sequential worker/controller roles with reduced independence recorded |
+| Structured questions | Discover the capability by schema/description; use it for one contextualized question at a time with a `Recommended` choice and a final open-ended addition check | Plain-text questions plus custom response; record the capability limit |
+| Subagents | Discover a dispatch capability by schema, call it for every substantive stage lane, and have the controller check final packets | Sequential role passes only when no permitted dispatch capability exists |
 | Shell and test runtime | Reproduce behavior with commands and artifacts | Source-only findings with explicit confidence limits |
 | Browser/debugger | Inspect UI, lifecycle, runtime state | Record unavailable checks and a reproduction recipe |
 | Graph, search, language server | Follow relationships efficiently | Targeted source search and manual tracing |
@@ -55,7 +55,11 @@ as `request_user_input`, `ask_user`, `elicitation`, `prompt_user`, `question`,
 or `clarify` are only search hints; do not assume one exists or treat a generic
 message, screen, approval, or notification tool as equivalent. Do not hardcode
 tool names, model names, agent counts, or hidden harness features in the core.
-An unavailable tool never means a check passed.
+An unavailable tool never means a check passed. A discovered subagent capability
+must be called for substantive work; discovering it without dispatching is an
+orchestration failure. Before each question, show the named subject, claim,
+evidence, impact, and one decision. If those are not available, ask a smaller
+clarifying question instead of asking for unexplained confirmation.
 
 Use capabilities only when permitted in the current mode. An asynchronous
 question stays pending until its answer arrives. Explicit plain-text answers
